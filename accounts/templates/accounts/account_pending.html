@@ -1,0 +1,28 @@
+{% extends "base/base_auth.html" %}
+{% block title %}Complete setup | MongiKazi{% endblock %}
+{% block content %}
+<div>
+  <span class="mk-badge">Account created</span>
+  <h1 class="mt-4 text-2xl font-bold tracking-tight text-mk-text dark:text-white">Your {{ role_label }} account is ready</h1>
+  <p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">
+    {% if is_employer %}
+      The next step is to confirm your location and define the help you need.
+    {% elif is_helper %}
+      The next step is to build your helper profile, add skills, and prepare your verification documents.
+    {% elif is_operations %}
+      Your operations access is prepared. Use continue to enter the operations workspace.
+    {% else %}
+      Continue to your MongiKazi workspace.
+    {% endif %}
+  </p>
+</div>
+<div class="mt-6 rounded-[1.25rem] border border-mk-border bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+  <p class="text-sm font-bold text-mk-text dark:text-white">Prepared next endpoint</p>
+  <p class="mt-2 break-all text-sm leading-6 text-mk-muted dark:text-slate-400">{{ next_url }}</p>
+  <p class="mt-3 text-xs leading-5 text-mk-muted dark:text-slate-400">This route is onboarding-ready and will continue into the dedicated portal flow as connected apps are released.</p>
+</div>
+<div class="mt-6 grid gap-3">
+  <a href="{{ next_url }}" class="mk-btn-primary w-full">Continue setup</a>
+  <a href="{{ public_home_url }}" class="mk-btn-secondary w-full">Back to website</a>
+</div>
+{% endblock %}

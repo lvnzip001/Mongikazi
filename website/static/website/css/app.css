@@ -1,0 +1,100 @@
+:root {
+  --mk-primary: #0F766E;
+  --mk-primary-dark: #0B4F4A;
+  --mk-secondary: #F4EFE7;
+  --mk-accent: #D9A441;
+  --mk-bg: #FAFAF7;
+  --mk-surface: #FFFFFF;
+  --mk-surface-soft: #F8FAFC;
+  --mk-text: #1F2933;
+  --mk-muted: #6B7280;
+  --mk-border: #E5E7EB;
+  --mk-success: #15803D;
+  --mk-warning: #B45309;
+  --mk-danger: #B91C1C;
+  --mk-ink: #102A2A;
+}
+
+html[data-theme="dark"] {
+  --mk-primary: #2DD4BF;
+  --mk-primary-dark: #14B8A6;
+  --mk-secondary: #172B2A;
+  --mk-accent: #F4C96B;
+  --mk-bg: #071312;
+  --mk-surface: #0D1F1D;
+  --mk-surface-soft: #102A2A;
+  --mk-text: #F8FAFC;
+  --mk-muted: #A7B5B3;
+  --mk-border: #1F3A38;
+  --mk-success: #4ADE80;
+  --mk-warning: #FBBF24;
+  --mk-danger: #F87171;
+  --mk-ink: #E6FFFB;
+}
+
+* { box-sizing: border-box; }
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+body { font-feature-settings: "cv02", "cv03", "cv04", "cv11"; background: var(--mk-bg); color: var(--mk-text); }
+img { max-width: 100%; display: block; }
+
+.mk-container { width: min(100% - 2rem, 1520px); margin-inline: auto; }
+@media (min-width: 1024px) { .mk-container { width: min(100% - 4rem, 1520px); } }
+@media (min-width: 1536px) { .mk-container { width: min(100% - 5rem, 1640px); } }
+
+.mk-card { border-radius: 1.5rem; background: var(--mk-surface); border: 1px solid var(--mk-border); box-shadow: 0 12px 30px rgba(15,23,42,.07); }
+.mk-card-flat { border-radius: 1.35rem; background: var(--mk-surface); border: 1px solid var(--mk-border); }
+.mk-card-glass { border-radius: 1.5rem; background: color-mix(in srgb, var(--mk-surface) 88%, transparent); border: 1px solid var(--mk-border); backdrop-filter: blur(18px); box-shadow: 0 24px 60px rgba(15,23,42,.14); }
+
+.mk-btn-primary,.mk-btn-secondary,.mk-btn-dark { display:inline-flex; align-items:center; justify-content:center; min-height:48px; border-radius:1rem; padding:.85rem 1.15rem; font-size:.9rem; font-weight:800; line-height:1.2rem; transition:all .18s ease; }
+.mk-btn-primary { background:var(--mk-primary); color:#fff; box-shadow:0 10px 24px rgba(15,118,110,.18); }
+html[data-theme="dark"] .mk-btn-primary { color:#04201d; }
+.mk-btn-primary:hover { background:var(--mk-primary-dark); transform:translateY(-1px); }
+.mk-btn-secondary { background:var(--mk-surface); color:var(--mk-primary); border:1px solid color-mix(in srgb, var(--mk-primary) 32%, var(--mk-border)); }
+.mk-btn-secondary:hover { background:var(--mk-secondary); transform:translateY(-1px); }
+.mk-btn-dark { background:var(--mk-ink); color:#fff; }
+html[data-theme="dark"] .mk-btn-dark { background:#E6FFFB; color:#06201D; }
+.mk-btn-dark:hover { background:var(--mk-primary-dark); transform:translateY(-1px); }
+
+.mk-input { width:100%; border-radius:1rem; border:1px solid var(--mk-border); background:var(--mk-surface); padding:.9rem 1rem; font-size:.9rem; color:var(--mk-text); outline:none; transition:all .16s ease; }
+.mk-input::placeholder { color: color-mix(in srgb, var(--mk-muted) 75%, transparent); }
+.mk-input:focus { border-color:var(--mk-primary); box-shadow:0 0 0 4px color-mix(in srgb, var(--mk-primary) 18%, transparent); }
+
+.mk-badge,.mk-badge-success,.mk-badge-warning,.mk-badge-danger,.mk-badge-neutral { display:inline-flex; align-items:center; gap:.35rem; border-radius:999px; padding:.35rem .7rem; font-size:.72rem; font-weight:800; line-height:1; white-space:nowrap; }
+.mk-badge { background:var(--mk-surface); color:var(--mk-primary); border:1px solid color-mix(in srgb, var(--mk-primary) 22%, var(--mk-border)); }
+.mk-badge-success { background:color-mix(in srgb, var(--mk-success) 12%, transparent); color:var(--mk-success); }
+.mk-badge-warning { background:color-mix(in srgb, var(--mk-warning) 14%, transparent); color:var(--mk-warning); }
+.mk-badge-danger { background:color-mix(in srgb, var(--mk-danger) 12%, transparent); color:var(--mk-danger); }
+.mk-badge-neutral { background:var(--mk-surface-soft); color:var(--mk-muted); border:1px solid var(--mk-border); }
+
+.mk-section { padding:4.5rem 0; }
+.mk-hero-grid { background-image: radial-gradient(circle at 20% 10%, rgba(217,164,65,.18), transparent 28%), radial-gradient(circle at 90% 20%, rgba(15,118,110,.14), transparent 30%); }
+.mk-photo { background:var(--mk-secondary); object-fit:cover; }
+.mk-link { color:var(--mk-primary); font-weight:800; }
+.mk-link:hover { color:var(--mk-primary-dark); }
+.mk-mobile-shadow { box-shadow:0 18px 50px rgba(15,23,42,.18); }
+
+.mk-mobile-menu { position: fixed; inset: 0; z-index: 80; display: grid; grid-template-columns: minmax(0, 1fr); background: rgba(2, 6, 23, .54); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.mk-mobile-menu.is-open { opacity: 1; pointer-events: auto; }
+.mk-mobile-menu__panel { margin-left: auto; height: 100%; width: min(88vw, 26rem); background: var(--mk-surface); transform: translateX(100%); transition: transform .24s ease; box-shadow: -24px 0 60px rgba(2,6,23,.25); }
+.mk-mobile-menu.is-open .mk-mobile-menu__panel { transform: translateX(0); }
+
+.mk-theme-toggle { border:1px solid var(--mk-border); background:var(--mk-surface); color:var(--mk-text); }
+.mk-theme-toggle:hover { background:var(--mk-secondary); }
+
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-mk-surface { background-color: var(--mk-surface) !important; }
+html[data-theme="dark"] .bg-mk-bg { background-color: var(--mk-bg) !important; }
+html[data-theme="dark"] .bg-mk-secondary { background-color: var(--mk-secondary) !important; }
+html[data-theme="dark"] .text-mk-text { color: var(--mk-text) !important; }
+html[data-theme="dark"] .text-mk-muted { color: var(--mk-muted) !important; }
+html[data-theme="dark"] .text-mk-primary { color: var(--mk-primary) !important; }
+html[data-theme="dark"] .border-mk-border { border-color: var(--mk-border) !important; }
+html[data-theme="dark"] .shadow-mk-soft,
+html[data-theme="dark"] .shadow-mk-lift { box-shadow: 0 20px 60px rgba(0,0,0,.28) !important; }
+
+@media (max-width: 767px) {
+  .mk-section { padding:3rem 0; }
+  .mk-hide-scrollbar::-webkit-scrollbar{display:none;}
+  .mk-hide-scrollbar{scrollbar-width:none;}
+}

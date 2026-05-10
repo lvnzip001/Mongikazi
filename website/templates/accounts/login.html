@@ -1,0 +1,28 @@
+{% extends "base/base_auth.html" %}
+{% block title %}Login | MongiKazi{% endblock %}
+{% block content %}
+<div>
+  <span class="mk-badge">Portal login</span>
+  <h1 class="mt-4 text-2xl font-extrabold tracking-tight text-mk-text">Welcome back</h1>
+  <p class="mt-2 text-sm leading-6 text-mk-muted">Sign in to continue to your employer, helper, or operations workspace.</p>
+</div>
+<form method="post" class="mt-6 grid gap-4">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="rounded-2xl bg-red-50 p-3 text-sm text-mk-danger">{{ form.non_field_errors }}</div>{% endif %}
+  <div>
+    <label class="mb-2 block text-sm font-bold text-mk-text" for="{{ form.identifier.id_for_label }}">Email or phone number</label>
+    {{ form.identifier }}
+    {% if form.identifier.errors %}<p class="mt-1 text-xs text-mk-danger">{{ form.identifier.errors|striptags }}</p>{% endif %}
+  </div>
+  <div>
+    <label class="mb-2 block text-sm font-bold text-mk-text" for="{{ form.password.id_for_label }}">Password</label>
+    {{ form.password }}
+    {% if form.password.errors %}<p class="mt-1 text-xs text-mk-danger">{{ form.password.errors|striptags }}</p>{% endif %}
+  </div>
+  <button type="submit" class="mk-btn-primary w-full">Sign in</button>
+</form>
+<div class="mt-5 flex items-center justify-between gap-3 text-sm">
+  <a href="{% url 'accounts:role_select' %}" class="mk-link">Create account</a>
+  <span class="font-bold text-mk-muted">Password reset coming soon</span>
+</div>
+{% endblock %}

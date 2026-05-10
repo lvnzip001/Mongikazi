@@ -1,0 +1,23 @@
+{% extends "base/base_public.html" %}
+{% block title %}Brochures & Resources | MongiKazi{% endblock %}
+{% block content %}
+<section class="bg-mk-bg mk-section">
+  <div class="mk-container">
+    <div class="max-w-3xl">{% include "components/section_badge.html" with label="Resources" %}<h1 class="text-4xl font-black tracking-tight text-mk-text lg:text-6xl">Brochures, guides, and platform documents.</h1><p class="mt-5 text-base leading-8 text-mk-muted lg:text-lg">These download links are prepared as placeholders. Actual PDFs can be added under static files or served through a document/media app later.</p></div>
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <div class="mk-card p-6"><span class="mk-badge">PDF</span><h2 class="mt-4 text-xl font-black text-mk-text">Employer brochure</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Explains safe booking, helper profiles, ratings, pricing, and payment proof flow.</p><a href="#" class="mt-5 mk-btn-secondary w-full">Download soon</a></div>
+      <div class="mk-card p-6"><span class="mk-badge">PDF</span><h2 class="mt-4 text-xl font-black text-mk-text">Helper onboarding guide</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Explains profile setup, verification, accepting jobs, ratings, and earnings tracking.</p><a href="#" class="mt-5 mk-btn-secondary w-full">Download soon</a></div>
+      <div class="mk-card p-6"><span class="mk-badge">PDF</span><h2 class="mt-4 text-xl font-black text-mk-text">Business cleaning pack</h2><p class="mt-3 text-sm leading-6 text-mk-muted">For SMEs, offices, schools, clinics, property managers, and recurring service clients.</p><a href="#" class="mt-5 mk-btn-secondary w-full">Download soon</a></div>
+      <div class="mk-card p-6"><span class="mk-badge">PDF</span><h2 class="mt-4 text-xl font-black text-mk-text">Trust & safety guide</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Explains verification, two-way reviews, audit trail, disputes, and platform controls.</p><a href="#" class="mt-5 mk-btn-secondary w-full">Download soon</a></div>
+    </div>
+  </div>
+</section>
+<section class="bg-white mk-section">
+  <div class="mk-container grid gap-6 lg:grid-cols-3">
+    <div class="mk-card p-6"><span class="mk-badge-success">Ready later</span><h2 class="mt-4 text-xl font-black text-mk-text">Terms and policies</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Add public legal links when the onboarding, payment, review, and privacy flows are finalised.</p></div>
+    <div class="mk-card p-6"><span class="mk-badge-warning">MVP</span><h2 class="mt-4 text-xl font-black text-mk-text">Service standards</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Prepare expectations for punctuality, communication, cancellations, payment, and respectful conduct.</p></div>
+    <div class="mk-card p-6"><span class="mk-badge-neutral">Future</span><h2 class="mt-4 text-xl font-black text-mk-text">Partner documents</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Useful for business development, community partners, training partners, and worker support initiatives.</p></div>
+  </div>
+</section>
+{% include "components/cta_panel.html" %}
+{% endblock %}

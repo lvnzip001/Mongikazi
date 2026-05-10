@@ -1,0 +1,16 @@
+{% extends "base/base_onboarding.html" %}
+{% block title %}Onboarding Complete | MongiKazi{% endblock %}
+{% block content %}
+<div class="mb-5">
+  <span class="mk-success-chip">✓ Setup complete</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight text-mk-text dark:text-white">Onboarding complete</h1>
+<p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">Your account setup has been captured. Continue to account status for the next available action.</p>
+<div class="mk-context-card mt-5">
+  <p class="text-sm font-bold text-mk-text dark:text-white">What happens next?</p>
+  <p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">MongiKazi will use these setup details to prepare your role-specific portal experience as the marketplace modules are added.</p>
+</div>
+<div class="mt-6">
+  <a href="{% url 'accounts:account_pending' %}" class="mk-btn-primary w-full">Go to account status</a>
+</div>
+{% endblock %}

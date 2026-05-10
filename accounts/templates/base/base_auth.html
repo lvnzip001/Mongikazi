@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}MongiKazi Account{% endblock %}</title>
+  <meta name="description" content="Access MongiKazi to book trusted help or build a verified helper profile.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind = window.tailwind || {};
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            mk: {
+              primary: '#0F766E', primaryDark: '#0B4F4A', secondary: '#F4EFE7', accent: '#D9A441',
+              bg: '#FAFAF7', surface: '#FFFFFF', text: '#1F2933', muted: '#6B7280', border: '#E5E7EB',
+              success: '#15803D', warning: '#B45309', danger: '#B91C1C', ink: '#102A2A'
+            }
+          },
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          boxShadow: {
+            'mk-soft': '0 12px 30px rgba(15, 23, 42, 0.07)',
+            'mk-lift': '0 24px 60px rgba(15, 23, 42, 0.14)'
+          },
+          borderRadius: { 'mk-card': '1.5rem', 'mk-button': '1rem' }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{% static 'website/css/app.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="min-h-screen bg-mk-bg text-mk-text font-sans antialiased dark:bg-slate-950 dark:text-slate-100">
+  <main class="mk-auth-shell relative min-h-screen overflow-hidden px-4 py-6 lg:px-8">
+    <div class="absolute right-4 top-4 z-20">
+      <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode">◐</button>
+    </div>
+
+    <div class="mx-auto grid min-h-[calc(100vh-3rem)] w-full max-w-7xl items-center gap-8 lg:grid-cols-[1.05fr_.95fr]">
+      <section class="hidden lg:block">
+        <a href="{{ public_home_url|default:'/' }}" class="inline-flex items-center gap-3">
+          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-mk-primary text-sm font-bold text-white shadow-mk-soft">MK</div>
+          <div>
+            <p class="text-xl font-bold tracking-tight text-mk-text dark:text-white">MongiKazi</p>
+            <p class="text-sm font-semibold text-mk-muted dark:text-slate-400">Trusted help. Reliable work.</p>
+          </div>
+        </a>
+        <div class="mt-12 max-w-xl">
+          <span class="mk-badge">Verified marketplace access</span>
+          <h1 class="mt-5 text-5xl font-bold leading-tight tracking-tight text-mk-text dark:text-white">One account. The right portal. A safer way to work.</h1>
+          <p class="mt-5 text-base leading-8 text-mk-muted dark:text-slate-300">MongiKazi routes employers, helpers, and operations users into focused workspaces designed for trust, booking clarity, and marketplace control.</p>
+        </div>
+        <div class="mt-8 grid max-w-2xl gap-4 sm:grid-cols-3">
+          <div class="mk-card-flat p-4"><p class="text-lg font-bold">ID</p><p class="mt-1 text-xs leading-5 text-mk-muted dark:text-slate-400">Verification-ready profiles</p></div>
+          <div class="mk-card-flat p-4"><p class="text-lg font-bold">2-way</p><p class="mt-1 text-xs leading-5 text-mk-muted dark:text-slate-400">Employer and helper ratings</p></div>
+          <div class="mk-card-flat p-4"><p class="text-lg font-bold">Audit</p><p class="mt-1 text-xs leading-5 text-mk-muted dark:text-slate-400">Structured booking trail</p></div>
+        </div>
+      </section>
+
+      <section class="mx-auto w-full max-w-md">
+        <div class="mb-6 flex items-center justify-between lg:hidden">
+          <a href="{{ public_home_url|default:'/' }}" class="flex items-center gap-3">
+            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-mk-primary text-xs font-bold text-white">MK</div>
+            <div><p class="text-base font-bold text-mk-text dark:text-white">MongiKazi</p><p class="text-xs text-mk-muted dark:text-slate-400">Account access</p></div>
+          </a>
+        </div>
+        <div class="mk-card p-5 sm:p-6">
+          {% if messages %}
+            <div class="mb-4 grid gap-2">
+              {% for message in messages %}
+                <div class="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-semibold text-amber-800">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% block content %}{% endblock %}
+        </div>
+        <p class="mt-5 text-center text-xs leading-5 text-mk-muted dark:text-slate-400">By continuing, you agree to MongiKazi's platform terms, privacy rules, and marketplace safety standards.</p>
+      </section>
+    </div>
+  </main>
+  <script src="{% static 'website/js/theme.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+

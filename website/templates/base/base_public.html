@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}MongiKazi | Trusted Help, Reliable Work{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}MongiKazi connects households and businesses with verified, reliable domestic workers and cleaners.{% endblock %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind = window.tailwind || {};
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            mk: {
+              primary: 'var(--mk-primary)', primaryDark: 'var(--mk-primary-dark)', secondary: 'var(--mk-secondary)', accent: 'var(--mk-accent)',
+              bg: 'var(--mk-bg)', surface: 'var(--mk-surface)', text: 'var(--mk-text)', muted: 'var(--mk-muted)', border: 'var(--mk-border)',
+              success: 'var(--mk-success)', warning: 'var(--mk-warning)', danger: 'var(--mk-danger)', ink: 'var(--mk-ink)'
+            }
+          },
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+          boxShadow: {
+            'mk-soft': '0 12px 30px rgba(15, 23, 42, 0.07)',
+            'mk-lift': '0 24px 60px rgba(15, 23, 42, 0.14)'
+          },
+          borderRadius: { 'mk-card': '1.5rem', 'mk-button': '1rem' }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="{% static 'website/css/app.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="min-h-screen bg-mk-bg text-mk-text font-sans antialiased">
+  {% include "components/public_navbar.html" %}
+  <main>{% block content %}{% endblock %}</main>
+  {% include "components/public_footer.html" %}
+  <script src="{% static 'website/js/mobile_menu.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

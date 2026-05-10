@@ -1,0 +1,31 @@
+{
+  "brand": "MongiKazi",
+  "tagline": "Trusted help. Reliable work.",
+  "static_strategy": "Tailwind CDN + custom app.css + minimal JS",
+  "theme": "Light/dark mode via CSS variables and localStorage",
+  "primary_ctas": [
+    "I need help",
+    "I want work",
+    "Business enquiry"
+  ],
+  "services": [
+    "Cleaning",
+    "Laundry",
+    "Cooking",
+    "Childcare",
+    "Office cleaning",
+    "Recurring support"
+  ],
+  "prepared_portals": [
+    "Employer Portal",
+    "Helper Portal",
+    "Operations Portal",
+    "Business Portal"
+  ],
+  "prepared_resources": [
+    "Employer brochure",
+    "Helper onboarding guide",
+    "Business cleaning pack",
+    "Trust and safety guide"
+  ]
+}

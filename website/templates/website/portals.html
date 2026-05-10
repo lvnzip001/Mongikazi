@@ -1,0 +1,27 @@
+{% extends "base/base_public.html" %}
+{% block title %}Portal Links | MongiKazi{% endblock %}
+{% block content %}
+<section id="portal-links" class="bg-mk-bg mk-section">
+  <div class="mk-container">
+    <div class="max-w-3xl">{% include "components/section_badge.html" with label="Platform endpoints" %}<h1 class="text-4xl font-black tracking-tight text-mk-text lg:text-6xl">Prepared links for each portal.</h1><p class="mt-5 text-base leading-8 text-mk-muted lg:text-lg">These are placeholder entry points for the end-state platform. The URLs can be wired to the relevant Django apps when each portal is ready.</p></div>
+    <div class="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <div class="mk-card p-6"><span class="mk-badge">Employer</span><h2 class="mt-4 text-xl font-black text-mk-text">Employer Portal</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Search helpers, send bookings, manage payments, save favourites, and rebook trusted workers.</p><a href="#" class="mt-5 mk-btn-primary w-full">Open employer portal</a></div>
+      <div class="mk-card p-6"><span class="mk-badge">Helper</span><h2 class="mt-4 text-xl font-black text-mk-text">Helper Portal</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Build profile, upload verification documents, manage requests, track jobs, and view earnings.</p><a href="#" class="mt-5 mk-btn-primary w-full">Open helper portal</a></div>
+      <div class="mk-card p-6"><span class="mk-badge">Operations</span><h2 class="mt-4 text-xl font-black text-mk-text">Operations Portal</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Review verifications, monitor bookings, manage payment proofs, disputes, users, and reports.</p><a href="#" class="mt-5 mk-btn-primary w-full">Open operations</a></div>
+      <div class="mk-card p-6"><span class="mk-badge">Business</span><h2 class="mt-4 text-xl font-black text-mk-text">Business Portal</h2><p class="mt-3 text-sm leading-6 text-mk-muted">Future portal for offices, sites, recurring work, multi-location management, and business invoices.</p><a href="#" class="mt-5 mk-btn-primary w-full">Open business portal</a></div>
+    </div>
+  </div>
+</section>
+<section class="bg-white mk-section">
+  <div class="mk-container grid gap-6 lg:grid-cols-[.85fr_1.15fr] lg:items-start">
+    <div>{% include "components/section_badge.html" with label="Portal roadmap" %}<h2 class="text-3xl font-black tracking-tight text-mk-text">One brand, multiple role-specific experiences.</h2><p class="mt-4 text-sm leading-7 text-mk-muted">The website should direct users into the right journey without exposing unfinished functionality too early.</p></div>
+    <div class="grid gap-4 md:grid-cols-2">
+      {% include "components/service_card.html" with icon="1" title="Public website" description="Trust-building, conversion, FAQs, pricing, and contact enquiries." %}
+      {% include "components/service_card.html" with icon="2" title="Role onboarding" description="Separate employer and helper paths immediately after registration." %}
+      {% include "components/service_card.html" with icon="3" title="Role portals" description="Employer and helper dashboards designed like lightweight mobile apps." %}
+      {% include "components/service_card.html" with icon="4" title="Operations" description="Desktop-friendly control centre for verification, payments, disputes, and reporting." %}
+    </div>
+  </div>
+</section>
+{% include "components/cta_panel.html" %}
+{% endblock %}

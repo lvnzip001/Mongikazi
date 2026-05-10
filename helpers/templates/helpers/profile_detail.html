@@ -1,0 +1,86 @@
+{% extends "base/base_helpers.html" %}
+{% block title %}Helper Work Profile | MongiKazi{% endblock %}
+{% block content %}
+<section class="mk-hero-panel">
+  <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+    <div class="flex items-start gap-4">
+      <div class="mk-avatar-lg">{{ profile.display_name|default:request.user.username|slice:":1" }}</div>
+      <div>
+        <p class="mk-eyebrow">Work profile</p>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">{{ profile.display_name|default:request.user.username }}</h1>
+        <p class="mt-2 max-w-2xl text-sm leading-6 text-mk-muted dark:text-slate-400">
+          {{ profile.location|default:"Location not set" }} · {{ profile.years_experience }} years experience · {{ profile.completed_jobs }} completed jobs
+        </p>
+      </div>
+    </div>
+
+    <div class="grid gap-2 sm:min-w-72">
+      <div class="flex items-center justify-between rounded-2xl border border-white/60 bg-white/80 px-4 py-3 shadow-sm dark:border-slate-700 dark:bg-slate-900/80">
+        <span class="text-xs font-bold uppercase tracking-[0.18em] text-mk-muted dark:text-slate-400">Completeness</span>
+        <span class="text-lg font-bold text-mk-primary dark:text-teal-300">{{ profile.profile_completion_percent }}%</span>
+      </div>
+      <div class="mk-progress-track"><span class="mk-progress-bar" style="width: {{ profile.profile_completion_percent }}%"></span></div>
+    </div>
+  </div>
+</section>
+
+<section class="grid gap-4 p-5 sm:p-6 lg:grid-cols-3">
+  <div class="mk-stat-card">
+    <span class="mk-stat-label">Trust status</span>
+    <strong class="mk-stat-value">{{ profile.get_trust_status_display }}</strong>
+  </div>
+  <div class="mk-stat-card">
+    <span class="mk-stat-label">Rating</span>
+    <strong class="mk-stat-value">{{ profile.average_rating }}</strong>
+  </div>
+  <div class="mk-stat-card">
+    <span class="mk-stat-label">Profile state</span>
+    <strong class="mk-stat-value">{% if profile.is_profile_complete %}Ready{% else %}In progress{% endif %}</strong>
+  </div>
+</section>
+
+<section class="grid gap-5 border-t border-mk-border p-5 dark:border-slate-800 sm:p-6 lg:grid-cols-2">
+  <div class="mk-section-card">
+    <div class="flex items-center justify-between gap-3">
+      <div>
+        <p class="mk-eyebrow">Services</p>
+        <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">What you can offer</h2>
+      </div>
+      <a href="{% url 'helpers:skills' %}" class="mk-small-link">Update</a>
+    </div>
+    <ul class="mt-4 grid gap-2 text-sm">
+      {% for skill in skills %}
+      <li class="mk-list-item"><span>{{ skill.category.name }}</span>{% if skill.is_primary %}<span class="mk-chip">Primary</span>{% endif %}</li>
+      {% empty %}
+      <li class="mk-empty-line">No services added yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="mk-section-card">
+    <div class="flex items-center justify-between gap-3">
+      <div>
+        <p class="mk-eyebrow">Trust readiness</p>
+        <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Verification foundation</h2>
+      </div>
+      <span class="mk-soft-badge">Phase 1</span>
+    </div>
+    <ul class="mt-4 grid gap-2 text-sm">
+      {% for signal in trust_signals %}
+      <li class="mk-list-item"><span>{{ signal.get_signal_type_display }}</span><span class="mk-chip-muted">{{ signal.get_status_display }}</span></li>
+      {% empty %}
+      <li class="mk-empty-line">No trust signals captured yet.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="border-t border-mk-border p-5 dark:border-slate-800 sm:p-6">
+  <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <a href="{% url 'helpers:profile_edit' %}" class="mk-btn-primary text-center">Edit Profile</a>
+    <a href="{% url 'helpers:skills' %}" class="mk-btn-secondary text-center">Manage Skills</a>
+    <a href="{% url 'helpers:availability' %}" class="mk-btn-secondary text-center">Availability</a>
+    <a href="{% url 'helpers:profile_preview' %}" class="mk-btn-secondary text-center">Preview</a>
+  </div>
+</section>
+{% endblock %}

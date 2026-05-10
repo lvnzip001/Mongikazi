@@ -1,0 +1,41 @@
+{% extends "base/base_helpers.html" %}
+{% block title %}Helper Availability | MongiKazi{% endblock %}
+{% block content %}
+<section class="mk-form-shell">
+  <div class="mk-form-intro">
+    <p class="mk-eyebrow">Availability</p>
+    <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-950 dark:text-white">Set when you can work</h1>
+    <p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-400">This is the foundation for future booking matching. You can refine this later when the booking calendar is introduced.</p>
+  </div>
+
+  <form method="post" class="mk-form-card">
+    {% csrf_token %}
+    {% if form.non_field_errors %}<div class="mk-error">{{ form.non_field_errors|striptags }}</div>{% endif %}
+    {% for field in form %}
+      <div>
+        <label class="mk-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}<p class="mk-field-error">{{ field.errors|striptags }}</p>{% endif %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="mk-btn-primary w-full">Add availability</button>
+  </form>
+</section>
+
+<section class="border-t border-mk-border p-5 dark:border-slate-800 sm:p-6">
+  <div class="flex items-center justify-between gap-3">
+    <div>
+      <p class="mk-eyebrow">Weekly rhythm</p>
+      <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Current availability</h2>
+    </div>
+    <a href="{% url 'helpers:profile_detail' %}" class="mk-small-link">Back to profile</a>
+  </div>
+  <ul class="mt-4 grid gap-2 text-sm sm:grid-cols-2">
+    {% for row in availability_rows %}
+    <li class="mk-list-item"><span>{{ row.get_day_of_week_display }}</span><span class="mk-chip-muted">{{ row.start_time }} - {{ row.end_time }}{% if not row.is_available %} · Unavailable{% endif %}</span></li>
+    {% empty %}
+    <li class="mk-empty-line sm:col-span-2">No availability set yet.</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

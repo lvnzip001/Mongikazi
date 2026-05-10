@@ -1,0 +1,41 @@
+{% extends "base/base_onboarding.html" %}
+{% block title %}Employer Setup: Location | MongiKazi{% endblock %}
+{% block content %}
+<div class="mb-5 flex flex-wrap items-center gap-2">
+  <span class="mk-step-pill">Employer setup</span>
+  <span class="mk-step-pill">Step 2 of 2</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight text-mk-text dark:text-white">Where and when should help start?</h1>
+<p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">Share location and preferred timing to complete your employer setup.</p>
+<form method="post" class="mt-6 grid gap-4">
+  {% csrf_token %}
+  {% if form.non_field_errors %}<div class="mk-error">{{ form.non_field_errors|striptags }}</div>{% endif %}
+  <div>
+    <label class="mk-label" for="{{ form.preferred_location.id_for_label }}">Preferred location</label>
+    {{ form.preferred_location }}
+    <p class="mt-2 text-xs font-medium text-mk-muted dark:text-slate-400">Use a suburb or area for now. Full saved addresses can come later in the employer portal.</p>
+    {% if form.preferred_location.errors %}<p class="mk-field-error">{{ form.preferred_location.errors|striptags }}</p>{% endif %}
+  </div>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <label class="mk-label" for="{{ form.preferred_start_date.id_for_label }}">Preferred start date</label>
+      {{ form.preferred_start_date }}
+      {% if form.preferred_start_date.errors %}<p class="mk-field-error">{{ form.preferred_start_date.errors|striptags }}</p>{% endif %}
+    </div>
+    <div>
+      <label class="mk-label" for="{{ form.preferred_time.id_for_label }}">Preferred time</label>
+      {{ form.preferred_time }}
+      {% if form.preferred_time.errors %}<p class="mk-field-error">{{ form.preferred_time.errors|striptags }}</p>{% endif %}
+    </div>
+  </div>
+  <div>
+    <label class="mk-label" for="{{ form.special_instructions.id_for_label }}">Special instructions</label>
+    {{ form.special_instructions }}
+    {% if form.special_instructions.errors %}<p class="mk-field-error">{{ form.special_instructions.errors|striptags }}</p>{% endif %}
+  </div>
+  <div class="grid gap-3 sm:grid-cols-2">
+    <a href="{% url 'onboarding:employer_service' %}" class="mk-btn-secondary text-center">Back</a>
+    <button type="submit" class="mk-btn-primary w-full">Continue</button>
+  </div>
+</form>
+{% endblock %}

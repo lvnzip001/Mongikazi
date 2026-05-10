@@ -1,0 +1,26 @@
+{% extends "base/base_onboarding.html" %}
+{% block title %}Employer Setup Complete | MongiKazi{% endblock %}
+{% block content %}
+<div class="mb-5 flex flex-wrap items-center gap-2">
+  <span class="mk-success-chip">✓ Setup checkpoint reached</span>
+  <span class="mk-step-pill">Employer</span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight text-mk-text dark:text-white">Employer setup is ready</h1>
+<p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">Finalize onboarding to unlock the upcoming employer portal and helper search experience.</p>
+<div class="mk-context-card mt-5">
+  <p class="text-sm font-bold text-mk-text dark:text-white">Next release preview</p>
+  <div class="mt-3 grid gap-3 text-sm text-mk-muted dark:text-slate-300">
+    <p>Search verified helpers by service, location, availability, and rating.</p>
+    <p>Send booking requests and track booking status from one clean workspace.</p>
+    <p>Rebook trusted helpers when the employer portal is activated.</p>
+  </div>
+</div>
+<form method="post" class="mt-6 grid gap-3">
+  {% csrf_token %}
+  {% if is_completed %}
+    <p class="rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-700 dark:bg-emerald-950/30 dark:text-emerald-200">Onboarding completed.</p>
+  {% endif %}
+  <button type="submit" class="mk-btn-primary w-full">Finish onboarding</button>
+  <a href="{% url 'accounts:account_pending' %}" class="mk-btn-secondary w-full text-center">Go to account status</a>
+</form>
+{% endblock %}

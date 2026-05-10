@@ -1,0 +1,19 @@
+{% extends "base/base_auth.html" %}
+{% block title %}Account created | MongiKazi{% endblock %}
+{% block content %}
+<div class="text-center">
+  <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-3xl bg-green-50 text-2xl text-mk-success">✓</div>
+  <h1 class="mt-5 text-2xl font-extrabold tracking-tight text-mk-text">Your account is ready</h1>
+  <p class="mt-2 text-sm leading-6 text-mk-muted">The next step is to complete your role-specific onboarding. Portal endpoints can be connected once the employer and helper apps are added.</p>
+</div>
+<div class="mt-6 grid gap-3">
+  {% if request.user.is_employer %}
+    <a href="/employer/" class="mk-btn-primary w-full">Continue to employer portal</a>
+  {% elif request.user.is_helper %}
+    <a href="/helper/" class="mk-btn-primary w-full">Continue to helper portal</a>
+  {% else %}
+    <a href="/operations/" class="mk-btn-primary w-full">Continue to operations</a>
+  {% endif %}
+  <a href="{% url 'website:home' %}" class="mk-btn-secondary w-full">Back to website</a>
+</div>
+{% endblock %}
