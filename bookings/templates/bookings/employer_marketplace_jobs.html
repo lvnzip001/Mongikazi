@@ -1,0 +1,35 @@
+﻿{% extends 'base/base_bookings.html' %}
+
+{% block title %}Marketplace Jobs | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="p-5 sm:p-6 lg:p-8">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+    <div>
+      <p class="mk-eyebrow">Employer marketplace</p>
+      <h1 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">Open jobs and applicants</h1>
+    </div>
+    <a href="{% url 'bookings:employer_booking_create' %}" class="mk-btn-primary">Post new marketplace job</a>
+  </div>
+
+  <div class="mt-6 grid gap-3">
+    {% for booking in jobs %}
+      <article class="mk-row-card">
+        <div>
+          <p class="text-sm font-bold text-slate-950 dark:text-white">{{ booking.booking_reference }} - {{ booking.service_category.name }}</p>
+          <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">{{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }} • {{ booking.employer_location }}</p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="mk-status">{{ booking.status|title }}</span>
+          <a href="{% url 'bookings:employer_booking_applications' booking_reference=booking.booking_reference %}" class="mk-btn-secondary">View applications</a>
+        </div>
+      </article>
+    {% empty %}
+      <div class="mk-empty-state">
+        <p class="text-sm font-bold text-slate-900 dark:text-white">No marketplace jobs yet.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+

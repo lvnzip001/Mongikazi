@@ -1,0 +1,48 @@
+{% extends 'base/base_bookings.html' %}
+
+{% block title %}Worker Requests | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="p-5 sm:p-6 lg:p-8">
+  <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
+    <div>
+      <p class="mk-eyebrow">Worker requests</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">Respond to incoming booking requests</h1>
+      <p class="mt-3 max-w-2xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Review the service, date, location, and estimate before accepting or declining. Clear responses help employers plan confidently.</p>
+    </div>
+    <div class="mk-soft-panel">
+      <p class="text-sm font-bold text-slate-950 dark:text-white">Worker control</p>
+      <p class="mt-1 text-xs font-medium leading-5 text-mk-muted dark:text-slate-400">You decide whether a request works for your availability before it becomes a confirmed job.</p>
+      <a href="{% url 'helpers:profile_detail' %}" class="mk-btn-secondary mt-4 inline-flex w-full justify-center">Improve work profile</a>
+    </div>
+  </div>
+
+  {% if requests %}
+    <div class="mt-6 grid gap-3">
+      {% for booking in requests %}
+        <article class="mk-row-card">
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <p class="text-xs font-bold uppercase tracking-[0.12em] text-mk-primary dark:text-teal-300">{{ booking.booking_reference }}</p>
+              <span class="mk-status mk-status-pending">{{ booking.get_status_display }}</span>
+            </div>
+            <h2 class="mt-2 text-base font-bold text-slate-950 dark:text-white">{{ booking.service_category.name }} - {{ booking.scheduled_date }}</h2>
+            <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">Employer: {{ booking.employer.display_name|default:booking.employer.user.get_full_name|default:booking.employer.user.email }}</p>
+            <p class="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-200">Estimated pay: R{{ booking.worker_fee_estimate }}</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 sm:justify-end">
+            <a href="{% url 'bookings:worker_request_detail' booking_reference=booking.booking_reference %}" class="mk-btn-primary">Review request</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="mk-empty-state mt-6">
+      <p class="mk-eyebrow">No pending requests</p>
+      <h2 class="mt-2 text-xl font-bold text-slate-950 dark:text-white">New booking requests will appear here</h2>
+      <p class="mx-auto mt-2 max-w-lg text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Keep your work profile, skills, and availability up to date to improve your chances of receiving suitable requests.</p>
+      <a href="{% url 'helpers:profile_detail' %}" class="mk-btn-secondary mt-5 inline-flex">Improve work profile</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

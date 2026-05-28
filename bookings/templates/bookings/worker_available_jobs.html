@@ -1,0 +1,30 @@
+﻿{% extends 'base/base_bookings.html' %}
+
+{% block title %}Available Jobs | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="p-5 sm:p-6 lg:p-8">
+  <div class="flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="mk-eyebrow">Marketplace</p>
+      <h1 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">Available open jobs</h1>
+    </div>
+    <a href="{% url 'bookings:worker_my_applications' %}" class="mk-btn-secondary">My applications</a>
+  </div>
+
+  <div class="mt-6 grid gap-3">
+    {% for booking in jobs %}
+      <article class="mk-row-card">
+        <div>
+          <p class="text-sm font-bold text-slate-950 dark:text-white">{{ booking.booking_reference }} - {{ booking.service_category.name }}</p>
+          <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">{{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }} • {{ booking.employer_location }}</p>
+        </div>
+        <a href="{% url 'bookings:worker_apply_to_job' booking_reference=booking.booking_reference %}" class="mk-btn-primary">Apply</a>
+      </article>
+    {% empty %}
+      <div class="mk-empty-state"><p class="text-sm font-bold text-slate-900 dark:text-white">No open jobs right now.</p></div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
+

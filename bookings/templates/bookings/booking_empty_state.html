@@ -1,0 +1,21 @@
+{% extends 'base/base_bookings.html' %}
+
+{% block title %}Bookings Empty State | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="p-7 text-center sm:p-10">
+  <p class="mk-eyebrow">Bookings</p>
+  <h1 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">No booking activity yet</h1>
+  <p class="mx-auto mt-3 max-w-md text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Booking requests, responses, and status updates will appear here as soon as workflow activity starts.</p>
+
+  <div class="mt-6 flex flex-col justify-center gap-2 sm:flex-row">
+    {% if portal_kind == 'worker' %}
+      <a href="{% url 'bookings:worker_requests' %}" class="mk-btn-primary">Worker requests</a>
+      <a href="{% url 'worker_portal:dashboard' %}" class="mk-btn-secondary">Worker portal</a>
+    {% else %}
+      <a href="{% url 'bookings:employer_booking_create' %}" class="mk-btn-primary">Create request</a>
+      <a href="{% url 'employer_portal:dashboard' %}" class="mk-btn-secondary">Employer portal</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

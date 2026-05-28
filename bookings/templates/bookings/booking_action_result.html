@@ -1,0 +1,22 @@
+{% extends 'base/base_bookings.html' %}
+
+{% block title %}Booking Action Result | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="p-7 text-center sm:p-10">
+  <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-teal-50 text-2xl text-mk-primary dark:bg-teal-950/40 dark:text-teal-300">✓</div>
+  <p class="mk-eyebrow mt-5">Action processed</p>
+  <h1 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">Your booking action was received</h1>
+  <p class="mx-auto mt-3 max-w-md text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Use the booking detail page to review the latest status and event history.</p>
+
+  <div class="mt-6 flex flex-col justify-center gap-2 sm:flex-row">
+    {% if portal_kind == 'worker' %}
+      <a href="{% url 'bookings:worker_requests' %}" class="mk-btn-primary">Back to requests</a>
+      <a href="{% url 'bookings:worker_jobs' %}" class="mk-btn-secondary">Open jobs</a>
+    {% else %}
+      <a href="{% url 'bookings:employer_bookings' %}" class="mk-btn-primary">Back to bookings</a>
+      <a href="{% url 'bookings:employer_booking_create' %}" class="mk-btn-secondary">Create another request</a>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

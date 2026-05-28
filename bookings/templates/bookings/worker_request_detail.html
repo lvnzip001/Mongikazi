@@ -1,0 +1,88 @@
+{% extends 'base/base_bookings.html' %}
+
+{% block title %}{{ booking.booking_reference }} | Worker Request{% endblock %}
+
+{% block content %}
+<div class="p-5 sm:p-6 lg:p-8">
+  <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <div>
+      <p class="mk-eyebrow">Booking request</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">{{ booking.booking_reference }}</h1>
+      <p class="mt-3 max-w-2xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Review the full request before accepting or declining. The timeline records every action for transparency.</p>
+    </div>
+    <span class="mk-status {% if booking.status == 'PENDING_WORKER_RESPONSE' %}mk-status-pending{% elif booking.status == 'ACCEPTED' %}mk-status-accepted{% elif booking.status == 'COMPLETED' %}mk-status-completed{% elif booking.status == 'DECLINED' %}mk-status-declined{% elif 'CANCELLED' in booking.status %}mk-status-cancelled{% endif %}">{{ booking.get_status_display }}</span>
+  </div>
+
+  <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]">
+    <article class="mk-detail-card">
+      <h2 class="mk-section-title">Request details</h2>
+      <dl class="mk-kv-grid mt-4 sm:grid sm:grid-cols-2">
+        <div><dt>Employer</dt><dd>{{ booking.employer.display_name|default:booking.employer.user.get_full_name|default:booking.employer.user.email }}</dd></div>
+        <div><dt>Service</dt><dd>{{ booking.service_category.name }}</dd></div>
+        <div><dt>Date</dt><dd>{{ booking.scheduled_date }}</dd></div>
+        <div><dt>Time</dt><dd>{{ booking.start_time }}</dd></div>
+        <div><dt>Duration</dt><dd>{{ booking.duration_hours }} hour{{ booking.duration_hours|pluralize }}</dd></div>
+        <div><dt>Location</dt><dd>{{ booking.employer_location.label|default:'Saved location' }}</dd></div>
+      </dl>
+      {% if booking.special_instructions %}
+        <div class="mk-soft-panel mt-4">
+          <p class="text-sm font-bold text-slate-950 dark:text-white">Special instructions</p>
+          <p class="mt-1 text-sm font-medium leading-6 text-slate-700 dark:text-slate-200">{{ booking.special_instructions }}</p>
+        </div>
+      {% endif %}
+    </article>
+
+    <article class="mk-detail-card">
+      <h2 class="mk-section-title">Estimate</h2>
+      <dl class="mk-kv-grid mt-4">
+        <div><dt>Estimated pay</dt><dd>R{{ booking.worker_fee_estimate }}</dd></div>
+        <div><dt>Platform fee estimate</dt><dd>R{{ booking.platform_fee_estimate }}</dd></div>
+        <div><dt>Total employer estimate</dt><dd>R{{ booking.total_estimate }}</dd></div>
+      </dl>
+      <p class="mt-4 text-xs font-semibold leading-5 text-mk-muted dark:text-slate-400">Estimate only. Payments and payouts are handled in future apps.</p>
+    </article>
+  </div>
+
+  {% include 'bookings/booking_timeline.html' with booking=booking events=events only %}
+
+  <section class="mt-5 grid gap-3 rounded-2xl border border-mk-border bg-white p-4 dark:border-slate-700 dark:bg-slate-900/60">
+    <div>
+      <h2 class="mk-section-title">Your actions</h2>
+      <p class="mt-1 text-xs font-medium leading-5 text-mk-muted dark:text-slate-400">Only respond if the date, location, service, and time work for you.</p>
+    </div>
+
+    {% if can_accept or can_decline or can_cancel %}
+      <div class="grid gap-3 lg:grid-cols-2">
+        {% if can_accept %}
+          <form method="post" action="{% url 'bookings:worker_accept_booking' booking_reference=booking.booking_reference %}" data-confirm="Accept this booking request?">
+            {% csrf_token %}
+            <button type="submit" class="mk-btn-primary w-full">Accept booking</button>
+          </form>
+        {% endif %}
+
+        {% if can_decline %}
+          <form method="post" action="{% url 'bookings:worker_decline_booking' booking_reference=booking.booking_reference %}" class="grid gap-2">
+            {% csrf_token %}
+            <label class="mk-label" for="{{ decline_form.reason.id_for_label }}">Decline reason</label>
+            {{ decline_form.reason }}
+            <button type="submit" class="mk-btn-secondary w-full">Decline booking</button>
+          </form>
+        {% endif %}
+
+        {% if can_cancel %}
+          <form method="post" action="{% url 'bookings:worker_cancel_booking' booking_reference=booking.booking_reference %}" class="grid gap-2" data-confirm="Cancel this accepted booking?">
+            {% csrf_token %}
+            <label class="mk-label" for="{{ cancel_form.reason.id_for_label }}">Cancellation reason</label>
+            {{ cancel_form.reason }}
+            <button type="submit" class="mk-btn-danger w-full">Cancel accepted booking</button>
+          </form>
+        {% endif %}
+      </div>
+    {% else %}
+      <p class="text-sm font-semibold text-mk-muted dark:text-slate-300">No actions are available for this status.</p>
+    {% endif %}
+
+    <a href="{% url 'messaging:open_booking_thread' booking_reference=booking.booking_reference %}" class="mk-btn-secondary w-full lg:w-auto">Open chat</a>
+  </section>
+</div>
+{% endblock %}
