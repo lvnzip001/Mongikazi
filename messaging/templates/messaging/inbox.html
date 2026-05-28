@@ -1,0 +1,97 @@
+﻿{% extends 'base/base_messaging.html' %}
+
+{% block title %}Messages | MongiKazi{% endblock %}
+
+{% block content %}
+<section class="mk-layout">
+  <aside class="mk-thread-list">
+    <div class="mb-3 flex items-end justify-between gap-2">
+      <div>
+        <p class="mk-eyebrow">Inbox</p>
+        <h1 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Threads</h1>
+      </div>
+      <div class="text-right">
+        <p class="text-xs font-bold text-mk-muted dark:text-slate-400">Unread</p>
+        <p class="text-sm font-bold text-mk-primary dark:text-teal-300">{{ unread.total_unread }}</p>
+      </div>
+    </div>
+
+    <div class="grid gap-2">
+      {% for thread in threads %}
+        <a href="{% url 'messaging:thread_detail' thread_id=thread.id %}" class="mk-thread-item {% if selected_thread and selected_thread.id == thread.id %}is-active{% endif %}">
+          <div class="flex items-start justify-between gap-2">
+            <p class="truncate text-sm font-bold text-slate-900 dark:text-white">
+              {% if role_kind == 'employer' %}
+                {{ thread.helper_user.get_full_name|default:thread.helper_user.email }}
+              {% else %}
+                {{ thread.employer_user.get_full_name|default:thread.employer_user.email }}
+              {% endif %}
+            </p>
+            {% if thread.unread_count %}<span class="mk-unread-chip">{{ thread.unread_count }}</span>{% endif %}
+          </div>
+          <p class="mt-1 truncate text-xs font-semibold text-mk-muted dark:text-slate-400">
+            {% if thread.booking %}{{ thread.booking.booking_reference }} - {{ thread.booking.get_status_display }}{% else %}Direct conversation{% endif %}
+          </p>
+          {% if thread.last_message_at %}
+            <p class="mt-1 text-[11px] font-medium text-slate-500 dark:text-slate-500">{{ thread.last_message_at|date:"Y-m-d H:i" }}</p>
+          {% endif %}
+        </a>
+      {% empty %}
+        <div class="mk-empty">No messages yet. Open chat from a booking.</div>
+      {% endfor %}
+    </div>
+  </aside>
+
+  <article class="mk-thread-panel">
+    {% if selected_thread %}
+      <header class="mk-panel-header">
+        <div>
+          <p class="mk-eyebrow">Conversation</p>
+          <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">
+            {% if role_kind == 'employer' %}
+              {{ selected_thread.helper_user.get_full_name|default:selected_thread.helper_user.email }}
+            {% else %}
+              {{ selected_thread.employer_user.get_full_name|default:selected_thread.employer_user.email }}
+            {% endif %}
+          </h2>
+          <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">
+            {% if selected_thread.booking %}
+              Booking {{ selected_thread.booking.booking_reference }}
+            {% else %}
+              Booking-independent thread
+            {% endif %}
+          </p>
+        </div>
+        {% if selected_thread.booking %}
+          <a class="mk-top-link" href="{% if role_kind == 'employer' %}{% url 'bookings:employer_booking_detail' booking_reference=selected_thread.booking.booking_reference %}{% else %}{% url 'bookings:worker_request_detail' booking_reference=selected_thread.booking.booking_reference %}{% endif %}">View booking</a>
+        {% endif %}
+      </header>
+
+      <div class="mk-messages">
+        {% for item in thread_messages %}
+          <div class="mk-bubble-wrap {% if item.sender_id == request.user.id %}is-me{% endif %}">
+            <div class="mk-bubble {% if item.sender_id == request.user.id %}is-me{% endif %}">
+              <p class="text-sm font-medium leading-6">{{ item.body }}</p>
+              <p class="mt-1 text-[11px] font-semibold {% if item.sender_id == request.user.id %}text-teal-100{% else %}text-slate-500 dark:text-slate-400{% endif %}">{{ item.created_at|date:"Y-m-d H:i" }}</p>
+            </div>
+          </div>
+        {% empty %}
+          <p class="mk-empty">No messages yet in this thread.</p>
+        {% endfor %}
+      </div>
+
+      <form method="post" action="{% url 'messaging:send_thread_message' thread_id=selected_thread.id %}" class="mt-3 grid gap-2">
+        {% csrf_token %}
+        {{ message_form.body }}
+        <div class="flex justify-end">
+          <button type="submit" class="mk-btn-primary">Send message</button>
+        </div>
+      </form>
+    {% else %}
+      <div class="mk-empty h-full">Select a thread to start chatting.</div>
+    {% endif %}
+  </article>
+</section>
+{% endblock %}
+
+
