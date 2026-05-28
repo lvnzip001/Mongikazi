@@ -50,7 +50,7 @@ DEBUG = _env_bool("DJANGO_DEBUG", True)
 
 ALLOWED_HOSTS = _env_list(
     "DJANGO_ALLOWED_HOSTS",
-    "localhost,127.0.0.1,www.mongikazi.co.za,mongikazi.co.za,46.101.81.183",
+    "mongikaz.co.za,www.mongikaz.co.za,46.101.81.183,localhost,127.0.0.1",
 )
 
 
