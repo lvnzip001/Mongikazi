@@ -5,16 +5,16 @@
   <div class="mk-container grid gap-10 py-14 lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:py-20">
     <div>
       {% include "components/section_badge.html" with label="For businesses and recurring clients" %}
-      <h1 class="text-4xl font-black tracking-tight text-mk-text lg:text-6xl">Structured cleaning support for offices, SMEs, and managed locations.</h1>
+      <h1 class="text-4xl font-extrabold tracking-tight text-mk-text lg:text-6xl">Structured cleaning support for offices, SMEs, and managed locations.</h1>
       <p class="mt-5 max-w-3xl text-base leading-8 text-mk-muted lg:text-lg">MongiKazi can support once-off business cleaning, recurring office support, multi-location requests, preferred helper pools, invoices, and operational oversight as the platform matures.</p>
       <div class="mt-7 flex flex-col gap-3 sm:flex-row"><a href="{% url 'website:contact' %}" class="mk-btn-primary">Request business support</a><a href="{% url 'website:portals' %}" class="mk-btn-secondary">View future portals</a></div>
     </div>
     <div class="mk-card overflow-hidden p-3"><img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80" alt="Office cleaning and workplace support" class="mk-photo h-[430px] w-full rounded-[1.25rem]"></div>
   </div>
 </section>
-<section class="bg-white mk-section">
+<section class="mk-surface-section mk-section">
   <div class="mk-container">
-    <div class="max-w-3xl">{% include "components/section_badge.html" with label="Business use cases" %}<h2 class="text-3xl font-black tracking-tight text-mk-text">Designed for more than household bookings.</h2><p class="mt-4 text-sm leading-7 text-mk-muted">The same booking engine can later support organisations that need reliable recurring work, consolidated billing, and basic service-level visibility.</p></div>
+    <div class="max-w-3xl">{% include "components/section_badge.html" with label="Business use cases" %}<h2 class="text-3xl font-extrabold tracking-tight text-mk-text">Designed for more than household bookings.</h2><p class="mt-4 text-sm leading-7 text-mk-muted">The same booking engine can later support organisations that need reliable recurring work, consolidated billing, and basic service-level visibility.</p></div>
     <div class="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       {% include "components/service_card.html" with icon="🏢" title="Office cleaning" description="Recurring workplace cleaning with booking status visibility and preferred helper allocation." %}
       {% include "components/service_card.html" with icon="📍" title="Multiple locations" description="Future support for branches, sites, properties, clinics, schools, and managed facilities." %}
@@ -23,9 +23,9 @@
     </div>
   </div>
 </section>
-<section class="bg-mk-bg mk-section">
+<section class="mk-muted-section mk-section">
   <div class="mk-container grid gap-6 lg:grid-cols-[.85fr_1.15fr] lg:items-start">
-    <div>{% include "components/section_badge.html" with label="End-state capability" %}<h2 class="text-3xl font-black tracking-tight text-mk-text">A future business portal can sit on the same marketplace engine.</h2><p class="mt-4 text-sm leading-7 text-mk-muted">No need to rebuild the platform for corporate clients later. Keep the domain logic shared and expose a business-specific portal when demand is proven.</p></div>
+    <div>{% include "components/section_badge.html" with label="End-state capability" %}<h2 class="text-3xl font-extrabold tracking-tight text-mk-text">A future business portal can sit on the same marketplace engine.</h2><p class="mt-4 text-sm leading-7 text-mk-muted">No need to rebuild the platform for corporate clients later. Keep the domain logic shared and expose a business-specific portal when demand is proven.</p></div>
     <div class="mk-card p-6 lg:p-8">
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="mk-card-flat p-4"><span class="mk-badge">Company profile</span><p class="mt-3 text-sm leading-6 text-mk-muted">Billing details, authorised users, and preferred service categories.</p></div>

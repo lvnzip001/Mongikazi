@@ -2,7 +2,7 @@
   "brand": "MongiKazi",
   "tagline": "Trusted help. Reliable work.",
   "static_strategy": "Tailwind CDN + custom app.css + minimal JS",
-  "theme": "Light/dark mode via CSS variables and localStorage",
+  "theme": "Light/dark mode via data-theme and localStorage key mk-theme",
   "primary_ctas": [
     "I need help",
     "I want work",

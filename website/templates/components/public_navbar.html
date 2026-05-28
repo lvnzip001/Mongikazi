@@ -1,30 +1,35 @@
-{% load static %}
-<header class="sticky top-0 z-40 border-b border-mk-border/80 bg-white/92 backdrop-blur-xl">
+<header class="mk-public-nav">
   <nav class="mk-container flex items-center justify-between py-3" aria-label="Main navigation">
-    <a href="{% url 'website:home' %}" class="flex items-center gap-3">
-      <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-mk-primary text-sm font-black text-white shadow-mk-soft">MK</div>
-      <div class="leading-tight">
-        <p class="text-base font-black tracking-tight text-mk-text">MongiKazi</p>
-        <p class="text-xs font-semibold text-mk-muted">Trusted help. Reliable work.</p>
+    <a href="{% url 'website:home' %}" class="flex min-w-0 items-center gap-3">
+      <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-mk-primary text-sm font-extrabold text-white shadow-mk-soft">MK</div>
+      <div class="min-w-0 leading-tight">
+        <p class="truncate text-base font-extrabold tracking-tight text-mk-text">MongiKazi</p>
+        <p class="hidden text-xs font-semibold text-mk-muted sm:block">Trusted help. Reliable work.</p>
       </div>
     </a>
+
     <div class="hidden items-center gap-6 xl:gap-8 lg:flex">
       <a href="{% url 'website:find_help' %}" class="text-sm font-bold text-mk-muted transition hover:text-mk-primary">Find Help</a>
       <a href="{% url 'website:find_work' %}" class="text-sm font-bold text-mk-muted transition hover:text-mk-primary">Find Work</a>
       <a href="{% url 'website:business' %}" class="text-sm font-bold text-mk-muted transition hover:text-mk-primary">Business</a>
       <a href="{% url 'website:how_it_works' %}" class="text-sm font-bold text-mk-muted transition hover:text-mk-primary">How It Works</a>
       <a href="{% url 'website:trust_safety' %}" class="text-sm font-bold text-mk-muted transition hover:text-mk-primary">Trust & Safety</a>
-      <a href="{% url 'website:portals' %}" class="text-sm font-bold text-mk-muted transition hover:text-mk-primary">Portals</a>
-      <a href="{% url 'website:resources' %}" class="text-sm font-bold text-mk-muted transition hover:text-mk-primary">Resources</a>
+      <a href="{% url 'website:pricing' %}" class="text-sm font-bold text-mk-muted transition hover:text-mk-primary">Pricing</a>
     </div>
+
     <div class="hidden items-center gap-3 lg:flex">
-      <button type="button" data-theme-toggle class="mk-theme-toggle flex h-10 w-10 items-center justify-center rounded-2xl text-lg font-black" aria-label="Switch theme">◐</button>
+      <button type="button" data-theme-toggle class="mk-theme-toggle flex h-10 w-10 items-center justify-center rounded-2xl text-lg font-extrabold" aria-label="Switch to dark mode">
+        <span data-theme-icon>&#9680;</span>
+      </button>
       <a href="{% url 'accounts:login' %}" class="mk-btn-secondary min-h-0 py-2.5">Login</a>
       <a href="{% url 'accounts:role_select' %}" class="mk-btn-primary min-h-0 py-2.5">Get Started</a>
     </div>
+
     <div class="flex items-center gap-2 lg:hidden">
-      <button type="button" data-theme-toggle class="mk-theme-toggle flex h-11 w-11 items-center justify-center rounded-2xl text-lg font-black" aria-label="Switch theme">◐</button>
-      <button type="button" data-mobile-menu-open class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-mk-border bg-white text-mk-text" aria-label="Open menu" aria-expanded="false">
+      <button type="button" data-theme-toggle class="mk-theme-toggle flex h-11 w-11 items-center justify-center rounded-2xl text-lg font-extrabold" aria-label="Switch to dark mode">
+        <span data-theme-icon>&#9680;</span>
+      </button>
+      <button type="button" data-mobile-menu-open class="mk-menu-button inline-flex h-11 w-11 items-center justify-center rounded-2xl" aria-label="Open menu" aria-expanded="false">
         <span class="text-xl leading-none">☰</span>
       </button>
     </div>
@@ -34,26 +39,26 @@
     <div class="mk-mobile-menu__panel flex flex-col">
       <div class="flex items-center justify-between border-b border-mk-border p-4">
         <div class="flex items-center gap-3">
-          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-mk-primary text-xs font-black text-white">MK</div>
-          <div><p class="text-base font-black text-mk-text">MongiKazi</p><p class="text-xs text-mk-muted">Choose your journey.</p></div>
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-mk-primary text-xs font-extrabold text-white">MK</div>
+          <div><p class="text-base font-extrabold text-mk-text">MongiKazi</p><p class="text-xs text-mk-muted">Choose your journey.</p></div>
         </div>
-        <button type="button" data-mobile-menu-close class="flex h-10 w-10 items-center justify-center rounded-xl border border-mk-border text-mk-text" aria-label="Close menu">✕</button>
+        <button type="button" data-mobile-menu-close class="mk-menu-button flex h-10 w-10 items-center justify-center rounded-xl" aria-label="Close menu">✕</button>
       </div>
       <div class="flex flex-1 flex-col gap-1 overflow-y-auto p-4">
-        <a data-mobile-menu-close href="{% url 'website:home' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Home</a>
-        <a data-mobile-menu-close href="{% url 'website:find_help' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Find Help</a>
-        <a data-mobile-menu-close href="{% url 'website:find_work' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Find Work</a>
-        <a data-mobile-menu-close href="{% url 'website:business' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Business</a>
-        <a data-mobile-menu-close href="{% url 'website:how_it_works' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">How It Works</a>
-        <a data-mobile-menu-close href="{% url 'website:trust_safety' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Trust & Safety</a>
-        <a data-mobile-menu-close href="{% url 'website:pricing' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Pricing</a>
-        <a data-mobile-menu-close href="{% url 'website:portals' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Portal Links</a>
-        <a data-mobile-menu-close href="{% url 'website:resources' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Brochures & Resources</a>
-        <a data-mobile-menu-close href="{% url 'website:contact' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Contact</a>
+        <a href="{% url 'website:home' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Home</a>
+        <a href="{% url 'website:find_help' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Find Help</a>
+        <a href="{% url 'website:find_work' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Find Work</a>
+        <a href="{% url 'website:business' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Business</a>
+        <a href="{% url 'website:how_it_works' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">How It Works</a>
+        <a href="{% url 'website:trust_safety' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Trust & Safety</a>
+        <a href="{% url 'website:pricing' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Pricing</a>
+        <a href="{% url 'website:portals' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Portal Links</a>
+        <a href="{% url 'website:resources' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Brochures & Resources</a>
+        <a href="{% url 'website:contact' %}" class="rounded-2xl px-4 py-3 text-sm font-bold text-mk-text hover:bg-mk-secondary">Contact</a>
       </div>
       <div class="grid gap-3 border-t border-mk-border p-4">
-        <a data-mobile-menu-close href="#start" class="mk-btn-primary w-full">I need help</a>
-        <a data-mobile-menu-close href="#start" class="mk-btn-secondary w-full">I want work</a>
+        <a href="{% url 'accounts:role_select' %}" class="mk-btn-primary w-full">I need help</a>
+        <a href="{% url 'accounts:role_select' %}" class="mk-btn-secondary w-full">I want work</a>
       </div>
     </div>
   </div>

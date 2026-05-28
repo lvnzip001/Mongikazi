@@ -5,42 +5,42 @@
   <div class="mk-container grid gap-10 py-12 lg:grid-cols-[1.02fr_0.98fr] lg:items-center  lg:py-20">
     <div>
       {% include "components/section_badge.html" with label="Trusted domestic work marketplace" %}
-      <h1 class="max-w-3xl text-4xl font-black tracking-tight text-mk-text sm:text-5xl lg:text-6xl">Find trusted help. Get reliable work.</h1>
+      <h1 class="max-w-3xl text-4xl font-extrabold tracking-tight text-mk-text sm:text-5xl lg:text-6xl">Find trusted help. Get reliable work.</h1>
       <p class="mt-5 max-w-2xl text-base leading-8 text-mk-muted sm:text-lg">MongiKazi connects households and businesses with verified domestic workers and cleaners through simple booking, transparent profiles, and trust-first reviews.</p>
-      <div class="mt-7 grid gap-3 sm:max-w-md sm:grid-cols-2"><a href="#" class="mk-btn-primary w-full">I need help</a><a href="#" class="mk-btn-secondary w-full">I want work</a></div>
+      <div class="mt-7 grid gap-3 sm:max-w-md sm:grid-cols-2"><a href="{% url 'accounts:role_select' %}" class="mk-btn-primary w-full">I need help</a><a href="{% url 'accounts:role_select' %}" class="mk-btn-secondary w-full">I want work</a></div>
       <div class="mt-6 flex flex-wrap gap-2">{% include "components/trust_badge.html" with label="Verified profiles" %}{% include "components/trust_badge.html" with label="Ratings & reviews" %}{% include "components/trust_badge.html" with label="Safe bookings" %}</div>
       <div class="mt-8 grid max-w-xl grid-cols-3 gap-3">
-        <div class="mk-card-flat p-4"><p class="text-2xl font-black text-mk-text">60s</p><p class="mt-1 text-xs font-bold text-mk-muted">target booking flow</p></div>
-        <div class="mk-card-flat p-4"><p class="text-2xl font-black text-mk-text">2-way</p><p class="mt-1 text-xs font-bold text-mk-muted">ratings system</p></div>
-        <div class="mk-card-flat p-4"><p class="text-2xl font-black text-mk-text">MVP</p><p class="mt-1 text-xs font-bold text-mk-muted">ready structure</p></div>
+        <div class="mk-card-flat p-4"><p class="text-2xl font-extrabold text-mk-text">60s</p><p class="mt-1 text-xs font-bold text-mk-muted">target booking flow</p></div>
+        <div class="mk-card-flat p-4"><p class="text-2xl font-extrabold text-mk-text">2-way</p><p class="mt-1 text-xs font-bold text-mk-muted">ratings system</p></div>
+        <div class="mk-card-flat p-4"><p class="text-2xl font-extrabold text-mk-text">MVP</p><p class="mt-1 text-xs font-bold text-mk-muted">ready structure</p></div>
       </div>
     </div>
     <div class="relative">
       <div class="mk-card overflow-hidden p-3">
         <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1100&q=80" alt="Professional cleaning service" class="mk-photo h-[430px] w-full rounded-[1.25rem]">
         <div class="absolute bottom-8 left-8 right-8 rounded-3xl bg-white/95 p-5 shadow-mk-lift backdrop-blur">
-          <div class="flex items-center justify-between gap-4"><div><p class="text-xs font-black uppercase tracking-[.16em] text-mk-primary">Available helper</p><h2 class="mt-1 text-2xl font-black text-mk-text">Nomsa M.</h2><p class="mt-1 text-sm text-mk-muted">Cleaning · Laundry · Benoni</p></div><span class="mk-badge-warning">★ 4.8</span></div>
-          <div class="mt-4 grid grid-cols-3 gap-2 text-center"><div class="rounded-2xl bg-mk-bg p-3"><p class="text-sm font-black">24</p><p class="text-[11px] text-mk-muted">Jobs</p></div><div class="rounded-2xl bg-mk-bg p-3"><p class="text-sm font-black">2.4km</p><p class="text-[11px] text-mk-muted">Away</p></div><div class="rounded-2xl bg-mk-bg p-3"><p class="text-sm font-black">Today</p><p class="text-[11px] text-mk-muted">Available</p></div></div>
+          <div class="flex items-center justify-between gap-4"><div><p class="text-xs font-extrabold uppercase tracking-[.16em] text-mk-primary">Available helper</p><h2 class="mt-1 text-2xl font-extrabold text-mk-text">Nomsa M.</h2><p class="mt-1 text-sm text-mk-muted">Cleaning &middot; Laundry &middot; Benoni</p></div><span class="mk-badge-warning">&#9733; 4.8</span></div>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center"><div class="rounded-2xl bg-mk-bg p-3"><p class="text-sm font-extrabold">24</p><p class="text-[11px] text-mk-muted">Jobs</p></div><div class="rounded-2xl bg-mk-bg p-3"><p class="text-sm font-extrabold">2.4km</p><p class="text-[11px] text-mk-muted">Away</p></div><div class="rounded-2xl bg-mk-bg p-3"><p class="text-sm font-extrabold">Today</p><p class="text-[11px] text-mk-muted">Available</p></div></div>
         </div>
       </div>
     </div>
   </div>
 </section>
-<section class="bg-white mk-section">
+<section class="mk-surface-section mk-section">
   <div class="mk-container">
-    <div class="max-w-2xl">{% include "components/section_badge.html" with label="How it works" %}<h2 class="text-3xl font-black tracking-tight text-mk-text">Simple enough for mobile. Structured enough for trust.</h2></div>
+    <div class="max-w-2xl">{% include "components/section_badge.html" with label="How it works" %}<h2 class="text-3xl font-extrabold tracking-tight text-mk-text">Simple enough for mobile. Structured enough for trust.</h2></div>
     <div class="mt-8 grid gap-4 md:grid-cols-4">{% include "components/service_card.html" with icon="1" title="Choose what you need" description="Select cleaning, laundry, childcare, cooking, once-off work, or recurring support." %}{% include "components/service_card.html" with icon="2" title="View trusted profiles" description="Browse helpers with ratings, experience, verification status, and availability." %}{% include "components/service_card.html" with icon="3" title="Send a request" description="Pick a date, time, duration, location, and special instructions." %}{% include "components/service_card.html" with icon="4" title="Complete and review" description="Confirm completion, manage payment proof, and leave a review." %}</div>
   </div>
 </section>
-<section class="bg-mk-bg mk-section">
+<section class="mk-muted-section mk-section">
   <div class="mk-container">
-    <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-center"><div>{% include "components/section_badge.html" with label="Popular services" %}<h2 class="text-3xl font-black tracking-tight text-mk-text">Built around everyday household and business needs.</h2><p class="mt-4 text-sm leading-7 text-mk-muted">Phase 1 keeps categories focused, clear, and easy to book.</p></div>
-    <div class="grid gap-4 sm:grid-cols-2">{% include "components/service_card.html" with icon="🧹" title="Cleaning" description="Once-off or recurring home and office cleaning." %}{% include "components/service_card.html" with icon="🧺" title="Laundry" description="Laundry support as part of household help." %}{% include "components/service_card.html" with icon="🍳" title="Cooking" description="Meal preparation and household cooking support." %}{% include "components/service_card.html" with icon="👶" title="Childcare" description="Childcare support where helper profiles and references are clear." %}</div></div>
+    <div class="grid gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-center"><div>{% include "components/section_badge.html" with label="Popular services" %}<h2 class="text-3xl font-extrabold tracking-tight text-mk-text">Built around everyday household and business needs.</h2><p class="mt-4 text-sm leading-7 text-mk-muted">Phase 1 keeps categories focused, clear, and easy to book.</p></div>
+    <div class="grid gap-4 sm:grid-cols-2">{% include "components/service_card.html" with icon="CLN" title="Cleaning" description="Once-off or recurring home and office cleaning." %}{% include "components/service_card.html" with icon="LND" title="Laundry" description="Laundry support as part of household help." %}{% include "components/service_card.html" with icon="CKG" title="Cooking" description="Meal preparation and household cooking support." %}{% include "components/service_card.html" with icon="CHD" title="Childcare" description="Childcare support where helper profiles and references are clear." %}</div></div>
   </div>
 </section>
-<section class="bg-white mk-section">
+<section class="mk-surface-section mk-section">
   <div class="mk-container">
-    <div class="max-w-2xl">{% include "components/section_badge.html" with label="Marketplace preview" %}<h2 class="text-3xl font-black tracking-tight text-mk-text">Trusted profiles, not anonymous listings.</h2></div>
+    <div class="max-w-2xl">{% include "components/section_badge.html" with label="Marketplace preview" %}<h2 class="text-3xl font-extrabold tracking-tight text-mk-text">Trusted profiles, not anonymous listings.</h2></div>
     <div class="mt-8 grid gap-5 lg:grid-cols-3">
       {% include "components/helper_preview_card.html" with image="https://images.unsplash.com/photo-1595278069441-2cf29f8005a4?auto=format&fit=crop&w=800&q=80" name="Nomsa M." role="Household cleaning specialist" rating="4.8" jobs="24" distance="2.4 km" description="Reliable cleaner with experience in household and office cleaning, laundry support, and recurring bookings." %}
       {% include "components/helper_preview_card.html" with image="https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=800&q=80" name="Thandi N." role="Laundry and home support" rating="4.7" jobs="31" distance="3.1 km" description="Experienced helper with strong employer reviews and a preference for recurring weekly work." %}
@@ -49,22 +49,23 @@
   </div>
 </section>
 
-<section class="bg-mk-bg mk-section">
+<section class="mk-muted-section mk-section">
   <div class="mk-container grid gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-start">
     <div>
       {% include "components/section_badge.html" with label="End-state platform" %}
-      <h2 class="text-3xl font-black tracking-tight text-mk-text">A complete marketplace website, not only a landing page.</h2>
+      <h2 class="text-3xl font-extrabold tracking-tight text-mk-text">A complete marketplace website, not only a landing page.</h2>
       <p class="mt-4 text-sm leading-7 text-mk-muted">MongiKazi should prepare clear entry points for employers, helpers, businesses, operations, brochures, support, and future portal access.</p>
       <div class="mt-6 flex flex-col gap-3 sm:flex-row"><a href="{% url 'website:portals' %}" class="mk-btn-primary">View portal links</a><a href="{% url 'website:resources' %}" class="mk-btn-secondary">View brochures</a></div>
     </div>
     <div class="grid gap-4 md:grid-cols-2">
-      {% include "components/service_card.html" with icon="🏠" title="Employer journey" description="Find helpers, browse profiles, request bookings, track status, upload POP, and review work." %}
-      {% include "components/service_card.html" with icon="👷" title="Helper journey" description="Build a profile, upload documents, manage requests, complete jobs, and build reputation." %}
-      {% include "components/service_card.html" with icon="🏢" title="Business journey" description="Prepare for offices, sites, recurring schedules, preferred helper pools, and consolidated invoices." %}
-      {% include "components/service_card.html" with icon="🛠️" title="Operations journey" description="Support verification, booking oversight, payment proof checks, disputes, and marketplace reporting." %}
+      {% include "components/service_card.html" with icon="EMP" title="Employer journey" description="Find helpers, browse profiles, request bookings, track status, upload POP, and review work." %}
+      {% include "components/service_card.html" with icon="HLP" title="Helper journey" description="Build a profile, upload documents, manage requests, complete jobs, and build reputation." %}
+      {% include "components/service_card.html" with icon="BUS" title="Business journey" description="Prepare for offices, sites, recurring schedules, preferred helper pools, and consolidated invoices." %}
+      {% include "components/service_card.html" with icon="OPS" title="Operations journey" description="Support verification, booking oversight, payment proof checks, disputes, and marketplace reporting." %}
     </div>
   </div>
 </section>
 
 {% include "components/cta_panel.html" %}
 {% endblock %}
+

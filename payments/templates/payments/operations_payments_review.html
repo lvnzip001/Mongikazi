@@ -1,0 +1,69 @@
+﻿{% extends 'base/base_payments.html' %}
+
+{% block title %}Operations Review | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="p-5 sm:p-6 lg:p-8">
+  <div class="flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <p class="mk-eyebrow">Operations</p>
+      <h1 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">Payment submissions review</h1>
+      <p class="mt-2 text-sm font-medium text-mk-muted dark:text-slate-300">Verify or reject submitted proof-of-payment records.</p>
+    </div>
+    <div class="flex gap-2">
+      <a href="{% url 'payments:operations_payout_history' %}" class="mk-btn-secondary">Payout history</a>
+      <a href="{% url 'admin:index' %}" class="mk-btn-secondary">Admin</a>
+    </div>
+  </div>
+
+  <div class="mt-6 grid gap-3">
+    {% for payment in payments %}
+      <article class="mk-row-card">
+        <div>
+          <p class="text-xs font-bold uppercase tracking-[0.12em] text-mk-primary dark:text-teal-300">{{ payment.invoice.invoice_number }}</p>
+          <p class="mt-2 text-sm font-bold text-slate-900 dark:text-white">Booking {{ payment.invoice.booking.booking_reference }} • {{ payment.invoice.employer_user.email }}</p>
+          <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">{{ payment.get_method_display }} • R{{ payment.amount }} • Submitted {{ payment.submitted_at|date:'Y-m-d H:i' }}</p>
+          {% with proof=payment.proofs.first %}
+            {% if proof and proof.document_url %}<a href="{{ proof.document_url }}" target="_blank" rel="noopener" class="mk-link">Open proof</a>{% endif %}
+          {% endwith %}
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <form method="post" action="{% url 'payments:operations_verify_payment' payment_id=payment.id %}">{% csrf_token %}<button class="mk-btn-primary" type="submit">Verify</button></form>
+          <form method="post" action="{% url 'payments:operations_reject_payment' payment_id=payment.id %}">{% csrf_token %}<button class="mk-btn-secondary" type="submit">Reject</button></form>
+        </div>
+      </article>
+    {% empty %}
+      <div class="mk-empty-state"><p class="text-sm font-bold text-slate-900 dark:text-white">No submitted payments waiting review.</p></div>
+    {% endfor %}
+  </div>
+
+  <div class="mt-8">
+    <h2 class="mk-section-title">Ready for payout</h2>
+    <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">After employer payment is verified, mark when payout to worker is completed.</p>
+    <div class="mt-3 grid gap-3">
+      {% for invoice in payout_invoices %}
+        <article class="mk-row-card">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.12em] text-mk-primary dark:text-teal-300">{{ invoice.invoice_number }}</p>
+            <p class="mt-2 text-sm font-bold text-slate-900 dark:text-white">Worker {{ invoice.helper_user.email }} - Booking {{ invoice.booking.booking_reference }}</p>
+            <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">Employer paid at {{ invoice.paid_at|date:'Y-m-d H:i' }} - Worker fee R{{ invoice.worker_fee_amount }}</p>
+          </div>
+          <form method="post" action="{% url 'payments:operations_mark_paid_out' invoice_id=invoice.id %}">
+            {% csrf_token %}
+            <div class="grid gap-2 sm:grid-cols-2 mb-2">
+              <input type="text" name="payout_reference" class="mk-input" placeholder="Payout reference (optional)">
+              <input type="text" name="note" class="mk-input" placeholder="Payout note (optional)">
+            </div>
+            <button class="mk-btn-primary" type="submit">Mark paid out</button>
+          </form>
+        </article>
+      {% empty %}
+        <div class="mk-empty-state"><p class="text-sm font-bold text-slate-900 dark:text-white">No invoices waiting payout confirmation.</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
