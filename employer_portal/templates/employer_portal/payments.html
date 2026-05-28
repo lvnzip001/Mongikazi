@@ -1,0 +1,18 @@
+{% extends 'base/base_employer_portal.html' %}
+
+{% block title %}Payments | MongiKazi{% endblock %}
+
+{% block content %}
+<section class="mk-page-grid">
+  <article class="mk-card mk-empty-state lg:col-span-12">
+    <span class="mk-empty-icon">P</span>
+    <p class="mk-eyebrow">Payments</p>
+    <h1 class="mt-2 text-3xl font-bold text-slate-950 dark:text-white">Payments and invoices are being prepared</h1>
+    <p class="mt-3 max-w-2xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">After bookings go live, this area will show invoices, payment status, platform fees, and proof-of-payment upload actions.</p>
+    <div class="mt-5 grid w-full gap-2 sm:max-w-xl sm:grid-cols-2">
+      <a href="{% url 'employer_portal:support' %}" class="mk-btn-secondary w-full">Contact support</a>
+      <a href="{% url 'employer_portal:coming_soon' %}" class="mk-btn-primary w-full">Roadmap updates</a>
+    </div>
+  </article>
+</section>
+{% endblock %}

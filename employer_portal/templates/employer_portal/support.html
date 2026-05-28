@@ -1,0 +1,32 @@
+{% extends 'base/base_employer_portal.html' %}
+
+{% block title %}Support | MongiKazi{% endblock %}
+
+{% block content %}
+<section class="mk-page-grid">
+  <article class="mk-card mk-hero lg:col-span-12">
+    <p class="mk-eyebrow">Support</p>
+    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Support and trust guidance</h1>
+    <p class="mt-3 max-w-3xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300 sm:text-base">This workspace will become your support hub for account setup, safety guidance, booking issues, and platform assistance.</p>
+  </article>
+
+  <article class="mk-card lg:col-span-4">
+    <p class="mk-eyebrow">Account setup</p>
+    <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Profile readiness</h2>
+    <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Keep your location and service preferences complete so future bookings are accurate.</p>
+    <a href="{{ profile_url|default:'/employers/profile/' }}" class="mk-mini-link mt-4">Open profile</a>
+  </article>
+  <article class="mk-card lg:col-span-4">
+    <p class="mk-eyebrow">Trust and safety</p>
+    <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Safe booking guidance</h2>
+    <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Verification, reviews, and booking audit trails will support safer work relationships.</p>
+    <span class="mk-chip-muted mt-4">Coming soon</span>
+  </article>
+  <article class="mk-card lg:col-span-4">
+    <p class="mk-eyebrow">Support requests</p>
+    <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Issue reporting</h2>
+    <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Structured support and dispute workflows will be added after bookings are live.</p>
+    <span class="mk-chip-muted mt-4">Coming soon</span>
+  </article>
+</section>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base/base_employer_portal.html' %}
+
+{% block title %}Employer Dashboard | MongiKazi{% endblock %}
+
+{% block content %}
+<section class="mk-page-grid">
+  <article class="mk-card mk-hero lg:col-span-12">
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.75fr)] lg:items-center">
+      <div>
+        <p class="mk-eyebrow">Employer workspace</p>
+        <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-4xl">Good day, {{ greeting_name }}</h1>
+        <p class="mt-3 max-w-3xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300 sm:text-base">Your MongiKazi account is being prepared for trusted bookings. Keep your location, service needs, and profile readiness up to date so the booking experience can launch cleanly.</p>
+        <div class="mt-5 flex flex-col gap-2 sm:flex-row">
+          <a href="{% url 'employer_portal:find_help' %}" class="mk-btn-primary">Find trusted help</a>
+          <a href="{{ profile_url|default:'/employers/profile/' }}" class="mk-btn-secondary">Review profile setup</a>
+        </div>
+      </div>
+      <div class="mk-readiness-card">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <p class="text-xs font-bold uppercase tracking-[0.16em] text-mk-primary dark:text-teal-300">Booking readiness</p>
+            <p class="mt-1 text-2xl font-bold text-slate-950 dark:text-white">{{ profile_completion_percent }}%</p>
+          </div>
+          <span class="mk-chip">{{ trust_status_display }}</span>
+        </div>
+        <div class="mt-4 mk-progress-track"><span class="mk-progress-bar" style="width: {{ profile_completion_percent }}%"></span></div>
+        <p class="mt-3 text-xs font-semibold leading-5 text-mk-muted dark:text-slate-400">This score combines profile setup, service need, location readiness, and trust signals.</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="mk-card lg:col-span-7">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <p class="mk-eyebrow">Readiness summary</p>
+        <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Your booking foundation</h2>
+      </div>
+      <span class="mk-chip-muted">Setup</span>
+    </div>
+    <div class="mt-4 grid gap-3 sm:grid-cols-2">
+      <div class="mk-stat"><span>Primary location</span><strong>{% if primary_location %}{{ primary_location.suburb|default:primary_location.city|default:'Captured' }}{% else %}Pending{% endif %}</strong></div>
+      <div class="mk-stat"><span>Service need</span><strong>{% if service_need_summary %}{{ service_need_summary.service_type }}{% else %}Pending{% endif %}</strong></div>
+      <div class="mk-stat"><span>Trust signals</span><strong>{{ ready_signal_count }}/{{ trust_signal_count }}</strong></div>
+      <div class="mk-stat"><span>Account status</span><strong>{{ trust_status_display }}</strong></div>
+    </div>
+    <div class="mt-4 grid gap-2 sm:grid-cols-3">
+      <a href="/employers/profile/" class="mk-btn-secondary w-full">Profile</a>
+      <a href="/employers/profile/locations/" class="mk-btn-secondary w-full">Location</a>
+      <a href="/employers/profile/preferences/" class="mk-btn-secondary w-full">Preferences</a>
+    </div>
+  </article>
+
+  <article class="mk-card lg:col-span-5">
+    <p class="mk-eyebrow">Next best actions</p>
+    <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Keep the account ready</h2>
+    <ul class="mt-4 grid gap-2">
+      {% for item in next_actions %}
+        <li class="mk-list-item"><span>{{ item.title }}</span><a href="{{ item.url }}" class="mk-mini-link">Open</a></li>
+      {% empty %}
+        <li class="mk-empty-line">No outstanding setup actions.</li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="mk-card lg:col-span-12">
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <p class="mk-eyebrow">Marketplace entry</p>
+        <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Start preparing your first helper request</h2>
+        <p class="mt-2 max-w-3xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Browse available categories and helper profile teasers while the full booking request workflow is being prepared.</p>
+      </div>
+      <a href="{% url 'employer_portal:find_help' %}" class="mk-btn-primary shrink-0">Explore helper options</a>
+    </div>
+  </article>
+
+  <article class="mk-card lg:col-span-12">
+    <p class="mk-eyebrow">Workspace overview</p>
+    <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <a href="{% url 'employer_portal:bookings' %}" class="mk-stat-link"><span>Upcoming bookings</span><strong>{{ placeholder_counts.bookings }}</strong><small>Booking requests will appear here.</small></a>
+      <a href="{% url 'employer_portal:favourites' %}" class="mk-stat-link"><span>Favourite helpers</span><strong>{{ placeholder_counts.favourites }}</strong><small>Saved helpers will appear here.</small></a>
+      <a href="{% url 'employer_portal:payments' %}" class="mk-stat-link"><span>Payments</span><strong>{{ placeholder_counts.payments }}</strong><small>Invoices and POP uploads.</small></a>
+      <a href="{% url 'employer_portal:messages' %}" class="mk-stat-link"><span>Messages</span><strong>{{ placeholder_counts.messages }}</strong><small>Chats open after requests.</small></a>
+    </div>
+  </article>
+</section>
+{% endblock %}
