@@ -21,6 +21,8 @@ dist/
 
 # dotenv environment variable files
 .env
+.env.local
+.env.production
 
 # Virtual environments
 .venv
