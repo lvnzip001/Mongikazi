@@ -1,0 +1,18 @@
+{% extends 'base/base_worker_portal.html' %}
+
+{% block title %}Messages | MongiKazi{% endblock %}
+
+{% block content %}
+<section class="mk-page-grid">
+  <article class="mk-card mk-empty-state lg:col-span-12">
+    <span class="mk-empty-icon">MS</span>
+    <p class="mk-eyebrow">Messages</p>
+    <h1 class="mt-2 text-3xl font-bold text-slate-950 dark:text-white">Messages open with active booking requests</h1>
+    <p class="mt-3 max-w-2xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">Messaging will stay connected to real booking activity so communication remains traceable, relevant, and safer for both sides.</p>
+    <div class="mt-5 grid w-full gap-2 sm:max-w-xl sm:grid-cols-2">
+      <a href="{% url 'worker_portal:requests' %}" class="mk-btn-secondary w-full">Go to requests</a>
+      <a href="{% url 'worker_portal:safety' %}" class="mk-btn-primary w-full">Worker safety</a>
+    </div>
+  </article>
+</section>
+{% endblock %}

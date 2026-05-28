@@ -1,0 +1,37 @@
+{% extends 'base/base_worker_portal.html' %}
+
+{% block title %}Verification | MongiKazi{% endblock %}
+
+{% block content %}
+<section class="mk-page-grid">
+  <article class="mk-card mk-hero lg:col-span-12">
+    <p class="mk-eyebrow">Verification readiness</p>
+    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Trust signals for safer work</h1>
+    <p class="mt-3 max-w-3xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">The full verification centre will come later. For now, this page shows the trust-readiness signals captured during onboarding and profile setup.</p>
+  </article>
+
+  <article class="mk-card lg:col-span-8">
+    <div class="flex items-start justify-between gap-3">
+      <div>
+        <p class="mk-eyebrow">Current trust signals</p>
+        <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Profile trust readiness</h2>
+      </div>
+      <span class="mk-chip-muted">Foundation</span>
+    </div>
+    <div class="mt-4 grid gap-2 sm:grid-cols-2">
+      {% for signal in trust_signals %}
+        <div class="mk-list-item"><span>{{ signal.get_signal_type_display }}</span><span class="mk-chip-muted">{{ signal.get_status_display }}</span></div>
+      {% empty %}
+        <div class="mk-empty-line sm:col-span-2">Trust signals will appear after onboarding/profile setup.</div>
+      {% endfor %}
+    </div>
+  </article>
+
+  <article class="mk-card lg:col-span-4">
+    <p class="mk-eyebrow">Next step</p>
+    <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Verification centre coming</h2>
+    <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Document uploads, review queues, and approval workflows belong to the future verification app.</p>
+    <a href="/helpers/profile/" class="mk-mini-link mt-4">Open work profile</a>
+  </article>
+</section>
+{% endblock %}
