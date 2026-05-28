@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-zw@sr%csbelecyz^d1(iqmko3od!gz01v@xdof5@e!1mc8tfqj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["272b-165-0-43-43.ngrok-free.app"]
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://272b-165-0-43-43.ngrok-free.app",
+# ]
+
 
 
 # Application definition
@@ -40,6 +45,12 @@ INSTALLED_APPS = [
     'accounts',
     'onboarding',
     'helpers',
+    'employers',
+    'employer_portal',
+    'worker_portal',
+    'bookings',
+    'messaging',
+    'payments',
     'website',
 ]
 
@@ -121,5 +132,3 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 AUTH_USER_MODEL = 'accounts.User'
-
-

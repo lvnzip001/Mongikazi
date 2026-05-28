@@ -12,6 +12,12 @@ urlpatterns = [
     path("accounts/", include(("accounts.urls", "accounts"), namespace="accounts")),
     path("onboarding/", include(("onboarding.urls", "onboarding"), namespace="onboarding")),
     path("helpers/", include(("helpers.urls", "helpers"), namespace="helpers")),
+    path("bookings/", include(("bookings.urls", "bookings"), namespace="bookings")),
+    path("messages/", include(("messaging.urls", "messaging"), namespace="messaging")),
+    path("payments/", include(("payments.urls", "payments"), namespace="payments")),
+    path("employer/", include(("employer_portal.urls", "employer_portal"), namespace="employer_portal")),
+    path("worker/", include(("worker_portal.urls", "worker_portal"), namespace="worker_portal")),
+    path("employers/", include(("employers.urls", "employers"), namespace="employers")),
     path("", include(("website.urls", "website"), namespace="website")),
 ]
 

@@ -19,7 +19,7 @@ def get_portal_url(user):
         return getattr(settings, "MONGIKAZI_EMPLOYER_PORTAL_URL", "/employer/")
 
     if getattr(user, "is_helper", False):
-        return getattr(settings, "MONGIKAZI_HELPER_PORTAL_URL", "/helper/")
+        return getattr(settings, "MONGIKAZI_HELPER_PORTAL_URL", "/worker/")
 
     return reverse("accounts:role_select")
 

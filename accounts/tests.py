@@ -218,6 +218,21 @@ class AccountsAuthFlowTests(TestCase):
         )
         self.assertRedirects(response, "/requested/page/", fetch_redirect_response=False)
 
+    def test_completed_helper_default_redirect_goes_to_worker_portal(self):
+        user = User.objects.create_user(
+            username="helper-default@example.com",
+            email="helper-default@example.com",
+            phone_number="0710000015",
+            password=self.password,
+            role=User.Role.HELPER,
+            is_onboarding_complete=True,
+        )
+        response = self.client.post(
+            reverse("accounts:login"),
+            {"identifier": user.email, "password": self.password},
+        )
+        self.assertRedirects(response, "/worker/", fetch_redirect_response=False)
+
     def test_logout_requires_post(self):
         user = User.objects.create_user(
             username="logout@example.com",
