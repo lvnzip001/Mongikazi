@@ -1,0 +1,55 @@
+{% extends 'base/base_employers.html' %}
+
+{% block title %}Employer Location | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="mk-shell">
+  <aside class="mk-intro-panel">
+    <span class="mk-status-pill">Location setup</span>
+    <h1 class="mt-3 text-2xl font-bold text-slate-950 dark:text-white sm:text-3xl">Primary service location</h1>
+    <p class="mt-3 text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">Capture the main area where helpers will report. Exact address details should stay operational and should not be exposed in public previews.</p>
+    {% if location %}
+      <div class="mt-5 mk-section-card">
+        <span class="mk-stat-label">Current primary</span>
+        <strong class="mk-stat-value">{{ location.label|default:'Primary location' }}</strong>
+        <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">{{ location.suburb|default:location.city }}{% if location.city %}, {{ location.city }}{% endif %}</p>
+      </div>
+    {% endif %}
+    <div class="mk-note-card mt-4">
+      <strong>Privacy note</strong>
+      <span>Only the service area should appear in profile previews. Full address details are for confirmed bookings and operations.</span>
+    </div>
+  </aside>
+
+  <section class="mk-content-panel">
+    <form method="post" class="mk-form-card">
+      {% csrf_token %}
+      <div class="mb-2">
+        <p class="mk-eyebrow">Where help is needed</p>
+        <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Location details</h2>
+        <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">Use practical location details that make future bookings easy to coordinate.</p>
+      </div>
+
+      {% if form.non_field_errors %}
+        <div class="mk-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        {% for field in form %}
+          <div class="{% if field.name == 'address_line_1' or field.name == 'address_line_2' or field.name == 'notes_for_helper' %}sm:col-span-2{% endif %}">
+            <label for="{{ field.id_for_label }}" class="mk-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<p class="mk-help-text">{{ field.help_text }}</p>{% endif %}
+            {% for error in field.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="mk-action-grid mt-2">
+        <button type="submit" class="mk-btn-primary w-full">Save location</button>
+        <a href="{% url 'employers:profile_detail' %}" class="mk-btn-secondary w-full">Back to profile</a>
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}

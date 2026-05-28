@@ -1,0 +1,48 @@
+{% extends 'base/base_employers.html' %}
+
+{% block title %}Employer Profile Incomplete | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="mk-shell">
+  <aside class="mk-intro-panel">
+    <span class="mk-status-pill">Almost ready</span>
+    <h1 class="mt-3 text-2xl font-bold text-slate-950 dark:text-white sm:text-3xl">Your booking profile is almost ready</h1>
+    <p class="mt-3 text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">Finish the setup items below so MongiKazi can prepare your account for trusted helper matching and future booking controls.</p>
+    {% if profile %}
+      <div class="mt-5 mk-progress-card">
+        <span class="mk-stat-label">Current completion</span>
+        <strong class="mt-1 block text-2xl font-bold text-slate-950 dark:text-white">{{ profile.profile_completion_percent }}%</strong>
+        <div class="mt-3 mk-progress-track"><span class="mk-progress-bar" style="width: {{ profile.profile_completion_percent }}%"></span></div>
+      </div>
+    {% endif %}
+  </aside>
+
+  <section class="mk-content-panel">
+    <div class="mk-section-card">
+      <p class="mk-eyebrow">Required next steps</p>
+      <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Complete your booking foundation</h2>
+      <ul class="mt-4 grid gap-2">
+        {% for item in missing_items %}
+          <li class="mk-list-item"><span>{{ item }}</span><span class="mk-chip-muted">Pending</span></li>
+        {% empty %}
+          <li class="mk-empty-line">No missing items were detected. Try refreshing your profile state.</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="mk-note-card">
+      <strong>Why this matters</strong>
+      <span>Helpers need enough context to judge distance, service type, timing, and safety before accepting work.</span>
+    </div>
+
+    <div class="mk-action-grid">
+      {% if onboarding_complete %}
+        <a href="{% url 'employers:profile_edit' %}" class="mk-btn-primary w-full">Continue setup</a>
+      {% else %}
+        <a href="{% url 'onboarding:start' %}" class="mk-btn-primary w-full">Continue onboarding</a>
+      {% endif %}
+      <a href="{% url 'employers:profile_detail' %}" class="mk-btn-secondary w-full">Try profile view</a>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base/base_employers.html' %}
+
+{% block title %}Employer Preferences | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="mk-shell">
+  <aside class="mk-intro-panel">
+    <span class="mk-status-pill">Service setup</span>
+    <h1 class="mt-3 text-2xl font-bold text-slate-950 dark:text-white sm:text-3xl">Service preferences</h1>
+    <p class="mt-3 text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">Define what you need, how often you need it, and the preferred timing. This becomes the demand-side foundation for future matching and bookings.</p>
+
+    {% if preference %}
+      <div class="mt-5 mk-section-card">
+        <span class="mk-stat-label">Current preference</span>
+        <strong class="mk-stat-value">{{ preference.get_service_type_display|default:'Pending' }}</strong>
+        <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">{{ preference.get_service_frequency_display|default:'Frequency pending' }}{% if preference.estimated_duration_hours %} &middot; {{ preference.estimated_duration_hours }} hours{% endif %}</p>
+      </div>
+    {% endif %}
+    <div class="mk-note-card mt-4">
+      <strong>Matching signal</strong>
+      <span>Clear service preferences help MongiKazi rank helpers by availability, skills, distance, and reliability later.</span>
+    </div>
+  </aside>
+
+  <section class="mk-content-panel">
+    <form method="post" class="mk-form-card">
+      {% csrf_token %}
+      <div class="mb-2">
+        <p class="mk-eyebrow">Booking intent</p>
+        <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Service need</h2>
+        <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">Keep this simple for now. The booking flow will use these values as starting defaults later.</p>
+      </div>
+
+      {% if form.non_field_errors %}
+        <div class="mk-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        {% for field in form %}
+          <div class="{% if field.name == 'special_instructions' %}sm:col-span-2{% endif %}">
+            <label for="{{ field.id_for_label }}" class="mk-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<p class="mk-help-text">{{ field.help_text }}</p>{% endif %}
+            {% for error in field.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="mk-action-grid mt-2">
+        <button type="submit" class="mk-btn-primary w-full">Save preferences</button>
+        <a href="{% url 'employers:profile_detail' %}" class="mk-btn-secondary w-full">Back to profile</a>
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}
+

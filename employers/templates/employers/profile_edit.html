@@ -1,0 +1,49 @@
+{% extends 'base/base_employers.html' %}
+
+{% block title %}Edit Employer Profile | MongiKazi{% endblock %}
+
+{% block content %}
+<div class="mk-shell">
+  <aside class="mk-intro-panel">
+    <span class="mk-status-pill">Profile setup</span>
+    <h1 class="mt-3 text-2xl font-bold text-slate-950 dark:text-white sm:text-3xl">Edit your employer profile</h1>
+    <p class="mt-3 text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">Use a clear profile name, area, and contact preference so future helpers and support teams understand who is requesting work.</p>
+    <div class="mt-5 mk-progress-card">
+      <span class="mk-stat-label">Current completion</span>
+      <strong class="mt-1 block text-2xl font-bold text-slate-950 dark:text-white">{{ profile.profile_completion_percent }}%</strong>
+      <div class="mt-3 mk-progress-track"><span class="mk-progress-bar" style="width: {{ profile.profile_completion_percent }}%"></span></div>
+    </div>
+  </aside>
+
+  <section class="mk-content-panel">
+    <form method="post" class="mk-form-card">
+      {% csrf_token %}
+      <div class="mb-2">
+        <p class="mk-eyebrow">Account identity</p>
+        <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Employer details</h2>
+        <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">These details prepare your account for the employer portal and future booking requests.</p>
+      </div>
+
+      {% if form.non_field_errors %}
+        <div class="mk-error">{{ form.non_field_errors }}</div>
+      {% endif %}
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        {% for field in form %}
+          <div class="{% if field.name == 'is_active' %}sm:col-span-2{% endif %}">
+            <label for="{{ field.id_for_label }}" class="mk-label">{{ field.label }}</label>
+            {{ field }}
+            {% if field.help_text %}<p class="mk-help-text">{{ field.help_text }}</p>{% endif %}
+            {% for error in field.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="mk-action-grid mt-2">
+        <button type="submit" class="mk-btn-primary w-full">Save profile</button>
+        <a href="{% url 'employers:profile_detail' %}" class="mk-btn-secondary w-full">Back to profile</a>
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}
