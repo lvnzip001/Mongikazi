@@ -1,16 +1,32 @@
 from django import forms
 
+from locations.form_fields import (
+    apply_locality_fallback_initial,
+    bind_locality_fields,
+    clean_locality_pair,
+    locality_autocomplete_widget,
+)
+
 from .models import HelperAvailability, HelperProfile, HelperSkill
 
 
 class HelperProfileForm(forms.ModelForm):
+    location_query = forms.CharField(
+        label="Location",
+        widget=locality_autocomplete_widget("location_locality_id"),
+    )
+    location_locality_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+    work_area_query = forms.CharField(
+        label="Preferred work area",
+        widget=locality_autocomplete_widget("work_area_locality_id"),
+    )
+    work_area_locality_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = HelperProfile
         fields = (
             "display_name",
             "profile_photo",
-            "location",
-            "preferred_work_area",
             "bio",
             "years_experience",
             "availability_summary",
@@ -18,12 +34,70 @@ class HelperProfileForm(forms.ModelForm):
         )
         widgets = {
             "display_name": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Display name"}),
-            "location": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Location"}),
-            "preferred_work_area": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Preferred work area"}),
             "bio": forms.Textarea(attrs={"class": "mk-input", "rows": 4, "placeholder": "Profile bio"}),
             "years_experience": forms.NumberInput(attrs={"class": "mk-input", "min": 0}),
             "availability_summary": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Availability summary"}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        bind_locality_fields(
+            self,
+            query_field="location_query",
+            id_field="location_locality_id",
+            instance=self.instance,
+            text_attr="location",
+            fk_attr="location_locality",
+        )
+        bind_locality_fields(
+            self,
+            query_field="work_area_query",
+            id_field="work_area_locality_id",
+            instance=self.instance,
+            text_attr="preferred_work_area",
+            fk_attr="preferred_work_area_locality",
+        )
+        apply_locality_fallback_initial(
+            self,
+            query_field="work_area_query",
+            id_field="work_area_locality_id",
+            source_locality=self.instance.location_locality,
+            source_text=self.instance.location,
+        )
+
+    def clean(self):
+        cleaned = super().clean()
+        location = clean_locality_pair(
+            cleaned,
+            query_field="location_query",
+            id_field="location_locality_id",
+            field_label="location",
+            fallback_locality=self.instance.location_locality,
+            fallback_text=self.instance.location,
+        )
+        work_area = clean_locality_pair(
+            cleaned,
+            query_field="work_area_query",
+            id_field="work_area_locality_id",
+            field_label="work area",
+            fallback_locality=self.instance.location_locality,
+            fallback_text=self.instance.location,
+        )
+        cleaned["location"] = location.display_label
+        cleaned["location_locality"] = location
+        cleaned["preferred_work_area"] = work_area.display_label
+        cleaned["preferred_work_area_locality"] = work_area
+        return cleaned
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.location = self.cleaned_data["location"]
+        instance.location_locality = self.cleaned_data["location_locality"]
+        instance.preferred_work_area = self.cleaned_data["preferred_work_area"]
+        instance.preferred_work_area_locality = self.cleaned_data["preferred_work_area_locality"]
+        if commit:
+            instance.save()
+        return instance
 
     def clean_years_experience(self):
         years = self.cleaned_data.get("years_experience")

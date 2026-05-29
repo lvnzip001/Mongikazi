@@ -27,6 +27,9 @@ def create_or_update_employer_profile_from_onboarding(user):
     employer_profile, _ = EmployerProfile.objects.get_or_create(user=user)
     employer_profile.display_name = _resolve_display_name(user, onboarding_profile)
     employer_profile.primary_area = onboarding_profile.preferred_location or employer_profile.primary_area
+    employer_profile.primary_area_locality = (
+        onboarding_profile.preferred_location_locality or employer_profile.primary_area_locality
+    )
     employer_profile.primary_location_label = employer_profile.primary_location_label or "Home"
     employer_profile.contact_number = user.phone_number or employer_profile.contact_number
     if not employer_profile.preferred_contact_method:
@@ -50,18 +53,23 @@ def sync_employer_location_from_onboarding(user):
     employer_profile, _ = EmployerProfile.objects.get_or_create(user=user)
     if onboarding_profile.preferred_location:
         employer_profile.primary_area = onboarding_profile.preferred_location
-        employer_profile.save(update_fields=["primary_area", "updated_at"])
+        employer_profile.primary_area_locality = onboarding_profile.preferred_location_locality
+        employer_profile.save(update_fields=["primary_area", "primary_area_locality", "updated_at"])
 
     if not any([onboarding_profile.preferred_location, onboarding_profile.special_instructions, employer_profile.primary_area]):
         return None
 
+    locality = onboarding_profile.preferred_location_locality
+    area_label = onboarding_profile.preferred_location or employer_profile.primary_area
+    suburb_name = locality.name if locality else area_label
     location = EmployerLocation.objects.filter(employer=employer_profile, is_primary=True).first()
     defaults = {
         "label": employer_profile.primary_location_label or "Home",
-        "address_line_1": onboarding_profile.preferred_location or employer_profile.primary_area,
-        "suburb": onboarding_profile.preferred_location or employer_profile.primary_area,
-        "city": location.city if location else "",
-        "province": location.province if location else "",
+        "address_line_1": area_label,
+        "suburb": suburb_name,
+        "locality": locality,
+        "city": (locality.municipality or locality.name) if locality else (location.city if location else ""),
+        "province": locality.province if locality else (location.province if location else ""),
         "postal_code": location.postal_code if location else "",
         "notes_for_helper": onboarding_profile.special_instructions,
         "is_primary": True,

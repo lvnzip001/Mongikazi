@@ -29,14 +29,39 @@
       {% endif %}
 
       <div class="grid gap-4 sm:grid-cols-2">
-        {% for field in form %}
-          <div class="{% if field.name == 'is_active' %}sm:col-span-2{% endif %}">
-            <label for="{{ field.id_for_label }}" class="mk-label">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}<p class="mk-help-text">{{ field.help_text }}</p>{% endif %}
-            {% for error in field.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
-          </div>
-        {% endfor %}
+        <div>
+          <label for="{{ form.display_name.id_for_label }}" class="mk-label">{{ form.display_name.label }}</label>
+          {{ form.display_name }}
+          {% for error in form.display_name.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          <label for="{{ form.employer_type.id_for_label }}" class="mk-label">{{ form.employer_type.label }}</label>
+          {{ form.employer_type }}
+          {% for error in form.employer_type.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          <label for="{{ form.primary_location_label.id_for_label }}" class="mk-label">{{ form.primary_location_label.label }}</label>
+          {{ form.primary_location_label }}
+          {% for error in form.primary_location_label.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="sm:col-span-2">
+          {% include "locations/includes/locality_field.html" with label="Primary area" help_text="Type your suburb or city and select from the suggestions." query_field=form.primary_area_query id_field=form.primary_area_locality_id %}
+        </div>
+        <div>
+          <label for="{{ form.contact_number.id_for_label }}" class="mk-label">{{ form.contact_number.label }}</label>
+          {{ form.contact_number }}
+          {% for error in form.contact_number.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          <label for="{{ form.preferred_contact_method.id_for_label }}" class="mk-label">{{ form.preferred_contact_method.label }}</label>
+          {{ form.preferred_contact_method }}
+          {% for error in form.preferred_contact_method.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="sm:col-span-2">
+          <label for="{{ form.is_active.id_for_label }}" class="mk-label">{{ form.is_active.label }}</label>
+          {{ form.is_active }}
+          {% for error in form.is_active.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
       </div>
 
       <div class="mk-action-grid mt-2">

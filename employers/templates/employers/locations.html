@@ -35,14 +35,49 @@
       {% endif %}
 
       <div class="grid gap-4 sm:grid-cols-2">
-        {% for field in form %}
-          <div class="{% if field.name == 'address_line_1' or field.name == 'address_line_2' or field.name == 'notes_for_helper' %}sm:col-span-2{% endif %}">
-            <label for="{{ field.id_for_label }}" class="mk-label">{{ field.label }}</label>
-            {{ field }}
-            {% if field.help_text %}<p class="mk-help-text">{{ field.help_text }}</p>{% endif %}
-            {% for error in field.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
-          </div>
-        {% endfor %}
+        <div>
+          <label for="{{ form.label.id_for_label }}" class="mk-label">{{ form.label.label }}</label>
+          {{ form.label }}
+          {% for error in form.label.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="sm:col-span-2">
+          <label for="{{ form.address_line_1.id_for_label }}" class="mk-label">{{ form.address_line_1.label }}</label>
+          {{ form.address_line_1 }}
+          {% for error in form.address_line_1.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="sm:col-span-2">
+          <label for="{{ form.address_line_2.id_for_label }}" class="mk-label">{{ form.address_line_2.label }}</label>
+          {{ form.address_line_2 }}
+          {% for error in form.address_line_2.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="sm:col-span-2">
+          {% include "locations/includes/locality_field.html" with label="Suburb / area" help_text="Type your suburb or city and select from the suggestions." query_field=form.suburb_query id_field=form.suburb_locality_id %}
+        </div>
+        <div>
+          <label for="{{ form.city.id_for_label }}" class="mk-label">{{ form.city.label }}</label>
+          {{ form.city }}
+          {% for error in form.city.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          <label for="{{ form.province.id_for_label }}" class="mk-label">{{ form.province.label }}</label>
+          {{ form.province }}
+          {% for error in form.province.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div>
+          <label for="{{ form.postal_code.id_for_label }}" class="mk-label">{{ form.postal_code.label }}</label>
+          {{ form.postal_code }}
+          {% for error in form.postal_code.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="sm:col-span-2">
+          <label for="{{ form.notes_for_helper.id_for_label }}" class="mk-label">{{ form.notes_for_helper.label }}</label>
+          {{ form.notes_for_helper }}
+          {% for error in form.notes_for_helper.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
+        <div class="sm:col-span-2">
+          <label for="{{ form.is_primary.id_for_label }}" class="mk-label">{{ form.is_primary.label }}</label>
+          {{ form.is_primary }}
+          {% for error in form.is_primary.errors %}<p class="mk-field-error">{{ error }}</p>{% endfor %}
+        </div>
       </div>
 
       <div class="mk-action-grid mt-2">

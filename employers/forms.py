@@ -1,5 +1,12 @@
 from django import forms
 
+from locations.form_fields import (
+    apply_locality_fallback_initial,
+    bind_locality_fields,
+    clean_locality_pair,
+    locality_autocomplete_widget,
+)
+
 from .models import EmployerLocation, EmployerProfile, EmployerServicePreference
 
 
@@ -16,13 +23,18 @@ class EmployerRoleValidationMixin:
 
 
 class EmployerProfileForm(EmployerRoleValidationMixin, forms.ModelForm):
+    primary_area_query = forms.CharField(
+        label="Primary area",
+        widget=locality_autocomplete_widget("primary_area_locality_id"),
+    )
+    primary_area_locality_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = EmployerProfile
         fields = (
             "display_name",
             "employer_type",
             "primary_location_label",
-            "primary_area",
             "contact_number",
             "preferred_contact_method",
             "is_active",
@@ -31,20 +43,57 @@ class EmployerProfileForm(EmployerRoleValidationMixin, forms.ModelForm):
             "display_name": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Employer display name"}),
             "employer_type": forms.Select(attrs={"class": "mk-input"}),
             "primary_location_label": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Home, Office, Apartment"}),
-            "primary_area": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Suburb or area"}),
             "contact_number": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Primary contact number"}),
             "preferred_contact_method": forms.Select(attrs={"class": "mk-input"}),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        bind_locality_fields(
+            self,
+            query_field="primary_area_query",
+            id_field="primary_area_locality_id",
+            instance=self.instance,
+            text_attr="primary_area",
+            fk_attr="primary_area_locality",
+        )
+
+    def clean(self):
+        cleaned = super().clean()
+        locality = clean_locality_pair(
+            cleaned,
+            query_field="primary_area_query",
+            id_field="primary_area_locality_id",
+            field_label="area",
+            fallback_locality=self.instance.primary_area_locality,
+            fallback_text=self.instance.primary_area,
+        )
+        cleaned["primary_area"] = locality.display_label
+        cleaned["primary_area_locality"] = locality
+        return cleaned
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.primary_area = self.cleaned_data["primary_area"]
+        instance.primary_area_locality = self.cleaned_data["primary_area_locality"]
+        if commit:
+            instance.save()
+        return instance
+
 
 class EmployerLocationForm(EmployerRoleValidationMixin, forms.ModelForm):
+    suburb_query = forms.CharField(
+        label="Suburb / area",
+        widget=locality_autocomplete_widget("suburb_locality_id"),
+    )
+    suburb_locality_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
+
     class Meta:
         model = EmployerLocation
         fields = (
             "label",
             "address_line_1",
             "address_line_2",
-            "suburb",
             "city",
             "province",
             "postal_code",
@@ -55,7 +104,6 @@ class EmployerLocationForm(EmployerRoleValidationMixin, forms.ModelForm):
             "label": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Home, Office, Apartment"}),
             "address_line_1": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Street address"}),
             "address_line_2": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Unit, complex, optional"}),
-            "suburb": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Suburb"}),
             "city": forms.TextInput(attrs={"class": "mk-input", "placeholder": "City"}),
             "province": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Province"}),
             "postal_code": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Postal code"}),
@@ -63,9 +111,54 @@ class EmployerLocationForm(EmployerRoleValidationMixin, forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        self.employer_profile = kwargs.pop("employer_profile", None)
         super().__init__(*args, **kwargs)
-        for field in ["address_line_1", "suburb", "city", "province"]:
+        for field in ["address_line_1", "city", "province"]:
             self.fields[field].required = True
+        bind_locality_fields(
+            self,
+            query_field="suburb_query",
+            id_field="suburb_locality_id",
+            instance=self.instance,
+            text_attr="suburb",
+            fk_attr="locality",
+        )
+        employer = self.employer_profile or getattr(self.instance, "employer", None)
+        if employer and not self.initial.get("suburb_locality_id"):
+            apply_locality_fallback_initial(
+                self,
+                query_field="suburb_query",
+                id_field="suburb_locality_id",
+                source_locality=employer.primary_area_locality,
+                source_text=employer.primary_area,
+            )
+
+    def clean(self):
+        cleaned = super().clean()
+        employer = self.employer_profile or getattr(self.instance, "employer", None)
+        locality = clean_locality_pair(
+            cleaned,
+            query_field="suburb_query",
+            id_field="suburb_locality_id",
+            field_label="suburb",
+            fallback_locality=employer.primary_area_locality if employer else None,
+            fallback_text=employer.primary_area if employer else "",
+        )
+        cleaned["suburb"] = locality.name
+        cleaned["locality"] = locality
+        if not cleaned.get("city"):
+            cleaned["city"] = locality.municipality or locality.name
+        if not cleaned.get("province"):
+            cleaned["province"] = locality.province
+        return cleaned
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.suburb = self.cleaned_data["suburb"]
+        instance.locality = self.cleaned_data["locality"]
+        if commit:
+            instance.save()
+        return instance
 
 
 class EmployerServicePreferenceForm(EmployerRoleValidationMixin, forms.ModelForm):

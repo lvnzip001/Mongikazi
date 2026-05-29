@@ -47,9 +47,11 @@ def create_or_update_helper_profile_from_onboarding(user):
     helper_profile, _ = HelperProfile.objects.get_or_create(user=user)
     helper_profile.display_name = display_name
     helper_profile.location = onboarding_profile.location
+    helper_profile.location_locality = onboarding_profile.location_locality
     helper_profile.years_experience = onboarding_profile.years_experience or 0
     helper_profile.bio = onboarding_profile.bio
     helper_profile.preferred_work_area = onboarding_profile.preferred_work_area
+    helper_profile.preferred_work_area_locality = onboarding_profile.preferred_work_area_locality
     helper_profile.availability_summary = onboarding_profile.availability_summary
     helper_profile.save()
 

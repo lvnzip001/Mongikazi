@@ -15,7 +15,21 @@ class HelperProfile(models.Model):
     display_name = models.CharField(max_length=120, blank=True)
     profile_photo = models.FileField(upload_to="helpers/profile_photos/", blank=True, null=True)
     location = models.CharField(max_length=255, blank=True)
+    location_locality = models.ForeignKey(
+        "locations.Locality",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="helper_profiles",
+    )
     preferred_work_area = models.CharField(max_length=255, blank=True)
+    preferred_work_area_locality = models.ForeignKey(
+        "locations.Locality",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="helper_work_area_profiles",
+    )
     bio = models.TextField(blank=True)
     years_experience = models.PositiveSmallIntegerField(default=0)
     availability_summary = models.CharField(max_length=255, blank=True)

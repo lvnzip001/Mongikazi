@@ -5,8 +5,9 @@ from django.test import TestCase
 from django.urls import resolve, reverse
 
 from accounts.models import User
-from employers.forms import EmployerServicePreferenceForm
+from employers.forms import EmployerLocationForm, EmployerServicePreferenceForm
 from employers.models import EmployerLocation, EmployerProfile, EmployerServicePreference, EmployerTrustSignal
+from locations.models import Locality
 from employers.services.onboarding_handoff_service import create_or_update_employer_profile_from_onboarding
 from employers.services.profile_completion_service import calculate_employer_profile_completion
 from onboarding.models import EmployerOnboardingProfile
@@ -146,6 +147,60 @@ class EmployersHandoffTests(TestCase):
             user=self.employer,
         )
         self.assertTrue(valid.is_valid())
+
+    def test_location_form_inherits_primary_area_from_profile(self):
+        east_london = Locality.objects.create(
+            name="East London",
+            province="Eastern Cape",
+            slug="east-london-employer-profile",
+            municipality="Buffalo City",
+            locality_type=Locality.LocalityType.CITY,
+        )
+        profile = EmployerProfile.objects.create(
+            user=self.employer,
+            display_name="Employer",
+            primary_area=east_london.display_label,
+            primary_area_locality=east_london,
+        )
+        location = EmployerLocation(employer=profile)
+        form = EmployerLocationForm(instance=location, employer_profile=profile)
+        self.assertEqual(form.initial.get("suburb_locality_id"), east_london.pk)
+        self.assertEqual(form.initial.get("suburb_query"), east_london.display_label)
+
+    def test_location_form_submits_without_hidden_id_when_area_matches_profile(self):
+        east_london = Locality.objects.create(
+            name="East London",
+            province="Eastern Cape",
+            slug="east-london-employer-submit",
+            municipality="Buffalo City",
+            locality_type=Locality.LocalityType.CITY,
+        )
+        profile = EmployerProfile.objects.create(
+            user=self.employer,
+            display_name="Employer",
+            primary_area=east_london.display_label,
+            primary_area_locality=east_london,
+        )
+        location = EmployerLocation(employer=profile)
+        form = EmployerLocationForm(
+            data={
+                "label": "Home",
+                "address_line_1": "12 Main Road",
+                "address_line_2": "",
+                "suburb_query": east_london.display_label,
+                "city": "East London",
+                "province": "Eastern Cape",
+                "postal_code": "",
+                "notes_for_helper": "",
+                "is_primary": True,
+            },
+            instance=location,
+            employer_profile=profile,
+            user=self.employer,
+        )
+        self.assertTrue(form.is_valid(), form.errors)
+        saved = form.save(commit=False)
+        self.assertEqual(saved.locality_id, east_london.pk)
 
     def test_findstatic_resolves_employer_assets(self):
         css = finders.find("employers/css/employers.css")

@@ -27,6 +27,13 @@ class EmployerProfile(models.Model):
     employer_type = models.CharField(max_length=20, choices=EmployerType.choices, default=EmployerType.HOUSEHOLD)
     primary_location_label = models.CharField(max_length=80, blank=True)
     primary_area = models.CharField(max_length=255, blank=True)
+    primary_area_locality = models.ForeignKey(
+        "locations.Locality",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employer_profiles",
+    )
     contact_number = models.CharField(max_length=20, blank=True)
     preferred_contact_method = models.CharField(max_length=20, choices=ContactMethod.choices, blank=True)
     is_active = models.BooleanField(default=True)
@@ -57,6 +64,13 @@ class EmployerLocation(models.Model):
     address_line_1 = models.CharField(max_length=255, blank=True)
     address_line_2 = models.CharField(max_length=255, blank=True)
     suburb = models.CharField(max_length=120, blank=True)
+    locality = models.ForeignKey(
+        "locations.Locality",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employer_locations",
+    )
     city = models.CharField(max_length=120, blank=True)
     province = models.CharField(max_length=120, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)

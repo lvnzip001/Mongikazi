@@ -5,6 +5,7 @@ from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
 from .forms import EmployerLocationForm, EmployerProfileForm, EmployerServicePreferenceForm
+from .models import EmployerLocation
 from .selectors.employer_selectors import (
     get_employer_profile_for_user,
     get_employer_profile_preview_context,
@@ -104,8 +105,13 @@ def locations(request):
         return guard
 
     profile = get_or_create_employer_profile_for_user(request.user)
-    location = get_primary_employer_location(profile)
-    form = EmployerLocationForm(request.POST or None, instance=location, user=request.user)
+    location = get_primary_employer_location(profile) or EmployerLocation(employer=profile)
+    form = EmployerLocationForm(
+        request.POST or None,
+        instance=location,
+        user=request.user,
+        employer_profile=profile,
+    )
 
     if request.method == "POST" and form.is_valid():
         location = form.save(commit=False)

@@ -1,11 +1,12 @@
 from django import forms
 
 from locations.form_fields import (
+    apply_locality_fallback_initial,
     bind_locality_fields,
+    clean_locality_pair,
     locality_autocomplete_widget,
     resolve_locality_from_form,
 )
-from locations.selectors import resolve_locality_from_stored_text
 
 from .models import EmployerOnboardingProfile, HelperOnboardingProfile
 
@@ -32,7 +33,7 @@ class EmployerLocationForm(forms.ModelForm):
     )
     preferred_location_locality_id = forms.IntegerField(
         widget=forms.HiddenInput(),
-        required=True,
+        required=False,
     )
 
     class Meta:
@@ -83,7 +84,7 @@ class HelperProfileForm(forms.ModelForm):
         label="Location",
         widget=locality_autocomplete_widget("location_locality_id"),
     )
-    location_locality_id = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+    location_locality_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = HelperOnboardingProfile
@@ -110,7 +111,14 @@ class HelperProfileForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-        locality = resolve_locality_from_form(cleaned.get("location_locality_id"), field_label="location")
+        locality = clean_locality_pair(
+            cleaned,
+            query_field="location_query",
+            id_field="location_locality_id",
+            field_label="location",
+            fallback_text=(self.instance.location or "").strip(),
+            fallback_locality=self.instance.location_locality,
+        )
         cleaned["location"] = locality.display_label
         cleaned["location_locality"] = locality
         return cleaned
@@ -172,38 +180,24 @@ class HelperServicesForm(forms.ModelForm):
             text_attr="preferred_work_area",
             fk_attr="preferred_work_area_locality",
         )
-        if not self.is_bound and not self.initial.get("work_area_locality_id"):
-            if self.instance.location_locality_id:
-                self.initial["work_area_locality_id"] = self.instance.location_locality_id
-                self.initial["work_area_query"] = self.instance.location_locality.display_label
-            elif (self.instance.location or "").strip():
-                locality = resolve_locality_from_stored_text(self.instance.location)
-                if locality:
-                    self.initial["work_area_locality_id"] = locality.pk
-                    self.initial["work_area_query"] = locality.display_label
-                else:
-                    self.initial["work_area_query"] = self.instance.location
+        apply_locality_fallback_initial(
+            self,
+            query_field="work_area_query",
+            id_field="work_area_locality_id",
+            source_locality=self.instance.location_locality,
+            source_text=self.instance.location,
+        )
 
     def clean(self):
         cleaned = super().clean()
-        locality_id = cleaned.get("work_area_locality_id")
-        query = (cleaned.get("work_area_query") or "").strip()
-
-        if not locality_id and self.instance.location_locality_id:
-            step1_labels = {
-                self.instance.location_locality.display_label,
-                (self.instance.location or "").strip(),
-            }
-            if query in step1_labels:
-                locality_id = self.instance.location_locality_id
-
-        if not locality_id and query:
-            locality = resolve_locality_from_stored_text(query)
-            if locality:
-                locality_id = locality.pk
-
-        locality = resolve_locality_from_form(locality_id, field_label="work area")
-        cleaned["work_area_locality_id"] = locality.pk
+        locality = clean_locality_pair(
+            cleaned,
+            query_field="work_area_query",
+            id_field="work_area_locality_id",
+            field_label="work area",
+            fallback_locality=self.instance.location_locality,
+            fallback_text=self.instance.location,
+        )
         cleaned["preferred_work_area"] = locality.display_label
         cleaned["preferred_work_area_locality"] = locality
         return cleaned

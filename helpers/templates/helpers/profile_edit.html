@@ -11,14 +11,46 @@
   <form method="post" enctype="multipart/form-data" class="mk-form-card">
     {% csrf_token %}
     {% if form.non_field_errors %}<div class="mk-error">{{ form.non_field_errors|striptags }}</div>{% endif %}
-    {% for field in form %}
-      <div>
-        <label class="mk-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-        {{ field }}
-        {% if field.help_text %}<p class="mk-help-text">{{ field.help_text }}</p>{% endif %}
-        {% if field.errors %}<p class="mk-field-error">{{ field.errors|striptags }}</p>{% endif %}
-      </div>
-    {% endfor %}
+
+    <div>
+      <label class="mk-label" for="{{ form.display_name.id_for_label }}">{{ form.display_name.label }}</label>
+      {{ form.display_name }}
+      {% if form.display_name.errors %}<p class="mk-field-error">{{ form.display_name.errors|striptags }}</p>{% endif %}
+    </div>
+
+    <div>
+      <label class="mk-label" for="{{ form.profile_photo.id_for_label }}">{{ form.profile_photo.label }}</label>
+      {{ form.profile_photo }}
+      {% if form.profile_photo.errors %}<p class="mk-field-error">{{ form.profile_photo.errors|striptags }}</p>{% endif %}
+    </div>
+
+    {% include "locations/includes/locality_field.html" with label="Location" help_text="Start typing a suburb or city, then pick from the list." query_field=form.location_query id_field=form.location_locality_id %}
+    {% include "locations/includes/locality_field.html" with label="Preferred work area" help_text="Type a suburb or city you travel to for work." query_field=form.work_area_query id_field=form.work_area_locality_id %}
+
+    <div>
+      <label class="mk-label" for="{{ form.bio.id_for_label }}">{{ form.bio.label }}</label>
+      {{ form.bio }}
+      {% if form.bio.errors %}<p class="mk-field-error">{{ form.bio.errors|striptags }}</p>{% endif %}
+    </div>
+
+    <div>
+      <label class="mk-label" for="{{ form.years_experience.id_for_label }}">{{ form.years_experience.label }}</label>
+      {{ form.years_experience }}
+      {% if form.years_experience.errors %}<p class="mk-field-error">{{ form.years_experience.errors|striptags }}</p>{% endif %}
+    </div>
+
+    <div>
+      <label class="mk-label" for="{{ form.availability_summary.id_for_label }}">{{ form.availability_summary.label }}</label>
+      {{ form.availability_summary }}
+      {% if form.availability_summary.errors %}<p class="mk-field-error">{{ form.availability_summary.errors|striptags }}</p>{% endif %}
+    </div>
+
+    <div>
+      <label class="mk-label" for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label>
+      {{ form.is_active }}
+      {% if form.is_active.errors %}<p class="mk-field-error">{{ form.is_active.errors|striptags }}</p>{% endif %}
+    </div>
+
     <div class="grid gap-3 sm:grid-cols-2">
       <a href="{% url 'helpers:profile_detail' %}" class="mk-btn-secondary text-center">Cancel</a>
       <button type="submit" class="mk-btn-primary w-full">Save profile</button>

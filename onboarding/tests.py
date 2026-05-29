@@ -134,6 +134,32 @@ class OnboardingFlowTests(TestCase):
         self.assertIsNotNone(profile.completed_at)
         self.assertTrue(self.helper.is_onboarding_complete)
 
+    def test_employer_location_accepts_query_without_hidden_id_when_label_matches(self):
+        east_london = Locality.objects.create(
+            name="East London",
+            province="Eastern Cape",
+            slug="east-london-ec-employer",
+            municipality="Buffalo City",
+            locality_type=Locality.LocalityType.CITY,
+        )
+        self.client.force_login(self.employer)
+        self.client.post(
+            reverse("onboarding:employer_service"),
+            {"service_type": "once_off_cleaning", "service_frequency": "weekly"},
+        )
+        response = self.client.post(
+            reverse("onboarding:employer_location"),
+            {
+                "preferred_location_query": east_london.display_label,
+                "preferred_start_date": date.today().isoformat(),
+                "preferred_time": time(8, 0).isoformat(timespec="minutes"),
+                "special_instructions": "Ring the bell.",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        profile = EmployerOnboardingProfile.objects.get(user=self.employer)
+        self.assertEqual(profile.preferred_location_locality_id, east_london.pk)
+
     def test_helper_services_accepts_work_area_carried_from_step_one_location(self):
         east_london = Locality.objects.create(
             name="East London",
