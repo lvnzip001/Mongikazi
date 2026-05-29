@@ -79,6 +79,7 @@ INSTALLED_APPS = [
     'bookings',
     'messaging',
     'payments',
+    'locations',
     'website',
 ]
 

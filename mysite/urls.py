@@ -18,6 +18,7 @@ urlpatterns = [
     path("employer/", include(("employer_portal.urls", "employer_portal"), namespace="employer_portal")),
     path("worker/", include(("worker_portal.urls", "worker_portal"), namespace="worker_portal")),
     path("employers/", include(("employers.urls", "employers"), namespace="employers")),
+    path("locations/", include(("locations.urls", "locations"), namespace="locations")),
     path("", include(("website.urls", "website"), namespace="website")),
 ]
 
