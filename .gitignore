@@ -11,7 +11,7 @@ __pycache__/
 *.md
 *.zip
 */*.pyc
-
+run_project_mapping.py
 
 # Distribution / packaging
 build/
