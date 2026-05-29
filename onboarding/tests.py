@@ -4,6 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from accounts.models import User
+from locations.models import Locality
 from onboarding.forms import EmployerServiceForm, HelperProfileForm
 from onboarding.models import EmployerOnboardingProfile, HelperOnboardingProfile
 
@@ -54,6 +55,13 @@ class OnboardingFlowTests(TestCase):
         self.assertRedirects(response, reverse("onboarding:start"), fetch_redirect_response=False)
 
     def test_employer_onboarding_completion_sets_flags(self):
+        benoni = Locality.objects.create(
+            name="Benoni",
+            province="Gauteng",
+            slug="benoni-gauteng-employer",
+            municipality="Ekurhuleni",
+            locality_type=Locality.LocalityType.SUBURB,
+        )
         self.client.force_login(self.employer)
         self.client.post(
             reverse("onboarding:employer_service"),
@@ -62,7 +70,8 @@ class OnboardingFlowTests(TestCase):
         self.client.post(
             reverse("onboarding:employer_location"),
             {
-                "preferred_location": "Benoni",
+                "preferred_location_query": "Benoni, Gauteng",
+                "preferred_location_locality_id": benoni.pk,
                 "preferred_start_date": date.today().isoformat(),
                 "preferred_time": time(8, 0).isoformat(timespec="minutes"),
                 "special_instructions": "Please ring the bell.",
@@ -78,12 +87,20 @@ class OnboardingFlowTests(TestCase):
         self.assertTrue(self.employer.is_onboarding_complete)
 
     def test_helper_onboarding_completion_sets_flags(self):
+        benoni = Locality.objects.create(
+            name="Benoni",
+            province="Gauteng",
+            slug="benoni-gauteng",
+            municipality="Ekurhuleni",
+            locality_type=Locality.LocalityType.SUBURB,
+        )
         self.client.force_login(self.helper)
         self.client.post(
             reverse("onboarding:helper_profile"),
             {
                 "display_name": "Nomsa",
-                "location": "Benoni",
+                "location_query": "Benoni, Gauteng",
+                "location_locality_id": benoni.pk,
                 "years_experience": 4,
                 "bio": "Reliable and punctual helper.",
             },
@@ -92,8 +109,9 @@ class OnboardingFlowTests(TestCase):
             reverse("onboarding:helper_services"),
             {
                 "selected_categories": ["cleaning", "laundry"],
-                "preferred_work_area": "Benoni and nearby",
-                "availability_summary": "Weekdays 08:00-16:00",
+                "work_area_query": "Benoni, Gauteng",
+                "work_area_locality_id": benoni.pk,
+                "availability_summary": "08:00 to 16:00",
             },
         )
         response = self.client.post(
@@ -108,10 +126,44 @@ class OnboardingFlowTests(TestCase):
         self.client.post(reverse("onboarding:helper_complete"))
 
         profile = HelperOnboardingProfile.objects.get(user=self.helper)
+        self.assertEqual(profile.preferred_work_area, "Benoni, Gauteng")
+        self.assertEqual(profile.preferred_work_area_locality_id, benoni.pk)
+        self.assertEqual(profile.availability_summary, "08:00 to 16:00")
         self.helper.refresh_from_db()
         self.assertTrue(profile.is_completed)
         self.assertIsNotNone(profile.completed_at)
         self.assertTrue(self.helper.is_onboarding_complete)
+
+    def test_helper_services_accepts_work_area_carried_from_step_one_location(self):
+        east_london = Locality.objects.create(
+            name="East London",
+            province="Eastern Cape",
+            slug="east-london-ec",
+            municipality="Buffalo City",
+            locality_type=Locality.LocalityType.CITY,
+        )
+        self.client.force_login(self.helper)
+        self.client.post(
+            reverse("onboarding:helper_profile"),
+            {
+                "display_name": "Thandi",
+                "location_query": east_london.display_label,
+                "location_locality_id": east_london.pk,
+                "years_experience": 3,
+                "bio": "Experienced helper.",
+            },
+        )
+        response = self.client.post(
+            reverse("onboarding:helper_services"),
+            {
+                "selected_categories": ["cleaning"],
+                "work_area_query": east_london.display_label,
+                "availability_summary": "08:00 to 16:00",
+            },
+        )
+        self.assertEqual(response.status_code, 302)
+        profile = HelperOnboardingProfile.objects.get(user=self.helper)
+        self.assertEqual(profile.preferred_work_area_locality_id, east_london.pk)
 
     def test_forms_validate_required_fields(self):
         employer_form = EmployerServiceForm(data={})

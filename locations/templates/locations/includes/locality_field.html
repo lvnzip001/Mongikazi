@@ -1,0 +1,8 @@
+<div class="mk-locality-field" data-locality-field>
+  <label class="mk-label" for="{{ query_field.id_for_label }}">{{ label }}</label>
+  {% if help_text %}<p class="mk-help-text mt-1">{{ help_text }}</p>{% endif %}
+  {{ query_field }}
+  {{ id_field }}
+  {% if query_field.errors %}<p class="mk-field-error">{{ query_field.errors|striptags }}</p>{% endif %}
+  {% if id_field.errors %}<p class="mk-field-error">{{ id_field.errors|striptags }}</p>{% endif %}
+</div>

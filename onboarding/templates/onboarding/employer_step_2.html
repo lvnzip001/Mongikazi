@@ -5,17 +5,12 @@
   <span class="mk-step-pill">Employer setup</span>
   <span class="mk-step-pill">Step 2 of 2</span>
 </div>
-<h1 class="text-2xl font-bold tracking-tight text-mk-text dark:text-white">Where and when should help start?</h1>
-<p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">Share location and preferred timing to complete your employer setup.</p>
+<h1 class="mk-page-header__title">Where and when should help start?</h1>
+<p class="mk-page-header__lead">Share location and preferred timing to complete your employer setup.</p>
 <form method="post" class="mt-6 grid gap-4">
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="mk-error">{{ form.non_field_errors|striptags }}</div>{% endif %}
-  <div>
-    <label class="mk-label" for="{{ form.preferred_location.id_for_label }}">Preferred location</label>
-    {{ form.preferred_location }}
-    <p class="mt-2 text-xs font-medium text-mk-muted dark:text-slate-400">Use a suburb or area for now. Full saved addresses can come later in the employer portal.</p>
-    {% if form.preferred_location.errors %}<p class="mk-field-error">{{ form.preferred_location.errors|striptags }}</p>{% endif %}
-  </div>
+  {% include "locations/includes/locality_field.html" with label="Preferred location" help_text="Type your suburb or city and select from the suggestions." query_field=form.preferred_location_query id_field=form.preferred_location_locality_id %}
   <div class="grid gap-4 sm:grid-cols-2">
     <div>
       <label class="mk-label" for="{{ form.preferred_start_date.id_for_label }}">Preferred start date</label>

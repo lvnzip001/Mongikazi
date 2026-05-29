@@ -1,5 +1,12 @@
 from django import forms
 
+from locations.form_fields import (
+    bind_locality_fields,
+    locality_autocomplete_widget,
+    resolve_locality_from_form,
+)
+from locations.selectors import resolve_locality_from_stored_text
+
 from .models import EmployerOnboardingProfile, HelperOnboardingProfile
 
 
@@ -19,30 +26,70 @@ class EmployerServiceForm(forms.ModelForm):
 
 
 class EmployerLocationForm(forms.ModelForm):
+    preferred_location_query = forms.CharField(
+        label="Preferred location",
+        widget=locality_autocomplete_widget("preferred_location_locality_id"),
+    )
+    preferred_location_locality_id = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=True,
+    )
+
     class Meta:
         model = EmployerOnboardingProfile
-        fields = ("preferred_location", "preferred_start_date", "preferred_time", "special_instructions")
+        fields = ("preferred_start_date", "preferred_time", "special_instructions")
         widgets = {
-            "preferred_location": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Area, suburb, or city"}),
             "preferred_start_date": forms.DateInput(attrs={"class": "mk-input", "type": "date"}),
             "preferred_time": forms.TimeInput(attrs={"class": "mk-input", "type": "time"}),
-            "special_instructions": forms.Textarea(attrs={"class": "mk-input", "rows": 4, "placeholder": "Any specific instructions"}),
+            "special_instructions": forms.Textarea(
+                attrs={"class": "mk-input", "rows": 4, "placeholder": "Any specific instructions"}
+            ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["preferred_location"].required = True
         self.fields["preferred_start_date"].required = True
         self.fields["preferred_time"].required = True
+        bind_locality_fields(
+            self,
+            query_field="preferred_location_query",
+            id_field="preferred_location_locality_id",
+            instance=self.instance,
+            text_attr="preferred_location",
+            fk_attr="preferred_location_locality",
+        )
+
+    def clean(self):
+        cleaned = super().clean()
+        locality = resolve_locality_from_form(
+            cleaned.get("preferred_location_locality_id"),
+            field_label="location",
+        )
+        cleaned["preferred_location"] = locality.display_label
+        cleaned["preferred_location_locality"] = locality
+        return cleaned
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.preferred_location = self.cleaned_data["preferred_location"]
+        instance.preferred_location_locality = self.cleaned_data["preferred_location_locality"]
+        if commit:
+            instance.save()
+        return instance
 
 
 class HelperProfileForm(forms.ModelForm):
+    location_query = forms.CharField(
+        label="Location",
+        widget=locality_autocomplete_widget("location_locality_id"),
+    )
+    location_locality_id = forms.IntegerField(widget=forms.HiddenInput(), required=True)
+
     class Meta:
         model = HelperOnboardingProfile
-        fields = ("display_name", "location", "years_experience", "bio")
+        fields = ("display_name", "years_experience", "bio")
         widgets = {
             "display_name": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Display name"}),
-            "location": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Area, suburb, or city"}),
             "years_experience": forms.NumberInput(attrs={"class": "mk-input", "min": 0, "max": 60}),
             "bio": forms.Textarea(attrs={"class": "mk-input", "rows": 4, "placeholder": "Short profile summary"}),
         }
@@ -50,9 +97,31 @@ class HelperProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["display_name"].required = True
-        self.fields["location"].required = True
         self.fields["years_experience"].required = True
         self.fields["bio"].required = True
+        bind_locality_fields(
+            self,
+            query_field="location_query",
+            id_field="location_locality_id",
+            instance=self.instance,
+            text_attr="location",
+            fk_attr="location_locality",
+        )
+
+    def clean(self):
+        cleaned = super().clean()
+        locality = resolve_locality_from_form(cleaned.get("location_locality_id"), field_label="location")
+        cleaned["location"] = locality.display_label
+        cleaned["location_locality"] = locality
+        return cleaned
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        instance.location = self.cleaned_data["location"]
+        instance.location_locality = self.cleaned_data["location_locality"]
+        if commit:
+            instance.save()
+        return instance
 
     def clean_years_experience(self):
         years = self.cleaned_data.get("years_experience")
@@ -70,21 +139,80 @@ class HelperServicesForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         required=True,
     )
+    work_area_query = forms.CharField(
+        label="Preferred work area",
+        widget=locality_autocomplete_widget("work_area_locality_id"),
+    )
+    work_area_locality_id = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = HelperOnboardingProfile
-        fields = ("selected_categories", "preferred_work_area", "availability_summary")
+        fields = ("availability_summary",)
         widgets = {
-            "preferred_work_area": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Preferred work area"}),
-            "availability_summary": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Example: Weekdays, 08:00-16:00"}),
+            "availability_summary": forms.TextInput(
+                attrs={"class": "mk-input"},
+            ),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["preferred_work_area"].required = True
         self.fields["availability_summary"].required = True
+
         if self.instance and self.instance.selected_categories:
             self.fields["selected_categories"].initial = self.instance.categories_list()
+
+        if not self.is_bound and not (self.instance.availability_summary or "").strip():
+            self.initial["availability_summary"] = HelperOnboardingProfile.DEFAULT_AVAILABILITY_SUMMARY
+
+        bind_locality_fields(
+            self,
+            query_field="work_area_query",
+            id_field="work_area_locality_id",
+            instance=self.instance,
+            text_attr="preferred_work_area",
+            fk_attr="preferred_work_area_locality",
+        )
+        if not self.is_bound and not self.initial.get("work_area_locality_id"):
+            if self.instance.location_locality_id:
+                self.initial["work_area_locality_id"] = self.instance.location_locality_id
+                self.initial["work_area_query"] = self.instance.location_locality.display_label
+            elif (self.instance.location or "").strip():
+                locality = resolve_locality_from_stored_text(self.instance.location)
+                if locality:
+                    self.initial["work_area_locality_id"] = locality.pk
+                    self.initial["work_area_query"] = locality.display_label
+                else:
+                    self.initial["work_area_query"] = self.instance.location
+
+    def clean(self):
+        cleaned = super().clean()
+        locality_id = cleaned.get("work_area_locality_id")
+        query = (cleaned.get("work_area_query") or "").strip()
+
+        if not locality_id and self.instance.location_locality_id:
+            step1_labels = {
+                self.instance.location_locality.display_label,
+                (self.instance.location or "").strip(),
+            }
+            if query in step1_labels:
+                locality_id = self.instance.location_locality_id
+
+        if not locality_id and query:
+            locality = resolve_locality_from_stored_text(query)
+            if locality:
+                locality_id = locality.pk
+
+        locality = resolve_locality_from_form(locality_id, field_label="work area")
+        cleaned["work_area_locality_id"] = locality.pk
+        cleaned["preferred_work_area"] = locality.display_label
+        cleaned["preferred_work_area_locality"] = locality
+        return cleaned
+
+    def clean_availability_summary(self):
+        value = (self.cleaned_data.get("availability_summary") or "").strip()
+        if not value:
+            return HelperOnboardingProfile.DEFAULT_AVAILABILITY_SUMMARY
+        return value
 
     def clean_selected_categories(self):
         categories = self.cleaned_data.get("selected_categories") or []
@@ -95,6 +223,8 @@ class HelperServicesForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         instance.selected_categories = ",".join(self.cleaned_data["selected_categories"])
+        instance.preferred_work_area = self.cleaned_data["preferred_work_area"]
+        instance.preferred_work_area_locality = self.cleaned_data["preferred_work_area_locality"]
         if commit:
             instance.save()
         return instance

@@ -8,10 +8,49 @@
 
 .mk-card {
   border-radius: 1.5rem;
-  border: 1px solid rgba(229, 231, 235, 0.92);
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.10);
+  border: 1px solid var(--mk-border);
+  background: color-mix(in srgb, var(--mk-surface) 94%, transparent);
+  box-shadow: var(--mk-shadow-soft);
   backdrop-filter: blur(14px);
+}
+
+html[data-theme="dark"] .mk-card,
+.dark .mk-card {
+  border-color: var(--mk-dark-border);
+  background: rgba(15, 23, 42, 0.82);
+  box-shadow: var(--mk-shadow-lift);
+}
+
+html[data-theme="dark"] .mk-onboarding-shell,
+.dark .mk-onboarding-shell {
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--mk-dark-maroon-soft) 42%, transparent), transparent 32rem),
+    radial-gradient(circle at bottom right, color-mix(in srgb, var(--mk-dark-accent-deep) 14%, transparent), transparent 26rem),
+    linear-gradient(180deg, var(--mk-dark-bg) 0%, var(--mk-dark-bg-2) 48%, var(--mk-dark-bg) 100%);
+}
+
+.mk-progress-track {
+  height: 0.6rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--mk-primary) 14%, transparent);
+}
+
+.mk-progress-bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--mk-maroon-primary), var(--mk-maroon-soft));
+}
+
+html[data-theme="dark"] .mk-progress-track,
+.dark .mk-progress-track {
+  background: var(--mk-dark-surface-2);
+}
+
+html[data-theme="dark"] .mk-progress-bar,
+.dark .mk-progress-bar {
+  background: linear-gradient(90deg, var(--mk-dark-accent-deep), var(--mk-dark-accent-bright));
 }
 
 .mk-brand-mark {
@@ -181,10 +220,23 @@ select.mk-input {
   box-shadow: 0 14px 24px rgba(15, 118, 110, 0.18);
 }
 
+html[data-theme="dark"] .mk-btn-primary,
+.dark .mk-btn-primary {
+  background: var(--mk-dark-accent-deep);
+  color: #042f2e;
+  box-shadow: 0 14px 28px rgba(15, 118, 110, 0.22);
+}
+
 .mk-btn-primary:hover {
   background: var(--mk-primary-dark);
   transform: translateY(-1px);
   box-shadow: 0 18px 30px rgba(15, 118, 110, 0.22);
+}
+
+html[data-theme="dark"] .mk-btn-primary:hover,
+.dark .mk-btn-primary:hover {
+  background: var(--mk-dark-accent);
+  color: #042f2e;
 }
 
 .mk-btn-secondary {
@@ -304,6 +356,15 @@ select.mk-input {
 .mk-choice-list li,
 .mk-check-list li {
   margin: 0;
+}
+
+.mk-choice-list--categories ul {
+  gap: 0.85rem;
+}
+
+.mk-choice-list--categories label {
+  min-height: 3.25rem;
+  padding: 0.9rem 1rem;
 }
 
 .mk-choice-list label,

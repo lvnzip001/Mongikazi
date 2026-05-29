@@ -7,6 +7,7 @@
   <title>{% block title %}MongiKazi Onboarding{% endblock %}</title>
   {% include "partials/mk_head.html" %}
   <link rel="stylesheet" href="{% static 'website/css/public_app.css' %}">
+  <link rel="stylesheet" href="{% static 'website/css/mk-polish.css' %}">
   <link rel="stylesheet" href="{% static 'onboarding/css/onboarding.css' %}">
 </head>
 <body class="min-h-screen bg-mk-bg text-mk-text font-sans antialiased">
@@ -71,6 +72,7 @@
     </div>
   </main>
   <script src="{% static 'website/js/mk-theme.js' %}"></script>
+  <script src="{% static 'locations/js/locality-autocomplete.js' %}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

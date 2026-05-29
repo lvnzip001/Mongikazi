@@ -5,27 +5,24 @@
   <span class="mk-step-pill">Helper setup</span>
   <span class="mk-step-pill">Step 2 of 3</span>
 </div>
-<h1 class="text-2xl font-bold tracking-tight text-mk-text dark:text-white">Services and availability</h1>
-<p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">Select the services you offer and where you prefer to work.</p>
-<form method="post" class="mt-6 grid gap-4">
+<h1 class="mk-page-header__title">Services and availability</h1>
+<p class="mk-page-header__lead">Select the services you offer, where you prefer to work, and your usual hours.</p>
+<form method="post" class="mt-6 grid gap-5">
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="mk-error">{{ form.non_field_errors|striptags }}</div>{% endif %}
   <div>
     <p class="mk-label">Service categories</p>
-    <div class="mk-choice-list mt-2">
+    <p class="mk-muted mt-1">Choose all services you can provide.</p>
+    <div class="mk-choice-list mk-choice-list--categories mt-3">
       {{ form.selected_categories }}
     </div>
     {% if form.selected_categories.errors %}<p class="mk-field-error">{{ form.selected_categories.errors|striptags }}</p>{% endif %}
   </div>
-  <div>
-    <label class="mk-label" for="{{ form.preferred_work_area.id_for_label }}">Preferred work area</label>
-    {{ form.preferred_work_area }}
-    {% if form.preferred_work_area.errors %}<p class="mk-field-error">{{ form.preferred_work_area.errors|striptags }}</p>{% endif %}
-  </div>
+  {% include "locations/includes/locality_field.html" with label="Preferred work area" help_text="Type a suburb or city you travel to for work. We use the same list for employers to improve matching." query_field=form.work_area_query id_field=form.work_area_locality_id %}
   <div>
     <label class="mk-label" for="{{ form.availability_summary.id_for_label }}">Availability summary</label>
     {{ form.availability_summary }}
-    <p class="mt-2 text-xs font-medium text-mk-muted dark:text-slate-400">Example: Weekdays from 08:00 to 16:00, or Saturdays only.</p>
+    <p class="mk-muted mt-2">You can change these hours if you work different times or days.</p>
     {% if form.availability_summary.errors %}<p class="mk-field-error">{{ form.availability_summary.errors|striptags }}</p>{% endif %}
   </div>
   <div class="grid gap-3 sm:grid-cols-2">

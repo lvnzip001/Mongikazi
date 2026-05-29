@@ -20,6 +20,13 @@ class EmployerOnboardingProfile(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="employer_onboarding")
     preferred_location = models.CharField(max_length=255, blank=True)
+    preferred_location_locality = models.ForeignKey(
+        "locations.Locality",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="employer_onboarding_locations",
+    )
     service_type = models.CharField(max_length=40, choices=ServiceType.choices, blank=True)
     service_frequency = models.CharField(max_length=30, choices=ServiceFrequency.choices, blank=True)
     preferred_start_date = models.DateField(null=True, blank=True)
@@ -35,6 +42,8 @@ class EmployerOnboardingProfile(models.Model):
 
 
 class HelperOnboardingProfile(models.Model):
+    DEFAULT_AVAILABILITY_SUMMARY = "08:00 to 16:00"
+
     class ServiceCategory(models.TextChoices):
         CLEANING = "cleaning", "Cleaning"
         LAUNDRY = "laundry", "Laundry"
@@ -45,6 +54,13 @@ class HelperOnboardingProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="helper_onboarding")
     display_name = models.CharField(max_length=120, blank=True)
     location = models.CharField(max_length=255, blank=True)
+    location_locality = models.ForeignKey(
+        "locations.Locality",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="helper_onboarding_locations",
+    )
     years_experience = models.PositiveSmallIntegerField(null=True, blank=True)
     bio = models.TextField(blank=True)
     selected_categories = models.TextField(blank=True)
@@ -52,6 +68,13 @@ class HelperOnboardingProfile(models.Model):
     has_criminal_check_ready = models.BooleanField(null=True, blank=True)
     has_references = models.BooleanField(null=True, blank=True)
     preferred_work_area = models.CharField(max_length=255, blank=True)
+    preferred_work_area_locality = models.ForeignKey(
+        "locations.Locality",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="helper_onboarding_work_areas",
+    )
     availability_summary = models.CharField(max_length=255, blank=True)
     is_completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(null=True, blank=True)
