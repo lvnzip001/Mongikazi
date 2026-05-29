@@ -19,6 +19,9 @@ dist/
 *.egg-info/
 *.egg
 
+db.sqlite3
+*.sqlite3
+
 # dotenv environment variable files
 .env
 .env.local

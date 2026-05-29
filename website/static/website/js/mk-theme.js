@@ -117,6 +117,7 @@
     }
 
     function openMenu() {
+      menu.removeAttribute("hidden");
       menu.classList.add("is-open");
       menu.setAttribute("aria-hidden", "false");
       openButton.setAttribute("aria-expanded", "true");
@@ -126,6 +127,7 @@
     function closeMenu() {
       menu.classList.remove("is-open");
       menu.setAttribute("aria-hidden", "true");
+      menu.setAttribute("hidden", "");
       openButton.setAttribute("aria-expanded", "false");
       lockBody(false);
     }

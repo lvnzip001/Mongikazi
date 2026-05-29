@@ -26,11 +26,13 @@
           </span>
         </span>
       </a>
-      <div class="flex items-center gap-2">
+      <div class="flex flex-wrap items-center justify-end gap-2">
         {% if portal_kind == "worker" %}
-          <a class="mk-top-link hidden sm:inline-flex" href="{% url 'worker_portal:dashboard' %}">My Work</a>
+          <a class="mk-top-link" href="{% url 'worker_portal:dashboard' %}">My Work</a>
+          <a class="mk-top-link hidden sm:inline-flex" href="{{ work_profile_url }}">Profile</a>
         {% else %}
-          <a class="mk-top-link hidden sm:inline-flex" href="{% url 'employer_portal:dashboard' %}">Workspace</a>
+          <a class="mk-top-link" href="{% url 'employer_portal:dashboard' %}">Workspace</a>
+          <a class="mk-top-link hidden sm:inline-flex" href="{{ employer_profile_url }}">Profile</a>
         {% endif %}
         <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
       </div>
@@ -53,12 +55,14 @@
             <a class="mk-side-link {% if nav_active == 'worker_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_jobs' %}">Jobs</a>
             <a class="mk-side-link {% if nav_active == 'worker_available_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_available_jobs' %}">Available jobs</a>
             <a class="mk-side-link {% if nav_active == 'worker_applications' %}is-active{% endif %}" href="{% url 'bookings:worker_my_applications' %}">My applications</a>
-            <a class="mk-side-link" href="{% url 'worker_portal:dashboard' %}">Worker dashboard</a>
+            <a class="mk-side-link" href="{% url 'worker_portal:dashboard' %}">My Work dashboard</a>
+            <a class="mk-side-link" href="{{ work_profile_url }}">Work profile</a>
           {% else %}
             <a class="mk-side-link {% if nav_active == 'employer_bookings' %}is-active{% endif %}" href="{% url 'bookings:employer_bookings' %}">My bookings</a>
             <a class="mk-side-link {% if nav_active == 'employer_create' %}is-active{% endif %}" href="{% url 'bookings:employer_booking_create' %}">Create request</a>
             <a class="mk-side-link {% if nav_active == 'employer_marketplace' %}is-active{% endif %}" href="{% url 'bookings:employer_marketplace_jobs' %}">Marketplace jobs</a>
-            <a class="mk-side-link" href="{% url 'employer_portal:dashboard' %}">Employer dashboard</a>
+            <a class="mk-side-link" href="{% url 'employer_portal:dashboard' %}">Employer workspace</a>
+            <a class="mk-side-link" href="{{ employer_profile_url }}">Profile setup</a>
           {% endif %}
         </nav>
         <div class="mk-sidebar-note">
@@ -74,10 +78,12 @@
             <a class="mk-subnav-link {% if nav_active == 'worker_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_jobs' %}">Jobs</a>
             <a class="mk-subnav-link {% if nav_active == 'worker_available_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_available_jobs' %}">Marketplace</a>
             <a class="mk-subnav-link {% if nav_active == 'worker_applications' %}is-active{% endif %}" href="{% url 'bookings:worker_my_applications' %}">Applications</a>
+            <a class="mk-subnav-link" href="{% url 'worker_portal:dashboard' %}">My Work</a>
           {% else %}
             <a class="mk-subnav-link {% if nav_active == 'employer_bookings' %}is-active{% endif %}" href="{% url 'bookings:employer_bookings' %}">Bookings</a>
             <a class="mk-subnav-link {% if nav_active == 'employer_create' %}is-active{% endif %}" href="{% url 'bookings:employer_booking_create' %}">New request</a>
             <a class="mk-subnav-link {% if nav_active == 'employer_marketplace' %}is-active{% endif %}" href="{% url 'bookings:employer_marketplace_jobs' %}">Marketplace</a>
+            <a class="mk-subnav-link" href="{% url 'employer_portal:dashboard' %}">Workspace</a>
           {% endif %}
         </nav>
 

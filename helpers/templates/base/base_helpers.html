@@ -4,42 +4,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}MongiKazi Helpers{% endblock %}</title>
+  <title>{% block title %}MongiKazi Work Profile{% endblock %}</title>
   {% include "partials/mk_head.html" %}
   <link rel="stylesheet" href="{% static 'website/css/mk-portal.css' %}">
+  <link rel="stylesheet" href="{% static 'website/css/mk-polish.css' %}">
   <link rel="stylesheet" href="{% static 'website/css/public_app.css' %}">
   <link rel="stylesheet" href="{% static 'helpers/css/helpers.css' %}">
+  {% block extra_css %}{% endblock %}
 </head>
 <body class="mk-body min-h-screen bg-mk-bg text-mk-text font-sans antialiased">
-  <main class="mk-page-wrap relative">
-    <header class="mk-topbar mk-mobile-header">
-      <a href="{% url 'helpers:profile_detail' %}" class="flex min-w-0 items-center gap-3">
-        <span class="mk-brand" aria-hidden="true">MK</span>
-        <span class="min-w-0">
-          <strong class="block truncate text-base font-extrabold text-mk-text">Work profile</strong>
-          <span class="block truncate text-xs font-semibold text-mk-muted">Your trusted digital CV</span>
-        </span>
-      </a>
-      <div class="flex items-center gap-2">
-        <a href="{% url 'helpers:profile_preview' %}" class="mk-top-link hidden sm:inline-flex">Preview</a>
-        <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode">&#9680;</button>
-      </div>
-    </header>
+  <a href="#profile-content" class="mk-skip-link">Skip to content</a>
+  <div class="mk-shell">
+    {% include "partials/portal_worker_sidebar.html" %}
 
-    {% if messages %}
-      <div class="mb-4 grid gap-2">
-        {% for message in messages %}
-          <div class="mk-alert">{{ message }}</div>
-        {% endfor %}
-      </div>
-    {% endif %}
+    <div class="mk-main">
+      <header class="mk-topbar mk-mobile-header">
+        <div class="min-w-0">
+          <p class="truncate text-base font-bold text-mk-text">{% block page_title %}Work profile{% endblock %}</p>
+          <p class="hidden text-xs font-semibold text-mk-muted sm:block">{% block page_lead %}Your trusted digital CV for employers.{% endblock %}</p>
+        </div>
+        <div class="flex flex-wrap items-center justify-end gap-2">
+          <a href="{% url 'worker_portal:dashboard' %}" class="mk-top-link">My Work</a>
+          <a href="{% url 'helpers:profile_preview' %}" class="mk-top-link hidden sm:inline-flex">Preview</a>
+          <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
+        </div>
+      </header>
 
-    <section class="mk-card overflow-hidden">
-      {% block content %}{% endblock %}
-    </section>
-  </main>
+      {% if messages %}
+        <div class="mb-4 grid gap-2" aria-live="polite">
+          {% for message in messages %}
+            <div class="mk-alert">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <main id="profile-content" class="pb-24 lg:pb-0">
+        <div class="mk-card overflow-hidden">
+          {% block content %}{% endblock %}
+        </div>
+      </main>
+    </div>
+  </div>
+
+  {% include "partials/portal_worker_mobile_nav.html" %}
+
   <script src="{% static 'website/js/mk-theme.js' %}"></script>
   <script src="{% static 'locations/js/locality-autocomplete.js' %}"></script>
-  <script src="{% static 'helpers/js/helpers.js' %}"></script>
+  <script src="{% static 'worker_portal/js/worker_portal.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

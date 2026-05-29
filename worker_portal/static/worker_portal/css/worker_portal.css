@@ -1,4 +1,4 @@
-/* Worker portal — app-specific overrides; shell in mk-portal.css */
+/* Worker portal — app-specific overrides; shell + mobile more-menu in mk-portal.css */
 
 .mk-readiness-card {
   border-radius: 1.2rem;
@@ -11,24 +11,3 @@ html[data-theme="dark"] .mk-readiness-card {
   border-color: rgba(45, 212, 191, 0.2);
   background: rgba(15, 23, 42, 0.88);
 }
-
-/* Alias for shared more-menu (worker templates) */
-.mk-worker-more-menu,
-.mk-portal-more-menu { position: fixed; inset: 0; z-index: 90; display: grid; background: rgba(20, 13, 16, 0.5); opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
-.mk-worker-more-menu.is-open,
-.mk-portal-more-menu.is-open { opacity: 1; pointer-events: auto; }
-.mk-worker-more-menu__panel,
-.mk-portal-more-menu__panel {
-  margin-top: auto;
-  width: 100%;
-  max-height: 70vh;
-  overflow-y: auto;
-  border-radius: 1.5rem 1.5rem 0 0;
-  background: var(--mk-surface);
-  border: 1px solid var(--mk-border);
-  padding: 1rem;
-  transform: translateY(100%);
-  transition: transform 0.24s ease;
-}
-.mk-worker-more-menu.is-open .mk-worker-more-menu__panel,
-.mk-portal-more-menu.is-open .mk-portal-more-menu__panel { transform: translateY(0); }

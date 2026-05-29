@@ -1,0 +1,36 @@
+<aside class="mk-sidebar hidden lg:flex" aria-label="Employer portal navigation">
+  <div class="flex h-full flex-col justify-between">
+    <div>
+      <a href="{% url 'employer_portal:dashboard' %}" class="mk-brand-wrap">
+        <span class="mk-brand">MK</span>
+        <div>
+          <p class="text-sm font-bold text-mk-text">Employer</p>
+          <p class="text-xs font-semibold text-mk-muted">Workspace</p>
+        </div>
+      </a>
+      <nav class="mt-6 grid gap-2">
+        <a class="mk-nav-link {% if nav_active == 'dashboard' %}is-active{% endif %}" href="{% url 'employer_portal:dashboard' %}" {% if nav_active == 'dashboard' %}aria-current="page"{% endif %}><span>Home</span></a>
+        <a class="mk-nav-link {% if nav_active == 'find_help' %}is-active{% endif %}" href="{% url 'employer_portal:find_help' %}" {% if nav_active == 'find_help' %}aria-current="page"{% endif %}><span>Find Help</span></a>
+        <a class="mk-nav-link {% if nav_active == 'bookings' %}is-active{% endif %}" href="{% url 'employer_portal:bookings' %}" {% if nav_active == 'bookings' %}aria-current="page"{% endif %}><span>Bookings</span></a>
+        <a class="mk-nav-link {% if nav_active == 'favourites' %}is-active{% endif %}" href="{% url 'employer_portal:favourites' %}" {% if nav_active == 'favourites' %}aria-current="page"{% endif %}><span>Favourites</span></a>
+        <a class="mk-nav-link {% if nav_active == 'payments' %}is-active{% endif %}" href="{% url 'employer_portal:payments' %}" {% if nav_active == 'payments' %}aria-current="page"{% endif %}><span>Payments</span></a>
+        <a class="mk-nav-link {% if nav_active == 'messages' %}is-active{% endif %}" href="{% url 'employer_portal:messages' %}" {% if nav_active == 'messages' %}aria-current="page"{% endif %}><span>Messages</span></a>
+        <a class="mk-nav-link {% if nav_active == 'support' %}is-active{% endif %}" href="{% url 'employer_portal:support' %}" {% if nav_active == 'support' %}aria-current="page"{% endif %}><span>Support</span></a>
+        <a class="mk-nav-link {% if nav_active == 'profile' %}is-active{% endif %}" href="{{ employer_profile_url }}" {% if nav_active == 'profile' %}aria-current="page"{% endif %}><span>Profile setup</span></a>
+        {% if portal_section == 'employer' and profile_nav_active %}
+          <div class="mk-nav-subgroup" aria-label="Profile sections">
+            <a class="mk-nav-link mk-nav-link--sub {% if profile_nav_active == 'profile_detail' %}is-active{% endif %}" href="{% url 'employers:profile_detail' %}"><span>Overview</span></a>
+            <a class="mk-nav-link mk-nav-link--sub {% if profile_nav_active == 'profile_edit' %}is-active{% endif %}" href="{% url 'employers:profile_edit' %}"><span>Edit profile</span></a>
+            <a class="mk-nav-link mk-nav-link--sub {% if profile_nav_active == 'locations' %}is-active{% endif %}" href="{% url 'employers:locations' %}"><span>Locations</span></a>
+            <a class="mk-nav-link mk-nav-link--sub {% if profile_nav_active == 'preferences' %}is-active{% endif %}" href="{% url 'employers:preferences' %}"><span>Preferences</span></a>
+            <a class="mk-nav-link mk-nav-link--sub {% if profile_nav_active == 'profile_preview' %}is-active{% endif %}" href="{% url 'employers:profile_preview' %}"><span>Preview</span></a>
+          </div>
+        {% endif %}
+      </nav>
+    </div>
+    <div class="mk-sidebar-note">
+      <p class="text-xs font-bold text-mk-text">Book with confidence</p>
+      <p class="mt-1 text-xs font-medium leading-5 text-mk-muted">Keep location and preferences up to date.</p>
+    </div>
+  </div>
+</aside>
