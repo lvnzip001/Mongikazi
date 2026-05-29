@@ -426,6 +426,88 @@ html[data-theme="dark"] .shadow-mk-lift { box-shadow: var(--mk-shadow-lift) !imp
   background: var(--mk-surface-soft) !important;
 }
 
+/* Profile avatars — photos + initials (registration, profiles, bookings) */
+.mk-avatar,
+.mk-avatar-lg,
+.mk-avatar-xl,
+.mk-avatar-large,
+.mk-avatar--md,
+.mk-avatar--lg,
+.mk-avatar--xl {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: 1.15rem;
+  background: linear-gradient(145deg, var(--mk-maroon-primary), var(--mk-maroon-deep));
+  color: #fff;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.mk-avatar,
+.mk-avatar--md {
+  width: 3.25rem;
+  height: 3.25rem;
+  font-size: 1.1rem;
+}
+
+.mk-avatar-lg,
+.mk-avatar--lg,
+.mk-avatar-large {
+  width: 4.25rem;
+  height: 4.25rem;
+  font-size: 1.35rem;
+  border-radius: 1.25rem;
+}
+
+.mk-avatar-xl,
+.mk-avatar--xl {
+  width: 5rem;
+  height: 5rem;
+  font-size: 1.55rem;
+  border-radius: 1.35rem;
+}
+
+.mk-avatar--sm {
+  width: 2.65rem;
+  height: 2.65rem;
+  font-size: 0.85rem;
+  border-radius: 0.95rem;
+}
+
+.mk-avatar__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mk-avatar__initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.mk-profile-photo-input {
+  padding: 0.65rem;
+}
+
+.mk-profile-photo-field {
+  border: 1px dashed color-mix(in srgb, var(--mk-border) 80%, transparent);
+  border-radius: 1.15rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--mk-surface-soft) 88%, transparent);
+}
+
+html[data-theme="dark"] .mk-profile-photo-field {
+  border-color: var(--mk-dark-border);
+  background: color-mix(in srgb, var(--mk-dark-surface-2) 90%, transparent);
+}
+
 /* Locality autocomplete (onboarding, profiles, employer locations) */
 .mk-locality-field {
   position: relative;

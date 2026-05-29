@@ -13,7 +13,7 @@ class HelperProfile(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="helper_profile")
     display_name = models.CharField(max_length=120, blank=True)
-    profile_photo = models.FileField(upload_to="helpers/profile_photos/", blank=True, null=True)
+    profile_photo = models.ImageField(upload_to="helpers/profile_photos/%Y/%m/", blank=True, null=True)
     location = models.CharField(max_length=255, blank=True)
     location_locality = models.ForeignKey(
         "locations.Locality",

@@ -1,8 +1,9 @@
+{% load static %}
 <aside class="mk-sidebar hidden lg:flex" aria-label="Worker portal navigation">
   <div class="flex h-full flex-col justify-between">
     <div>
       <a href="{% url 'worker_portal:dashboard' %}" class="mk-brand-wrap">
-        <span class="mk-brand">MK</span>
+        <img src="{% static 'website/img/logo.png' %}" alt="MongiKazi logo" class="h-10 w-10 rounded-2xl object-cover">
         <div>
           <p class="text-sm font-bold text-mk-text">My Work</p>
           <p class="text-xs font-semibold text-mk-muted">Worker workspace</p>

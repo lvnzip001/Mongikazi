@@ -6,6 +6,7 @@ from locations.form_fields import (
     clean_locality_pair,
     locality_autocomplete_widget,
 )
+from website.profile_photos import profile_photo_widget, validate_profile_photo
 
 from .models import HelperAvailability, HelperProfile, HelperSkill
 
@@ -34,6 +35,7 @@ class HelperProfileForm(forms.ModelForm):
         )
         widgets = {
             "display_name": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Display name"}),
+            "profile_photo": profile_photo_widget(),
             "bio": forms.Textarea(attrs={"class": "mk-input", "rows": 4, "placeholder": "Profile bio"}),
             "years_experience": forms.NumberInput(attrs={"class": "mk-input", "min": 0}),
             "availability_summary": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Availability summary"}),
@@ -98,6 +100,12 @@ class HelperProfileForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+    def clean_profile_photo(self):
+        upload = self.cleaned_data.get("profile_photo")
+        if upload:
+            validate_profile_photo(upload)
+        return upload
 
     def clean_years_experience(self):
         years = self.cleaned_data.get("years_experience")

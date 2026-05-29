@@ -12,7 +12,7 @@
     {% endif %}
   </p>
 </div>
-<form method="post" class="mt-6 grid gap-4">
+<form method="post" enctype="multipart/form-data" class="mt-6 grid gap-4">
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="rounded-2xl bg-red-50 p-3 text-sm text-mk-danger">{{ form.non_field_errors|striptags }}</div>{% endif %}
   <div class="grid gap-4 sm:grid-cols-2">
@@ -33,6 +33,7 @@
     <p class="mt-1 text-xs text-mk-muted">No email? Use your phone number below to sign in.</p>
     {% if form.email.errors %}<p class="mt-1 text-xs text-mk-danger">{{ form.email.errors|striptags }}</p>{% endif %}
   </div>
+  {% include "components/profile_photo_field.html" with field=form.profile_photo optional=True help_text="Use your phone camera or gallery. You can add or change this later in your profile." %}
   <div>
     <label class="mb-2 block text-sm font-bold text-mk-text" for="{{ form.phone_number.id_for_label }}">Phone number</label>
     {{ form.phone_number }}

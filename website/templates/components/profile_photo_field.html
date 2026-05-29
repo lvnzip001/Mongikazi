@@ -1,0 +1,16 @@
+<div class="mk-profile-photo-field" data-profile-photo-field>
+  {% if current_photo_url %}
+    <div class="flex items-center gap-4">
+      <div class="mk-avatar mk-avatar--{{ preview_size|default:'lg' }} mk-avatar--photo">
+        <img src="{{ current_photo_url }}" alt="{{ display_name|default:'Profile photo' }}" class="mk-avatar__img" loading="lazy" decoding="async" />
+      </div>
+      <p class="text-sm text-mk-muted">Current photo. Choose a new file below to replace it.</p>
+    </div>
+  {% endif %}
+  <div class="{% if current_photo_url %}mt-4{% endif %}">
+    <label class="mk-label" for="{{ field.id_for_label }}">{{ field.label }}{% if optional %} <span class="font-semibold text-mk-muted">(optional)</span>{% endif %}</label>
+    {{ field }}
+    {% if help_text %}<p class="mk-help-text mt-2">{{ help_text }}</p>{% endif %}
+    {% if field.errors %}<p class="mk-field-error">{{ field.errors|striptags }}</p>{% endif %}
+  </div>
+</div>

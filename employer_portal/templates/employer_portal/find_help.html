@@ -1,4 +1,5 @@
 {% extends 'base/base_employer_portal.html' %}
+{% load profile_display %}
 
 {% block title %}Find Help | MongiKazi{% endblock %}
 
@@ -47,7 +48,7 @@
       {% for helper in helper_teasers %}
         <div class="mk-teaser-card">
           <div class="flex items-start gap-3">
-            <div class="mk-avatar">{{ helper.display_name|first|default:'H' }}</div>
+            {% profile_avatar helper size="md" %}
             <div class="min-w-0 flex-1">
               <p class="truncate text-sm font-bold text-slate-900 dark:text-white">{{ helper.display_name }}</p>
               <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">{{ helper.location|default:'Location pending' }}</p>

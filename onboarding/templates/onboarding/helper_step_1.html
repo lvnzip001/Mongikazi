@@ -7,9 +7,10 @@
 </div>
 <h1 class="mk-page-header__title">Create your helper profile</h1>
 <p class="mk-page-header__lead">Start with the details employers will need to trust your profile.</p>
-<form method="post" class="mt-6 grid gap-4">
+<form method="post" enctype="multipart/form-data" class="mt-6 grid gap-4">
   {% csrf_token %}
   {% if form.non_field_errors %}<div class="mk-error">{{ form.non_field_errors|striptags }}</div>{% endif %}
+  {% include "components/profile_photo_field.html" with field=form.profile_photo optional=True help_text="A clear photo helps employers trust your profile. Works with phone camera or gallery." current_photo_url=user_photo_url display_name=request.user.first_name %}
   <div>
     <label class="mk-label" for="{{ form.display_name.id_for_label }}">Display name</label>
     {{ form.display_name }}

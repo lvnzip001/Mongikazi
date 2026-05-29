@@ -24,6 +24,7 @@ class EmployerProfile(models.Model):
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="employer_profile")
     display_name = models.CharField(max_length=120, blank=True)
+    profile_photo = models.ImageField(upload_to="employers/profile_photos/%Y/%m/", blank=True, null=True)
     employer_type = models.CharField(max_length=20, choices=EmployerType.choices, default=EmployerType.HOUSEHOLD)
     primary_location_label = models.CharField(max_length=80, blank=True)
     primary_area = models.CharField(max_length=255, blank=True)

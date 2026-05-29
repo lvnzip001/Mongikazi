@@ -6,6 +6,7 @@ from locations.form_fields import (
     clean_locality_pair,
     locality_autocomplete_widget,
 )
+from website.profile_photos import profile_photo_form_field, validate_profile_photo
 
 from .models import EmployerOnboardingProfile, HelperOnboardingProfile
 
@@ -83,6 +84,7 @@ class EmployerLocationForm(forms.ModelForm):
 
 
 class HelperProfileForm(forms.ModelForm):
+    profile_photo = profile_photo_form_field(required=False, label="Profile photo (optional)")
     location_query = forms.CharField(
         label="Location",
         widget=locality_autocomplete_widget("location_locality_id"),
@@ -133,6 +135,12 @@ class HelperProfileForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+    def clean_profile_photo(self):
+        upload = self.cleaned_data.get("profile_photo")
+        if upload:
+            validate_profile_photo(upload)
+        return upload
 
     def clean_years_experience(self):
         years = self.cleaned_data.get("years_experience")

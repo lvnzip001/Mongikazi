@@ -87,7 +87,7 @@ def profile_edit(request):
         return guard
 
     profile = get_or_create_employer_profile_for_user(request.user)
-    form = EmployerProfileForm(request.POST or None, instance=profile, user=request.user)
+    form = EmployerProfileForm(request.POST or None, request.FILES or None, instance=profile, user=request.user)
     if request.method == "POST" and form.is_valid():
         profile = form.save()
         refresh_employer_profile_state(profile)

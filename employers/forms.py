@@ -6,6 +6,7 @@ from locations.form_fields import (
     clean_locality_pair,
     locality_autocomplete_widget,
 )
+from website.profile_photos import profile_photo_widget, validate_profile_photo
 
 from .models import EmployerLocation, EmployerProfile, EmployerServicePreference
 
@@ -33,6 +34,7 @@ class EmployerProfileForm(EmployerRoleValidationMixin, forms.ModelForm):
         model = EmployerProfile
         fields = (
             "display_name",
+            "profile_photo",
             "employer_type",
             "primary_location_label",
             "contact_number",
@@ -41,6 +43,7 @@ class EmployerProfileForm(EmployerRoleValidationMixin, forms.ModelForm):
         )
         widgets = {
             "display_name": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Employer display name"}),
+            "profile_photo": profile_photo_widget(),
             "employer_type": forms.Select(attrs={"class": "mk-input"}),
             "primary_location_label": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Home, Office, Apartment"}),
             "contact_number": forms.TextInput(attrs={"class": "mk-input", "placeholder": "Primary contact number"}),
@@ -57,6 +60,12 @@ class EmployerProfileForm(EmployerRoleValidationMixin, forms.ModelForm):
             text_attr="primary_area",
             fk_attr="primary_area_locality",
         )
+
+    def clean_profile_photo(self):
+        upload = self.cleaned_data.get("profile_photo")
+        if upload:
+            validate_profile_photo(upload)
+        return upload
 
     def clean(self):
         cleaned = super().clean()

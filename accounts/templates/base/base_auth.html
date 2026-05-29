@@ -24,7 +24,7 @@
     <div class="mx-auto grid min-h-[calc(100vh-3rem)] w-full max-w-7xl items-center gap-8 lg:grid-cols-[1.05fr_.95fr]">
       <section class="hidden lg:block">
         <a href="{{ public_home_url|default:'/' }}" class="inline-flex items-center gap-3">
-          <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-mk-primary text-sm font-extrabold text-white shadow-mk-soft">MK</div>
+          <img src="{% static 'website/img/logo.png' %}" alt="MongiKazi logo" class="h-12 w-12 rounded-2xl object-cover shadow-mk-soft">
           <div>
             <p class="text-xl font-extrabold tracking-tight text-mk-text">MongiKazi</p>
             <p class="text-sm font-semibold text-mk-muted">Trusted help. Reliable work.</p>
@@ -44,7 +44,7 @@
       <section class="mx-auto w-full max-w-md">
         <div class="mb-6 flex items-center justify-between lg:hidden">
           <a href="{{ public_home_url|default:'/' }}" class="flex items-center gap-3">
-            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-mk-primary text-xs font-extrabold text-white">MK</div>
+            <img src="{% static 'website/img/logo.png' %}" alt="MongiKazi logo" class="h-11 w-11 rounded-2xl object-cover">
             <div><p class="text-base font-extrabold text-mk-text">MongiKazi</p><p class="text-xs text-mk-muted">Account</p></div>
           </a>
         </div>

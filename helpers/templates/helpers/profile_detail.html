@@ -1,10 +1,11 @@
 {% extends "base/base_helpers.html" %}
+{% load profile_display %}
 {% block title %}Helper Work Profile | MongiKazi{% endblock %}
 {% block content %}
 <section class="mk-hero-panel">
   <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
     <div class="flex items-start gap-4">
-      <div class="mk-avatar-lg">{{ profile.display_name|default:request.user.username|slice:":1" }}</div>
+      {% profile_avatar profile size="xl" %}
       <div>
         <p class="mk-eyebrow">Work profile</p>
         <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">{{ profile.display_name|default:request.user.username }}</h1>

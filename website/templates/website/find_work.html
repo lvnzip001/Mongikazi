@@ -1,4 +1,5 @@
 {% extends "base/base_public.html" %}
+{% load static %}
 {% block title %}Find Work | MongiKazi{% endblock %}
 {% block content %}
 <section class="mk-hero mk-hero-grid">
@@ -13,7 +14,7 @@
       </div>
     </div>
     <div class="mk-card overflow-hidden p-3">
-      <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1100&q=80" alt="Worker profile" class="mk-photo h-[420px] w-full rounded-[1.25rem]">
+      <img src="{% static 'website/img/cleaner2.webp' %}" alt="Worker profile" class="mk-photo h-[420px] w-full rounded-[1.25rem] object-cover">
     </div>
   </div>
 </section>

@@ -1,4 +1,5 @@
 {% extends "base/base_public.html" %}
+{% load static %}
 {% block title %}MongiKazi | Find Trusted Help or Get Reliable Work{% endblock %}
 {% block content %}
 <section class="mk-hero mk-hero-grid overflow-hidden">
@@ -19,7 +20,7 @@
     </div>
     <div class="relative">
       <div class="mk-card overflow-hidden p-3">
-        <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=1100&q=80" alt="Professional cleaning service" class="mk-photo h-[430px] w-full rounded-[1.25rem]">
+        <img src="{% static 'website/img/cleaner1.jpg' %}" alt="Professional cleaning service" class="mk-photo h-[430px] w-full rounded-[1.25rem] object-cover">
         <div class="absolute bottom-8 left-8 right-8 rounded-3xl border border-mk-border bg-mk-surface/95 p-5 shadow-mk-lift backdrop-blur">
           <div class="flex items-center justify-between gap-4">
             <div>
@@ -80,9 +81,9 @@
       <p class="mk-body-copy mt-3">Preview how verified workers appear to employers.</p>
     </div>
     <div class="mt-8 grid gap-5 lg:grid-cols-3">
-      {% include "components/helper_preview_card.html" with image="https://images.unsplash.com/photo-1595278069441-2cf29f8005a4?auto=format&fit=crop&w=800&q=80" name="Nomsa M." role="Household cleaning" rating="4.8" jobs="24" distance="2.4 km" description="Reliable cleaner for home and office. Strong recurring bookings." %}
-      {% include "components/helper_preview_card.html" with image="https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=800&q=80" name="Thandi N." role="Laundry & home support" rating="4.7" jobs="31" distance="3.1 km" description="Top-rated helper. Prefers weekly household schedules." %}
-      {% include "components/helper_preview_card.html" with image="https://images.unsplash.com/photo-1580894908361-967195033215?auto=format&fit=crop&w=800&q=80" name="Lerato K." role="Office cleaning" rating="4.9" jobs="18" distance="5.0 km" description="Office and deep cleans. Available for business accounts." %}
+      {% include "components/helper_preview_card.html" with image="/static/website/img/cleaner2.webp" name="Nomsa M." role="Household cleaning" rating="4.8" jobs="24" distance="2.4 km" description="Reliable cleaner for home and office. Strong recurring bookings." %}
+      {% include "components/helper_preview_card.html" with image="/static/website/img/cleaner3.webp" name="Thandi N." role="Laundry & home support" rating="4.7" jobs="31" distance="3.1 km" description="Top-rated helper. Prefers weekly household schedules." %}
+      {% include "components/helper_preview_card.html" with image="/static/website/img/cleaner4.jpg" name="Lerato K." role="Office cleaning" rating="4.9" jobs="18" distance="5.0 km" description="Office and deep cleans. Available for business accounts." %}
     </div>
   </div>
 </section>

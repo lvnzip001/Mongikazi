@@ -13,6 +13,7 @@ class User(AbstractUser):
         ADMIN = "ADMIN", _("Admin")
 
     email = models.EmailField(_("email address"), unique=True, blank=True, null=True)
+    profile_photo = models.ImageField(upload_to="accounts/profile_photos/%Y/%m/", blank=True, null=True)
     role = models.CharField(max_length=20, choices=Role.choices, blank=True)
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     is_phone_verified = models.BooleanField(default=False)

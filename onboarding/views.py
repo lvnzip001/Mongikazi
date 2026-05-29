@@ -13,6 +13,8 @@ from .services.onboarding_service import (
     user_can_access_employer_onboarding,
     user_can_access_helper_onboarding,
 )
+from website.profile_photos import profile_photo_url
+
 from .services.redirect_service import redirect_user_to_correct_onboarding_flow
 
 
@@ -108,15 +110,22 @@ def helper_profile(request):
         return redirect("accounts:account_pending")
 
     profile = get_or_create_helper_onboarding_profile(request.user)
-    form = HelperProfileForm(request.POST or None, instance=profile)
+    form = HelperProfileForm(request.POST or None, request.FILES or None, instance=profile)
     if request.method == "POST" and form.is_valid():
         form.save()
+        if form.cleaned_data.get("profile_photo"):
+            request.user.profile_photo = form.cleaned_data["profile_photo"]
+            request.user.save(update_fields=["profile_photo"])
         return redirect("onboarding:helper_services")
 
     return render(
         request,
         "onboarding/helper_step_1.html",
-        {**_base_context(request, step_label="Step 1 of 3", step_number=1), "form": form},
+        {
+            **_base_context(request, step_label="Step 1 of 3", step_number=1),
+            "form": form,
+            "user_photo_url": profile_photo_url(request.user),
+        },
     )
 
 

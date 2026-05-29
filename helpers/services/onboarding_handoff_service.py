@@ -53,6 +53,8 @@ def create_or_update_helper_profile_from_onboarding(user):
     helper_profile.preferred_work_area = onboarding_profile.preferred_work_area
     helper_profile.preferred_work_area_locality = onboarding_profile.preferred_work_area_locality
     helper_profile.availability_summary = onboarding_profile.availability_summary
+    if user.profile_photo and not helper_profile.profile_photo:
+        helper_profile.profile_photo = user.profile_photo
     helper_profile.save()
 
     sync_helper_skills_from_onboarding(user)

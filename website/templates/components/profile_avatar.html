@@ -1,0 +1,7 @@
+<div class="mk-avatar mk-avatar--{{ size }}{% if size == 'lg' %} mk-avatar-lg{% elif size == 'xl' %} mk-avatar-xl{% elif size == 'sm' %} mk-avatar--sm{% endif %}{% if photo_url %} mk-avatar--photo{% endif %}" title="{{ name }}">
+  {% if photo_url %}
+    <img src="{{ photo_url }}" alt="{{ name }}" class="mk-avatar__img" loading="lazy" decoding="async" />
+  {% else %}
+    <span class="mk-avatar__initials" aria-hidden="true">{{ initials }}</span>
+  {% endif %}
+</div>

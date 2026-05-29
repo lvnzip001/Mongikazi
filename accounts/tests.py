@@ -1,6 +1,8 @@
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
+from website.tests.media_fixtures import tiny_png
+
 from .forms import RegisterForm
 from .models import User
 from .services.redirect_service import get_onboarding_url, get_role_redirect_url
@@ -88,6 +90,49 @@ class AccountsAuthFlowTests(TestCase):
         user = User.objects.get(email="helper@example.com")
         self.assertEqual(user.role, User.Role.HELPER)
         self.assertRedirects(response, reverse("onboarding:start"), fetch_redirect_response=False)
+
+    def test_registration_accepts_optional_profile_photo(self):
+        response = self.client.post(
+            reverse("accounts:register", kwargs={"role": "helper"}),
+            {
+                "first_name": "Photo",
+                "last_name": "Helper",
+                "email": "photo.helper@example.com",
+                "phone_number": "0710000088",
+                "password1": self.password,
+                "password2": self.password,
+                "accepted_terms": True,
+                "profile_photo": tiny_png("face.png"),
+            },
+            format="multipart",
+        )
+        user = User.objects.get(email="photo.helper@example.com")
+        self.assertTrue(user.profile_photo.name)
+        self.assertRedirects(response, reverse("onboarding:start"), fetch_redirect_response=False)
+
+    def test_registration_rejects_oversized_profile_photo(self):
+        from django.core.files.uploadedfile import SimpleUploadedFile
+
+        huge = SimpleUploadedFile("big.png", b"x" * (5 * 1024 * 1024 + 1), content_type="image/png")
+        response = self.client.post(
+            reverse("accounts:register", kwargs={"role": "employer"}),
+            {
+                "first_name": "Big",
+                "last_name": "File",
+                "email": "big.file@example.com",
+                "phone_number": "0710000087",
+                "password1": self.password,
+                "password2": self.password,
+                "accepted_terms": True,
+                "profile_photo": huge,
+            },
+            format="multipart",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(email="big.file@example.com").exists())
+        form = response.context["form"]
+        self.assertFalse(form.is_valid())
+        self.assertIn("profile_photo", form.errors)
 
     def test_duplicate_email_validation_is_case_insensitive(self):
         User.objects.create_user(

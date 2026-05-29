@@ -1,4 +1,5 @@
 {% extends 'base/base_bookings.html' %}
+{% load profile_display %}
 
 {% block title %}{{ booking.booking_reference }} | Worker Request{% endblock %}
 
@@ -17,9 +18,16 @@
 
   <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]">
     <article class="mk-detail-card">
+      <div class="mb-5 flex items-center gap-3 rounded-2xl border border-mk-border bg-mk-surface-soft/80 p-4 dark:border-slate-700 dark:bg-slate-900/50">
+        {% profile_avatar booking.employer size="md" %}
+        <div class="min-w-0">
+          <p class="text-xs font-bold uppercase tracking-[0.14em] text-mk-muted">Employer</p>
+          <p class="mt-1 truncate text-sm font-bold text-slate-950 dark:text-white">{{ booking.employer.display_name|default:booking.employer.user.get_full_name|default:booking.employer.user.username }}</p>
+          <p class="mt-0.5 text-xs text-mk-muted">{{ booking.employer.primary_area|default:"Area on file" }}</p>
+        </div>
+      </div>
       <h2 class="mk-section-title">Request details</h2>
       <dl class="mk-kv-grid mt-4 sm:grid sm:grid-cols-2">
-        <div><dt>Employer</dt><dd>{{ booking.employer.display_name|default:booking.employer.user.get_full_name|default:booking.employer.user.email }}</dd></div>
         <div><dt>Service</dt><dd>{{ booking.service_category.name }}</dd></div>
         <div><dt>Date</dt><dd>{{ booking.scheduled_date }}</dd></div>
         <div><dt>Time</dt><dd>{{ booking.start_time }}</dd></div>

@@ -1,4 +1,5 @@
 {% extends 'base/base_employers.html' %}
+{% load profile_display %}
 
 {% block title %}Edit Employer Profile | MongiKazi{% endblock %}
 
@@ -16,7 +17,7 @@
   </aside>
 
   <section class="mk-content-panel">
-    <form method="post" class="mk-form-card">
+    <form method="post" enctype="multipart/form-data" class="mk-form-card">
       {% csrf_token %}
       <div class="mb-2">
         <p class="mk-eyebrow">Account identity</p>
@@ -27,6 +28,10 @@
       {% if form.non_field_errors %}
         <div class="mk-error">{{ form.non_field_errors }}</div>
       {% endif %}
+
+      <div class="sm:col-span-2">
+        {% include "components/profile_photo_field.html" with field=form.profile_photo help_text="Use your phone camera or gallery. JPG, PNG, or WebP up to 5 MB." current_photo_url=profile|profile_photo_url display_name=profile.display_name %}
+      </div>
 
       <div class="grid gap-4 sm:grid-cols-2">
         <div>

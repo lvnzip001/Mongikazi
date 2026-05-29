@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
+from website.profile_photos import profile_photo_form_field, validate_profile_photo
+
 User = get_user_model()
 
 
@@ -84,6 +86,10 @@ class RegisterForm(UserCreationForm):
         label="Phone number",
         widget=forms.TextInput(attrs={"class": "mk-input", "placeholder": "Phone number", "autocomplete": "tel"}),
     )
+    profile_photo = profile_photo_form_field(
+        required=False,
+        label="Profile photo (optional)",
+    )
     accepted_terms = forms.BooleanField(
         required=True,
         widget=forms.CheckboxInput(attrs={"class": "h-4 w-4 rounded border-mk-border text-mk-primary focus:ring-mk-primary"}),
@@ -113,6 +119,12 @@ class RegisterForm(UserCreationForm):
             raise forms.ValidationError("An account with this phone number already exists.")
         return phone_number
 
+    def clean_profile_photo(self):
+        upload = self.cleaned_data.get("profile_photo")
+        if upload:
+            validate_profile_photo(upload)
+        return upload
+
     def clean(self):
         cleaned_data = super().clean()
         if self.role not in {User.Role.EMPLOYER, User.Role.HELPER}:
@@ -128,6 +140,8 @@ class RegisterForm(UserCreationForm):
         user.phone_number = phone_number
         user.role = self.role
         user.accepted_terms = self.cleaned_data["accepted_terms"]
+        if self.cleaned_data.get("profile_photo"):
+            user.profile_photo = self.cleaned_data["profile_photo"]
         if commit:
             user.save()
             self.save_m2m()

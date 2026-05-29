@@ -34,6 +34,8 @@ def create_or_update_employer_profile_from_onboarding(user):
     employer_profile.contact_number = user.phone_number or employer_profile.contact_number
     if not employer_profile.preferred_contact_method:
         employer_profile.preferred_contact_method = EmployerProfile.ContactMethod.APP
+    if user.profile_photo and not employer_profile.profile_photo:
+        employer_profile.profile_photo = user.profile_photo
     employer_profile.save()
 
     sync_employer_location_from_onboarding(user)

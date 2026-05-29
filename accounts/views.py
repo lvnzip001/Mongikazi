@@ -44,7 +44,7 @@ def register(request, role):
     if request.user.is_authenticated:
         return redirect(get_role_redirect_url(request.user))
 
-    form = RegisterForm(request.POST or None, role=role)
+    form = RegisterForm(request.POST or None, request.FILES or None, role=role)
     if request.method == "POST" and form.is_valid():
         _, next_url = complete_registration(request, form)
         return redirect(next_url)
