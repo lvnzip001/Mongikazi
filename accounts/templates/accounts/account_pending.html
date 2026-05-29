@@ -3,8 +3,8 @@
 {% block content %}
 <div>
   <span class="mk-badge">Account created</span>
-  <h1 class="mt-4 text-2xl font-bold tracking-tight text-mk-text dark:text-white">Your {{ role_label }} account is ready</h1>
-  <p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">
+  <h1 class="mt-4 text-2xl font-bold tracking-tight text-mk-text">Your {{ role_label }} account is ready</h1>
+  <p class="mt-2 mk-body-copy">
     {% if is_employer %}
       The next step is to confirm your location and define the help you need.
     {% elif is_helper %}
@@ -16,10 +16,10 @@
     {% endif %}
   </p>
 </div>
-<div class="mt-6 rounded-[1.25rem] border border-mk-border bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-  <p class="text-sm font-bold text-mk-text dark:text-white">Prepared next endpoint</p>
-  <p class="mt-2 break-all text-sm leading-6 text-mk-muted dark:text-slate-400">{{ next_url }}</p>
-  <p class="mt-3 text-xs leading-5 text-mk-muted dark:text-slate-400">This route is onboarding-ready and will continue into the dedicated portal flow as connected apps are released.</p>
+<div class="mt-6 rounded-[1.25rem] border border-mk-border bg-mk-surface p-4">
+  <p class="text-sm font-bold text-mk-text">Prepared next endpoint</p>
+  <p class="mt-2 break-all mk-body-copy">{{ next_url }}</p>
+  <p class="mt-3 mk-muted">This route is onboarding-ready and will continue into the dedicated portal flow as connected apps are released.</p>
 </div>
 <div class="mt-6 grid gap-3">
   <a href="{{ next_url }}" class="mk-btn-primary w-full">Continue setup</a>

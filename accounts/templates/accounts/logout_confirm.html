@@ -3,8 +3,8 @@
 {% block content %}
 <div>
   <span class="mk-badge">Session security</span>
-  <h1 class="mt-4 text-2xl font-bold tracking-tight text-mk-text dark:text-white">Sign out?</h1>
-  <p class="mt-2 text-sm leading-6 text-mk-muted dark:text-slate-300">Use the secure sign-out action below to end your session.</p>
+  <h1 class="mt-4 text-2xl font-bold tracking-tight text-mk-text">Sign out?</h1>
+  <p class="mt-2 mk-body-copy">Use the secure sign-out action below to end your session.</p>
 </div>
 <form method="post" action="{% url 'accounts:logout' %}" class="mt-6 grid gap-3">
   {% csrf_token %}
