@@ -12,6 +12,7 @@ __pycache__/
 *.zip
 */*.pyc
 run_project_mapping.py
+media/
 
 # Distribution / packaging
 build/

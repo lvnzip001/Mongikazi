@@ -26,6 +26,7 @@
         <div class="flex flex-wrap items-center justify-end gap-2">
           <a href="{% url 'employer_portal:dashboard' %}" class="mk-top-link">Workspace</a>
           <a href="{% url 'employers:profile_preview' %}" class="mk-top-link hidden sm:inline-flex">Preview</a>
+          <a href="{% url 'accounts:logout_confirm' %}" class="mk-top-link mk-top-link--signout hidden sm:inline-flex">Sign out</a>
           <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
         </div>
       </header>
@@ -39,9 +40,9 @@
       {% endif %}
 
       <main id="profile-content" class="pb-24 lg:pb-0">
-        <div class="mk-card overflow-hidden">
+        <section class="mk-portal-panel mk-portal-panel--flush">
           {% block content %}{% endblock %}
-        </div>
+        </section>
       </main>
     </div>
   </div>

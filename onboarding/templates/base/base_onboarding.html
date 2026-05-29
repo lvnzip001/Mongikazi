@@ -67,6 +67,11 @@
           {% endif %}
           {% block content %}{% endblock %}
         </div>
+        {% if request.user.is_authenticated %}
+          <p class="mk-muted mt-4 text-center text-sm">
+            <a href="{% url 'accounts:logout_confirm' %}" class="font-bold text-mk-muted underline-offset-2 hover:text-mk-primary hover:underline">Sign out</a>
+          </p>
+        {% endif %}
         <p class="mk-muted mt-5 text-center">Short setup. Full features in your portal.</p>
       </section>
     </div>

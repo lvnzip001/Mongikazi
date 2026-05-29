@@ -34,6 +34,7 @@
           <a class="mk-top-link" href="{% url 'employer_portal:dashboard' %}">Workspace</a>
           <a class="mk-top-link hidden sm:inline-flex" href="{{ employer_profile_url }}">Profile</a>
         {% endif %}
+        <a href="{% url 'accounts:logout_confirm' %}" class="mk-top-link mk-top-link--signout">Sign out</a>
         <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
       </div>
     </header>
@@ -65,6 +66,7 @@
             <a class="mk-side-link" href="{{ employer_profile_url }}">Profile setup</a>
           {% endif %}
         </nav>
+        {% include "partials/portal_account_footer.html" %}
         <div class="mk-sidebar-note">
           <p class="font-extrabold text-mk-text">Status-first</p>
           <p class="mk-muted mt-1">Every request keeps a clear timeline.</p>

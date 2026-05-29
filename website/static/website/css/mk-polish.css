@@ -4,13 +4,31 @@
  */
 
 .mk-content-panel {
-  padding: 1.25rem 1.25rem 1.5rem;
+  padding: var(--mk-portal-pad);
 }
 @media (min-width: 640px) {
-  .mk-content-panel { padding: 1.5rem 1.75rem 1.75rem; }
+  .mk-content-panel { padding: calc(var(--mk-portal-pad) + 0.15rem); }
 }
 @media (min-width: 1024px) {
-  .mk-content-panel { padding: 1.75rem 2rem 2rem; }
+  .mk-content-panel { padding: calc(var(--mk-portal-pad) + 0.35rem); }
+}
+
+/* Portal page surface — symmetric padding on mobile (helpers/employers profile shells) */
+.mk-portal-panel {
+  border-radius: 1rem;
+  border: 1px solid var(--mk-border);
+  background: color-mix(in srgb, var(--mk-surface) 96%, transparent);
+  box-shadow: var(--mk-shadow-soft);
+  padding: var(--mk-portal-pad);
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .mk-portal-panel { border-radius: 1.15rem; }
+}
+
+.mk-portal-panel--flush {
+  padding: 0;
 }
 
 .mk-page-header {
@@ -95,6 +113,10 @@ html[data-theme="dark"] .mk-actions-panel {
 .mk-surface-card {
   padding: 0;
   overflow: hidden;
+}
+
+.mk-surface-card > .mk-content-panel {
+  padding: var(--mk-portal-pad);
 }
 
 .mk-row-highlight {

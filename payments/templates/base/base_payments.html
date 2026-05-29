@@ -30,6 +30,7 @@
           <a href="{% url 'employer_portal:dashboard' %}" class="mk-top-link">Workspace</a>
           <a href="{{ employer_profile_url }}" class="mk-top-link hidden sm:inline-flex">Profile</a>
         {% endif %}
+        <a href="{% url 'accounts:logout_confirm' %}" class="mk-top-link mk-top-link--signout">Sign out</a>
         <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
       </div>
     </header>
@@ -42,8 +43,10 @@
       </div>
     {% endif %}
 
-    <section class="mk-card">
+    <section class="mk-card mk-surface-card">
+      <div class="mk-content-panel">
       {% block content %}{% endblock %}
+      </div>
     </section>
   </main>
   <script src="{% static 'website/js/mk-theme.js' %}"></script>

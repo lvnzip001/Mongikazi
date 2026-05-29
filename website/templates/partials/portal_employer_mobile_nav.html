@@ -28,6 +28,9 @@
       {% else %}
         <a href="{{ employer_profile_url }}" class="mk-nav-link">Profile setup</a>
       {% endif %}
+      <div class="mk-portal-account mk-portal-account--menu">
+        {% include "partials/portal_sign_out_link.html" %}
+      </div>
     </div>
   </div>
 </div>

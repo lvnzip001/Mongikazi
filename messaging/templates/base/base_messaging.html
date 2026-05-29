@@ -30,6 +30,7 @@
         {% endif %}
         <a href="{{ dashboard_url }}" class="mk-top-link hidden md:inline-flex">Dashboard</a>
         <a href="{{ bookings_url }}" class="mk-top-link hidden md:inline-flex">Bookings</a>
+        <a href="{% url 'accounts:logout_confirm' %}" class="mk-top-link mk-top-link--signout">Sign out</a>
         <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
       </div>
     </header>

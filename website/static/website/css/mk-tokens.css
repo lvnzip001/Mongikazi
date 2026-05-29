@@ -17,8 +17,9 @@
 
   /* Layout — capped on small/medium screens; fluid on xl+ (see mk-portal.css) */
   --mk-layout-max: 88rem;
-  --mk-layout-gutter: 1rem;
+  --mk-layout-gutter: 0.65rem;
   --mk-shell-max: 105rem;
+  --mk-portal-pad: 0.75rem;
 
   /* Compatibility aliases (existing templates) */
   --mk-primary: var(--mk-maroon-primary);
@@ -33,6 +34,20 @@
   --mk-nav-bg: rgba(251, 248, 244, 0.92);
   --mk-shadow-soft: 0 14px 34px rgba(95, 31, 52, 0.08);
   --mk-shadow-lift: 0 22px 56px rgba(95, 31, 52, 0.12);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --mk-layout-gutter: 0.85rem;
+    --mk-portal-pad: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --mk-layout-gutter: 1rem;
+    --mk-portal-pad: 1.15rem;
+  }
 }
 
 html[data-theme="dark"] {
