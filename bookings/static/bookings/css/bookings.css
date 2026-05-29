@@ -402,19 +402,18 @@ html[data-theme="dark"] .mk-status-cancelled { border-color: rgba(248, 113, 113,
   margin-top: 0.15rem;
   font-size: 0.92rem;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--mk-text);
 }
 
 html[data-theme="dark"] .mk-kv-grid dt { color: #94a3b8; }
 html[data-theme="dark"] .mk-kv-grid dd { color: #e2e8f0; }
 
 .mk-section-title {
-  font-size: 0.94rem;
+  font-size: 1rem;
   font-weight: 800;
-  color: #0f172a;
+  letter-spacing: -0.01em;
+  color: var(--mk-text);
 }
-
-html[data-theme="dark"] .mk-section-title { color: #f8fafc; }
 
 .mk-empty-state {
   padding: 1.5rem;

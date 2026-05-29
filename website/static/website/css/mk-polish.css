@@ -1,0 +1,148 @@
+/**
+ * Premium polish — spacing and typography for high-traffic screens.
+ * Requires mk-tokens.css (+ mk-portal.css for portal shells).
+ */
+
+.mk-content-panel {
+  padding: 1.25rem 1.25rem 1.5rem;
+}
+@media (min-width: 640px) {
+  .mk-content-panel { padding: 1.5rem 1.75rem 1.75rem; }
+}
+@media (min-width: 1024px) {
+  .mk-content-panel { padding: 1.75rem 2rem 2rem; }
+}
+
+.mk-page-header {
+  display: grid;
+  gap: 1.25rem;
+}
+.mk-page-header--split {
+  gap: 1.25rem;
+}
+@media (min-width: 1024px) {
+  .mk-page-header--split {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 320px);
+    align-items: start;
+    gap: 1.5rem;
+  }
+}
+
+.mk-page-header__title {
+  margin-top: 0.35rem;
+  font-size: clamp(1.65rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--mk-text);
+}
+
+.mk-page-header__lead {
+  margin-top: 0.65rem;
+  max-width: 42rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--mk-subtext);
+}
+
+.mk-page-header__aside-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--mk-text);
+}
+
+.mk-page-header__aside-copy {
+  margin-top: 0.35rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--mk-muted);
+}
+
+.mk-card-heading__title {
+  margin-top: 0.25rem;
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--mk-text);
+}
+
+.mk-stat-hero {
+  margin-top: 0.2rem;
+  font-size: clamp(1.75rem, 4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--mk-text);
+}
+
+.mk-actions-panel {
+  margin-top: 1.25rem;
+  padding: 1.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--mk-border);
+  background: color-mix(in srgb, var(--mk-surface-soft) 70%, var(--mk-surface));
+  display: grid;
+  gap: 1rem;
+}
+
+html[data-theme="dark"] .mk-actions-panel {
+  border-color: var(--mk-dark-border);
+  background: rgba(15, 23, 42, 0.55);
+}
+
+/* Bookings: outer shell card holds inner content only */
+.mk-surface-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.mk-row-highlight {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--mk-text);
+}
+
+.mk-auth-card {
+  padding: 1.35rem 1.35rem 1.5rem;
+}
+@media (min-width: 640px) {
+  .mk-auth-card { padding: 1.5rem 1.65rem 1.65rem; }
+}
+
+.mk-auth-card .mk-page-title {
+  margin-top: 0.85rem;
+  font-size: clamp(1.5rem, 3vw, 1.75rem);
+}
+
+.mk-auth-form {
+  margin-top: 1.35rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.mk-auth-links {
+  margin-top: 1.15rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+}
+
+.mk-portal-hero .mk-page-title {
+  margin-top: 0.35rem;
+}
+
+.mk-readiness-card .mk-chip {
+  flex-shrink: 0;
+  max-width: 9rem;
+  text-align: center;
+}
+
+html[data-theme="dark"] .mk-auth-card .rounded-2xl.bg-red-50 {
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: rgba(127, 29, 29, 0.35);
+  color: var(--mk-danger);
+}

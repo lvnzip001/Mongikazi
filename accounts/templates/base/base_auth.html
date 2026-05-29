@@ -8,6 +8,7 @@
   <meta name="description" content="Access MongiKazi to book trusted help or build a verified helper profile.">
   {% include "partials/mk_head.html" %}
   <link rel="stylesheet" href="{% static 'website/css/public_app.css' %}">
+  <link rel="stylesheet" href="{% static 'website/css/mk-polish.css' %}">
   <style>
     .mk-auth-shell { position: relative; min-height: 100vh; overflow: hidden; padding: 1.5rem 1rem; }
     @media (min-width: 1024px) { .mk-auth-shell { padding: 1.5rem 2rem; } }
@@ -47,7 +48,7 @@
             <div><p class="text-base font-extrabold text-mk-text">MongiKazi</p><p class="text-xs text-mk-muted">Account</p></div>
           </a>
         </div>
-        <div class="mk-card p-5 sm:p-6">
+        <div class="mk-card mk-auth-card">
           {% if messages %}
             <div class="mb-4 grid gap-2">
               {% for message in messages %}

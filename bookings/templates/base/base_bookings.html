@@ -9,6 +9,7 @@
   {% include "partials/mk_head.html" %}
   <link rel="stylesheet" href="{% static 'website/css/mk-portal.css' %}">
   <link rel="stylesheet" href="{% static 'website/css/public_app.css' %}">
+  <link rel="stylesheet" href="{% static 'website/css/mk-polish.css' %}">
   <link rel="stylesheet" href="{% static 'bookings/css/bookings.css' %}">
 </head>
 <body class="mk-body min-h-screen bg-mk-bg text-mk-text font-sans antialiased">
@@ -80,7 +81,7 @@
           {% endif %}
         </nav>
 
-        <section class="mk-card overflow-hidden">
+        <section class="mk-card mk-surface-card">
           {% block content %}{% endblock %}
         </section>
       </div>

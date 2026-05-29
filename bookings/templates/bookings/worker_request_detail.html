@@ -3,15 +3,17 @@
 {% block title %}{{ booking.booking_reference }} | Worker Request{% endblock %}
 
 {% block content %}
-<div class="p-5 sm:p-6 lg:p-8">
-  <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-    <div>
-      <p class="mk-eyebrow">Booking request</p>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">{{ booking.booking_reference }}</h1>
-      <p class="mt-3 max-w-2xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Review the full request before accepting or declining. The timeline records every action for transparency.</p>
+<div class="mk-content-panel">
+  <header class="mk-page-header">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+      <div>
+        <p class="mk-eyebrow">Booking request</p>
+        <h1 class="mk-page-header__title">{{ booking.booking_reference }}</h1>
+        <p class="mk-page-header__lead">Review the full request before accepting or declining. The timeline records every action for transparency.</p>
+      </div>
+      <span class="mk-status shrink-0 {% if booking.status == 'PENDING_WORKER_RESPONSE' %}mk-status-pending{% elif booking.status == 'ACCEPTED' %}mk-status-accepted{% elif booking.status == 'COMPLETED' %}mk-status-completed{% elif booking.status == 'DECLINED' %}mk-status-declined{% elif 'CANCELLED' in booking.status %}mk-status-cancelled{% endif %}">{{ booking.get_status_display }}</span>
     </div>
-    <span class="mk-status {% if booking.status == 'PENDING_WORKER_RESPONSE' %}mk-status-pending{% elif booking.status == 'ACCEPTED' %}mk-status-accepted{% elif booking.status == 'COMPLETED' %}mk-status-completed{% elif booking.status == 'DECLINED' %}mk-status-declined{% elif 'CANCELLED' in booking.status %}mk-status-cancelled{% endif %}">{{ booking.get_status_display }}</span>
-  </div>
+  </header>
 
   <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]">
     <article class="mk-detail-card">
@@ -26,8 +28,8 @@
       </dl>
       {% if booking.special_instructions %}
         <div class="mk-soft-panel mt-4">
-          <p class="text-sm font-bold text-slate-950 dark:text-white">Special instructions</p>
-          <p class="mt-1 text-sm font-medium leading-6 text-slate-700 dark:text-slate-200">{{ booking.special_instructions }}</p>
+          <p class="mk-page-header__aside-title">Special instructions</p>
+          <p class="mt-1 mk-body-copy">{{ booking.special_instructions }}</p>
         </div>
       {% endif %}
     </article>
@@ -39,16 +41,16 @@
         <div><dt>Platform fee estimate</dt><dd>R{{ booking.platform_fee_estimate }}</dd></div>
         <div><dt>Total employer estimate</dt><dd>R{{ booking.total_estimate }}</dd></div>
       </dl>
-      <p class="mt-4 text-xs font-semibold leading-5 text-mk-muted dark:text-slate-400">Estimate only. Payments and payouts are handled in future apps.</p>
+      <p class="mk-muted mt-4">Estimate only. Payments and payouts are handled in future apps.</p>
     </article>
   </div>
 
   {% include 'bookings/booking_timeline.html' with booking=booking events=events only %}
 
-  <section class="mt-5 grid gap-3 rounded-2xl border border-mk-border bg-white p-4 dark:border-slate-700 dark:bg-slate-900/60">
+  <section class="mk-actions-panel">
     <div>
       <h2 class="mk-section-title">Your actions</h2>
-      <p class="mt-1 text-xs font-medium leading-5 text-mk-muted dark:text-slate-400">Only respond if the date, location, service, and time work for you.</p>
+      <p class="mk-muted mt-1">Only respond if the date, location, service, and time work for you.</p>
     </div>
 
     {% if can_accept or can_decline or can_cancel %}
@@ -79,7 +81,7 @@
         {% endif %}
       </div>
     {% else %}
-      <p class="text-sm font-semibold text-mk-muted dark:text-slate-300">No actions are available for this status.</p>
+      <p class="mk-body-copy">No actions are available for this status.</p>
     {% endif %}
 
     <a href="{% url 'messaging:open_booking_thread' booking_reference=booking.booking_reference %}" class="mk-btn-secondary w-full lg:w-auto">Open chat</a>

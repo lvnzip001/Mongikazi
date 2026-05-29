@@ -4,11 +4,11 @@
 
 {% block content %}
 <section class="mk-page-grid">
-  <article class="mk-card mk-hero lg:col-span-12">
+  <article class="mk-card mk-hero mk-portal-hero lg:col-span-12">
     <div class="grid gap-6 lg:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.75fr)] lg:items-center">
       <div>
         <p class="mk-eyebrow">Employer workspace</p>
-        <h1 class="mk-page-title mt-2 sm:text-4xl">Good day, {{ greeting_name }}</h1>
+        <h1 class="mk-page-title">Good day, {{ greeting_name }}</h1>
         <p class="mk-body-copy mt-3 max-w-lg">Find trusted help and manage bookings in one place.</p>
         <div class="mt-5 flex flex-col gap-2 sm:flex-row">
           <a href="{% url 'employer_portal:find_help' %}" class="mk-btn-primary">Find trusted help</a>
@@ -19,7 +19,7 @@
         <div class="flex items-start justify-between gap-3">
           <div>
             <p class="mk-eyebrow">Booking readiness</p>
-            <p class="mt-1 text-2xl font-extrabold text-mk-text">{{ profile_completion_percent }}%</p>
+            <p class="mk-stat-hero">{{ profile_completion_percent }}%</p>
           </div>
           <span class="mk-chip">{{ trust_status_display }}</span>
         </div>
@@ -30,10 +30,10 @@
 
   <article class="mk-card lg:col-span-7">
     <div class="flex items-start justify-between gap-3">
-      <div>
+      <header class="mk-card-heading">
         <p class="mk-eyebrow">Readiness summary</p>
-        <h2 class="mt-1 text-xl font-extrabold text-mk-text">Your booking foundation</h2>
-      </div>
+        <h2 class="mk-card-heading__title">Your booking foundation</h2>
+      </header>
       <span class="mk-chip-muted">Setup</span>
     </div>
     <div class="mt-4 grid gap-3 sm:grid-cols-2">
@@ -50,8 +50,10 @@
   </article>
 
   <article class="mk-card lg:col-span-5">
-    <p class="mk-eyebrow">Next best actions</p>
-    <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Keep the account ready</h2>
+    <header class="mk-card-heading">
+      <p class="mk-eyebrow">Next best actions</p>
+      <h2 class="mk-card-heading__title">Keep the account ready</h2>
+    </header>
     <ul class="mt-4 grid gap-2">
       {% for item in next_actions %}
         <li class="mk-list-item"><span>{{ item.title }}</span><a href="{{ item.url }}" class="mk-mini-link">Open</a></li>
@@ -65,15 +67,18 @@
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p class="mk-eyebrow">Marketplace entry</p>
-        <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Start preparing your first helper request</h2>
-        <p class="mt-2 max-w-3xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Browse available categories and helper profile teasers while the full booking request workflow is being prepared.</p>
+        <h2 class="mk-card-heading__title">Start preparing your first helper request</h2>
+        <p class="mk-body-copy mt-2 max-w-3xl">Browse available categories and helper profile teasers while the full booking request workflow is being prepared.</p>
       </div>
       <a href="{% url 'employer_portal:find_help' %}" class="mk-btn-primary shrink-0">Explore helper options</a>
     </div>
   </article>
 
   <article class="mk-card lg:col-span-12">
-    <p class="mk-eyebrow">Workspace overview</p>
+    <header class="mk-card-heading">
+      <p class="mk-eyebrow">Workspace overview</p>
+      <h2 class="mk-card-heading__title">Quick links</h2>
+    </header>
     <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
       <a href="{% url 'employer_portal:bookings' %}" class="mk-stat-link"><span>Upcoming bookings</span><strong>{{ placeholder_counts.bookings }}</strong><small>Booking requests will appear here.</small></a>
       <a href="{% url 'employer_portal:favourites' %}" class="mk-stat-link"><span>Favourite helpers</span><strong>{{ placeholder_counts.favourites }}</strong><small>Saved helpers will appear here.</small></a>
