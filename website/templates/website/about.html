@@ -1,7 +1,26 @@
 {% extends "base/base_public.html" %}
 {% block title %}About | MongiKazi{% endblock %}
 {% block content %}
-<section class="mk-hero-grid bg-mk-bg"><div class="mk-container grid gap-10 py-14 lg:grid-cols-2 lg:items-center  lg:py-20"><div>{% include "components/section_badge.html" with label="Our mission" %}<h1 class="text-4xl font-extrabold tracking-tight text-mk-text lg:text-6xl">Formalising domestic work through trust and access.</h1><p class="mt-5 text-base leading-8 text-mk-muted lg:text-lg">MongiKazi exists to make hiring domestic help safer and more transparent while helping workers build reputation and access consistent income opportunities.</p></div><div class="mk-card overflow-hidden p-3"><img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1100&q=80" alt="Team and community" class="mk-photo h-[390px] w-full rounded-[1.25rem]"></div></div></section>
-<section class="mk-surface-section mk-section"><div class="mk-container"><div class="grid gap-4 md:grid-cols-3">{% include "components/service_card.html" with icon="🏠" title="For employers" description="A trusted way to find reliable domestic workers beyond informal referrals." %}{% include "components/service_card.html" with icon="👷" title="For helpers" description="A digital CV, reputation system, and access to more consistent work opportunities." %}{% include "components/service_card.html" with icon="📈" title="For the market" description="A structured platform that introduces identity, booking, ratings, and operational controls." %}</div></div></section>
+<section class="mk-hero mk-hero-grid">
+  <div class="mk-container grid gap-10 py-14 lg:grid-cols-2 lg:items-center lg:py-20">
+    <div>
+      {% include "components/section_badge.html" with label="About" %}
+      <h1 class="mk-page-title lg:text-6xl">Safer hiring. Fairer work.</h1>
+      <p class="mk-body-copy mt-5 lg:text-lg">We connect households and businesses with verified domestic workers across South Africa.</p>
+    </div>
+    <div class="mk-card overflow-hidden p-3">
+      <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1100&q=80" alt="Community" class="mk-photo h-[390px] w-full rounded-[1.25rem]">
+    </div>
+  </div>
+</section>
+
+<section class="mk-surface-section mk-section">
+  <div class="mk-container grid gap-4 md:grid-cols-3">
+    {% include "components/service_card.html" with icon="EMP" title="Employers" description="Trusted help beyond word-of-mouth referrals." %}
+    {% include "components/service_card.html" with icon="HLP" title="Workers" description="A profile, reputation, and steady opportunities." %}
+    {% include "components/service_card.html" with icon="MKT" title="Marketplace" description="Identity, bookings, ratings, and oversight in one place." %}
+  </div>
+</section>
+
 {% include "components/cta_panel.html" %}
 {% endblock %}

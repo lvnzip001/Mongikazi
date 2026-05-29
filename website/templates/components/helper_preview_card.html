@@ -2,13 +2,21 @@
   <img src="{{ image }}" alt="{{ name }}" class="mk-photo h-56 w-full">
   <div class="p-5">
     <div class="flex items-start justify-between gap-3">
-      <div><h3 class="text-lg font-extrabold text-mk-text">{{ name }}</h3><p class="mt-1 text-sm font-semibold text-mk-muted">{{ role }}</p></div>
-      <span class="mk-badge-warning">★ {{ rating }}</span>
+      <div>
+        <h3 class="text-lg font-extrabold text-mk-text">{{ name }}</h3>
+        <p class="mt-1 text-sm font-semibold text-mk-muted">{{ role }}</p>
+      </div>
+      <span class="mk-badge-warning">&#9733; {{ rating }}</span>
     </div>
     <div class="mt-4 flex flex-wrap gap-2">
-      <span class="mk-badge-success">ID verified</span><span class="mk-badge-neutral">{{ jobs }} jobs</span><span class="mk-badge-neutral">{{ distance }}</span>
+      <span class="mk-badge-success">Verified</span>
+      <span class="mk-badge-neutral">{{ jobs }} jobs</span>
+      <span class="mk-badge-neutral">{{ distance }}</span>
     </div>
-    <p class="mt-4 text-sm leading-6 text-mk-muted">{{ description }}</p>
-    <div class="mt-5 grid grid-cols-2 gap-3"><a href="#" class="mk-btn-secondary min-h-0 py-2.5">View profile</a><a href="#" class="mk-btn-primary min-h-0 py-2.5">Book</a></div>
+    <p class="mk-body-copy mt-4">{{ description }}</p>
+    <div class="mt-5 grid grid-cols-2 gap-3">
+      <a href="{% url 'accounts:role_select' %}" class="mk-btn-secondary min-h-0 py-2.5">View profile</a>
+      <a href="{% url 'accounts:role_select' %}" class="mk-btn-primary min-h-0 py-2.5">Request</a>
+    </div>
   </div>
 </div>

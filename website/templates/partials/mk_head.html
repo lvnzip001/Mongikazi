@@ -1,0 +1,39 @@
+{% load static %}
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem("mk-theme");
+      var prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var theme = (saved === "dark" || saved === "light") ? saved : (prefersDark ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    } catch (error) {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  })();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+  window.tailwind = window.tailwind || {};
+  window.tailwind.config = {
+    darkMode: ['selector', '[data-theme="dark"]'],
+    theme: {
+      extend: {
+        colors: {
+          mk: {
+            primary: 'var(--mk-primary)', primaryDark: 'var(--mk-primary-dark)', secondary: 'var(--mk-secondary)', accent: 'var(--mk-accent)',
+            bg: 'var(--mk-bg)', surface: 'var(--mk-surface)', surfaceSoft: 'var(--mk-surface-soft)', text: 'var(--mk-text)', muted: 'var(--mk-muted)', subtext: 'var(--mk-subtext)', border: 'var(--mk-border)',
+            success: 'var(--mk-success)', warning: 'var(--mk-warning)', danger: 'var(--mk-danger)', ink: 'var(--mk-ink)'
+          }
+        },
+        fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+        boxShadow: { 'mk-soft': 'var(--mk-shadow-soft)', 'mk-lift': 'var(--mk-shadow-lift)' },
+        borderRadius: { 'mk-card': '1.5rem', 'mk-button': '1rem' },
+        maxWidth: { '8xl': 'var(--mk-layout-max)', 'shell': 'var(--mk-shell-max)', 'portal': 'none' }
+      }
+    }
+  };
+</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="{% static 'website/css/mk-tokens.css' %}">

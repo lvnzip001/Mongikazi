@@ -1,9 +1,45 @@
 {% extends "base/base_public.html" %}
 {% block title %}Find Help | MongiKazi{% endblock %}
 {% block content %}
-<section class="mk-hero-grid bg-mk-bg"><div class="mk-container grid gap-10 py-14 lg:grid-cols-2 lg:items-center  lg:py-20"><div>{% include "components/section_badge.html" with label="For employers" %}<h1 class="text-4xl font-extrabold tracking-tight text-mk-text lg:text-6xl">Book verified domestic help with confidence.</h1><p class="mt-5 text-base leading-8 text-mk-muted lg:text-lg">Search by service, location, availability, rating, and verification status. Send a request and track the booking from request to review.</p><div class="mt-7 flex flex-col gap-3 sm:flex-row"><a href="{% url 'accounts:role_select' %}" class="mk-btn-primary">Book a cleaner</a><a href="{% url 'website:trust_safety' %}" class="mk-btn-secondary">View trust layer</a></div></div><div class="mk-card overflow-hidden p-3"><img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1100&q=80" alt="Clean home interior" class="mk-photo h-[420px] w-full rounded-[1.25rem]"></div></div></section>
-<section class="mk-surface-section mk-section"><div class="mk-container"><div class="grid gap-4 md:grid-cols-3">{% include "components/service_card.html" with icon="LOC" title="Location-first search" description="Find nearby helpers and reduce practical booking friction." %}{% include "components/service_card.html" with icon="TRS" title="Visible trust signals" description="Profiles show verification, ratings, reviews, experience, and completed jobs." %}{% include "components/service_card.html" with icon="RBK" title="Rebook trusted helpers" description="Save favourites and turn once-off help into repeat support." %}</div></div></section>
-<section class="mk-muted-section mk-section"><div class="mk-container grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-start "><div>{% include "components/section_badge.html" with label="Employer flow" %}<h2 class="text-3xl font-extrabold tracking-tight text-mk-text">From need to booking request in four steps.</h2><p class="mt-4 text-sm leading-7 text-mk-muted">The employer journey should feel guided, short, and mobile-first.</p></div><div class="grid gap-4 sm:grid-cols-2">{% include "components/service_card.html" with icon="1" title="Choose service" description="Cleaning, laundry, cooking, childcare, office cleaning, or recurring help." %}{% include "components/service_card.html" with icon="2" title="Browse helpers" description="Compare verified profiles, ratings, experience, distance, and availability." %}{% include "components/service_card.html" with icon="3" title="Send request" description="Pick date, time, duration, address, and special instructions." %}{% include "components/service_card.html" with icon="4" title="Confirm and review" description="Track status, confirm completion, and rate the helper." %}</div></div></section>
+<section class="mk-hero mk-hero-grid">
+  <div class="mk-container grid gap-10 py-14 lg:grid-cols-2 lg:items-center lg:py-20">
+    <div>
+      {% include "components/section_badge.html" with label="For employers" %}
+      <h1 class="mk-page-title lg:text-6xl">Find trusted help near you.</h1>
+      <p class="mk-body-copy mt-5 lg:text-lg">Search by service, location, and ratings. Send a request in minutes.</p>
+      <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+        <a href="{% url 'accounts:role_select' %}" class="mk-btn-primary">Book help</a>
+        <a href="{% url 'website:trust_safety' %}" class="mk-btn-secondary">Trust & safety</a>
+      </div>
+    </div>
+    <div class="mk-card overflow-hidden p-3">
+      <img src="https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?auto=format&fit=crop&w=1100&q=80" alt="Clean home interior" class="mk-photo h-[420px] w-full rounded-[1.25rem]">
+    </div>
+  </div>
+</section>
+
+<section class="mk-surface-section mk-section">
+  <div class="mk-container grid gap-4 md:grid-cols-3">
+    {% include "components/service_card.html" with icon="LOC" title="Nearby search" description="Find helpers close to you." %}
+    {% include "components/service_card.html" with icon="TRS" title="Trust signals" description="Verification, ratings, and job history on every profile." %}
+    {% include "components/service_card.html" with icon="RBK" title="Rebook favourites" description="Turn once-off help into repeat support." %}
+  </div>
+</section>
+
+<section class="mk-muted-section mk-section">
+  <div class="mk-container grid gap-8 lg:grid-cols-[.9fr_1.1fr] lg:items-start">
+    <div>
+      {% include "components/section_badge.html" with label="Employer flow" %}
+      <h2 class="mk-section-title">Four steps to a booking.</h2>
+    </div>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {% include "components/service_card.html" with icon="1" title="Choose service" description="Cleaning, laundry, childcare, and more." %}
+      {% include "components/service_card.html" with icon="2" title="Browse helpers" description="Compare profiles, distance, and availability." %}
+      {% include "components/service_card.html" with icon="3" title="Send request" description="Date, time, address, and notes." %}
+      {% include "components/service_card.html" with icon="4" title="Confirm & review" description="Track status and rate the helper." %}
+    </div>
+  </div>
+</section>
+
 {% include "components/cta_panel.html" %}
 {% endblock %}
-

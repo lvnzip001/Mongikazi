@@ -1,8 +1,46 @@
 {% extends "base/base_public.html" %}
 {% block title %}Pricing | MongiKazi{% endblock %}
 {% block content %}
-<section class="mk-muted-section mk-section"><div class="mk-container"><div class="max-w-3xl">{% include "components/section_badge.html" with label="Transparent fees" %}<h1 class="text-4xl font-extrabold tracking-tight text-mk-text lg:text-6xl">Clear pricing before the booking is confirmed.</h1><p class="mt-5 text-base leading-8 text-mk-muted lg:text-lg">The MVP can start with transparent estimates, invoices, EFT payments, and proof-of-payment upload before automating payments later.</p></div></div></section>
-<section class="mk-surface-section mk-section"><div class="mk-container grid gap-5 lg:grid-cols-3 "><div class="mk-card p-6"><span class="mk-badge">Once-off work</span><h2 class="mt-4 text-2xl font-extrabold">10%–25%</h2><p class="mt-2 text-sm leading-6 text-mk-muted">Suggested platform commission range for temporary or once-off bookings.</p></div><div class="mk-card p-6"><span class="mk-badge">Placement support</span><h2 class="mt-4 text-2xl font-extrabold">Fixed R500</h2><p class="mt-2 text-sm leading-6 text-mk-muted">Suggested fixed commission for longer-term helper placements.</p></div><div class="mk-card p-6"><span class="mk-badge">MVP payments</span><h2 class="mt-4 text-2xl font-extrabold">EFT + POP</h2><p class="mt-2 text-sm leading-6 text-mk-muted">Employer pays by EFT and uploads proof for admin verification.</p></div></div></section>
-<section class="mk-muted-section mk-section"><div class="mk-container"><div class="mx-auto max-w-4xl"><div class="mk-card p-6"><h2 class="text-2xl font-extrabold">Example booking estimate</h2><div class="mt-5 divide-y divide-mk-border text-sm"><div class="flex justify-between py-3"><span class="text-mk-muted">Worker fee</span><strong>R300</strong></div><div class="flex justify-between py-3"><span class="text-mk-muted">Platform fee</span><strong>R50</strong></div><div class="flex justify-between py-3 text-base"><span class="font-extrabold">Total estimate</span><strong>R350</strong></div></div></div></div></div></section>
+<section class="mk-muted-section mk-section">
+  <div class="mk-container max-w-3xl">
+    {% include "components/section_badge.html" with label="Pricing" %}
+    <h1 class="mk-page-title lg:text-6xl">Clear fees before you book.</h1>
+    <p class="mk-body-copy mt-5 lg:text-lg">Transparent estimates today. Automated payments when you are ready.</p>
+  </div>
+</section>
+
+<section class="mk-surface-section mk-section">
+  <div class="mk-container grid gap-5 lg:grid-cols-3">
+    <div class="mk-stat-card">
+      <span class="mk-badge">Once-off</span>
+      <h2 class="mt-4 text-2xl font-extrabold text-mk-text">10%–25%</h2>
+      <p class="mk-muted mt-2">Platform fee on temporary bookings.</p>
+    </div>
+    <div class="mk-stat-card">
+      <span class="mk-badge">Placement</span>
+      <h2 class="mt-4 text-2xl font-extrabold text-mk-text">R500 fixed</h2>
+      <p class="mk-muted mt-2">Longer-term helper placements.</p>
+    </div>
+    <div class="mk-stat-card">
+      <span class="mk-badge">Payments</span>
+      <h2 class="mt-4 text-2xl font-extrabold text-mk-text">EFT + POP</h2>
+      <p class="mk-muted mt-2">Pay by EFT and upload proof for verification.</p>
+    </div>
+  </div>
+</section>
+
+<section class="mk-muted-section mk-section">
+  <div class="mk-container mx-auto max-w-lg">
+    <div class="mk-card p-6">
+      <h2 class="text-xl font-extrabold text-mk-text">Example estimate</h2>
+      <div class="mt-5 divide-y divide-mk-border text-sm">
+        <div class="flex justify-between py-3"><span class="text-mk-muted">Worker fee</span><strong>R300</strong></div>
+        <div class="flex justify-between py-3"><span class="text-mk-muted">Platform fee</span><strong>R50</strong></div>
+        <div class="flex justify-between py-3 text-base"><span class="font-extrabold">Total</span><strong>R350</strong></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 {% include "components/cta_panel.html" %}
 {% endblock %}

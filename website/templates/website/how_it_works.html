@@ -1,8 +1,49 @@
 {% extends "base/base_public.html" %}
 {% block title %}How It Works | MongiKazi{% endblock %}
 {% block content %}
-<section class="mk-muted-section mk-section"><div class="mk-container"><div class="max-w-3xl">{% include "components/section_badge.html" with label="Process" %}<h1 class="text-4xl font-extrabold tracking-tight text-mk-text lg:text-6xl">A simple marketplace flow with trust built in.</h1><p class="mt-5 text-base leading-8 text-mk-muted lg:text-lg">MongiKazi separates the employer and helper journeys early, then connects them through verified profiles, structured bookings, messaging, and reviews.</p></div></div></section>
-<section class="mk-surface-section mk-section"><div class="mk-container"><div class="grid gap-4 md:grid-cols-4">{% include "components/service_card.html" with icon="1" title="Role selection" description="Users choose whether they need help or want work." %}{% include "components/service_card.html" with icon="2" title="Profile setup" description="Helpers build profiles; employers define their service needs and location." %}{% include "components/service_card.html" with icon="3" title="Booking request" description="Employer sends a structured booking request to a selected helper." %}{% include "components/service_card.html" with icon="4" title="Complete and rate" description="The job is completed, payment is tracked, and both sides review each other." %}</div></div></section>
-<section class="mk-muted-section mk-section"><div class="mk-container grid gap-6 lg:grid-cols-2 "><div class="mk-card p-6"><span class="mk-badge">Employer journey</span><h2 class="mt-4 text-2xl font-extrabold">I need help</h2><div class="mt-5 space-y-3 text-sm text-mk-muted"><p>1. Select service type and location.</p><p>2. Browse trusted helper cards.</p><p>3. Send booking request.</p><p>4. Confirm completion and review.</p></div></div><div class="mk-card p-6"><span class="mk-badge">Helper journey</span><h2 class="mt-4 text-2xl font-extrabold">I want work</h2><div class="mt-5 space-y-3 text-sm text-mk-muted"><p>1. Build profile and upload documents.</p><p>2. Set availability and work categories.</p><p>3. Accept or decline booking requests.</p><p>4. Track jobs, earnings, and reviews.</p></div></div></div></section>
+<section class="mk-muted-section mk-section">
+  <div class="mk-container max-w-3xl">
+    {% include "components/section_badge.html" with label="Process" %}
+    <h1 class="mk-page-title lg:text-6xl">Simple flow. Built-in trust.</h1>
+    <p class="mk-body-copy mt-5 lg:text-lg">Employers and workers meet through verified profiles, structured bookings, and reviews.</p>
+  </div>
+</section>
+
+<section class="mk-surface-section mk-section">
+  <div class="mk-container grid gap-4 md:grid-cols-4">
+    {% include "components/service_card.html" with icon="1" title="Choose your role" description="Need help or want work." %}
+    {% include "components/service_card.html" with icon="2" title="Set up profile" description="Employer needs or worker CV." %}
+    {% include "components/service_card.html" with icon="3" title="Request & accept" description="Structured booking request." %}
+    {% include "components/service_card.html" with icon="4" title="Complete & rate" description="Payment tracking and two-way reviews." %}
+  </div>
+</section>
+
+<section class="mk-muted-section mk-section">
+  <div class="mk-container grid gap-6 lg:grid-cols-2">
+    <div class="mk-card p-6">
+      <span class="mk-badge">Employers</span>
+      <h2 class="mt-4 text-2xl font-extrabold text-mk-text">I need help</h2>
+      <ul class="mk-muted mt-5 space-y-2">
+        <li>Pick service and location</li>
+        <li>Browse trusted profiles</li>
+        <li>Send a booking request</li>
+        <li>Confirm and review</li>
+      </ul>
+      <a href="{% url 'accounts:role_select' %}" class="mk-btn-primary mt-6 w-full sm:w-auto">Get started</a>
+    </div>
+    <div class="mk-card p-6">
+      <span class="mk-badge">Workers</span>
+      <h2 class="mt-4 text-2xl font-extrabold text-mk-text">I want work</h2>
+      <ul class="mk-muted mt-5 space-y-2">
+        <li>Build profile and verify</li>
+        <li>Set availability</li>
+        <li>Accept requests</li>
+        <li>Track jobs and earnings</li>
+      </ul>
+      <a href="{% url 'accounts:role_select' %}" class="mk-btn-secondary mt-6 w-full sm:w-auto">Join as worker</a>
+    </div>
+  </div>
+</section>
+
 {% include "components/cta_panel.html" %}
 {% endblock %}

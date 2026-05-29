@@ -1,0 +1,74 @@
+/**
+ * MongiKazi design tokens — website + worker portal (maroon/beige).
+ * Other apps may still use teal until a later alignment pass.
+ */
+:root {
+  --mk-maroon-soft: #F1ADC3;
+  --mk-maroon-primary: #8F2F4D;
+  --mk-maroon-deep: #5F1F34;
+  --beige-50: #FBF8F4;
+  --beige-100: #F2E9E2;
+  --mk-surface: #FFFDFC;
+  --mk-surface-soft: #FFFFFF;
+  --mk-text: #1F1218;
+  --mk-muted: #4F3A42;
+  --mk-subtext: #5C4650;
+  --mk-border: rgba(95, 31, 52, 0.12);
+
+  /* Layout — capped on small/medium screens; fluid on xl+ (see mk-portal.css) */
+  --mk-layout-max: 88rem;
+  --mk-layout-gutter: 1rem;
+  --mk-shell-max: 105rem;
+
+  /* Compatibility aliases (existing templates) */
+  --mk-primary: var(--mk-maroon-primary);
+  --mk-primary-dark: var(--mk-maroon-deep);
+  --mk-secondary: var(--beige-100);
+  --mk-accent: var(--mk-maroon-soft);
+  --mk-bg: var(--beige-50);
+  --mk-success: #2D6A4F;
+  --mk-warning: #B45309;
+  --mk-danger: #B91C1C;
+  --mk-ink: var(--mk-maroon-deep);
+  --mk-nav-bg: rgba(251, 248, 244, 0.92);
+  --mk-shadow-soft: 0 14px 34px rgba(95, 31, 52, 0.08);
+  --mk-shadow-lift: 0 22px 56px rgba(95, 31, 52, 0.12);
+}
+
+html[data-theme="dark"] {
+  /* Page canvas — warm maroon (background only) */
+  --mk-dark-bg: #140D10;
+  --mk-dark-bg-2: #1a1216;
+
+  /* Cards & panels — cool slate (bookings-style) */
+  --mk-dark-surface: #0f172a;
+  --mk-dark-surface-2: #1e293b;
+  --mk-dark-border: rgba(51, 65, 85, 0.95);
+  --mk-dark-text: #f1f5f9;
+  --mk-dark-muted: #94a3b8;
+
+  /* UI accents — teal (not pink maroon on every control) */
+  --mk-dark-accent: #2dd4bf;
+  --mk-dark-accent-bright: #5eead4;
+  --mk-dark-accent-deep: #14b8a6;
+  --mk-dark-maroon-soft: #5F1F34;
+
+  --mk-primary: var(--mk-dark-accent);
+  --mk-primary-dark: var(--mk-dark-accent-bright);
+  --mk-secondary: var(--mk-dark-surface-2);
+  --mk-accent: var(--mk-dark-accent);
+  --mk-bg: var(--mk-dark-bg);
+  --mk-surface: var(--mk-dark-surface);
+  --mk-surface-soft: var(--mk-dark-surface-2);
+  --mk-text: var(--mk-dark-text);
+  --mk-muted: var(--mk-dark-muted);
+  --mk-subtext: #cbd5e1;
+  --mk-border: var(--mk-dark-border);
+  --mk-ink: var(--mk-dark-text);
+  --mk-nav-bg: rgba(15, 23, 42, 0.88);
+  --mk-success: #6EE7A8;
+  --mk-warning: #FBBF24;
+  --mk-danger: #F87171;
+  --mk-shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --mk-shadow-lift: 0 22px 55px rgba(0, 0, 0, 0.25);
+}
