@@ -1,18 +1,13 @@
 {% extends 'base/base_worker_portal.html' %}
 
 {% block title %}Coming Soon | MongiKazi{% endblock %}
+{% block page_title %}Coming soon{% endblock %}
+{% block page_lead %}This feature is on the way.{% endblock %}
 
 {% block content %}
 <section class="mk-page-grid">
-  <article class="mk-card mk-empty-state lg:col-span-12">
-    <span class="mk-empty-icon">MK</span>
-    <p class="mk-eyebrow">Coming soon</p>
-    <h1 class="mt-2 text-3xl font-bold text-slate-950 dark:text-white">{{ title|default:'Feature coming soon' }}</h1>
-    <p class="mt-3 max-w-2xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">{{ description|default:'This worker experience is being prepared and will roll out in a future release.' }}</p>
-    <div class="mt-5 grid w-full gap-2 sm:max-w-xl sm:grid-cols-2">
-      <a href="{% url 'worker_portal:dashboard' %}" class="mk-btn-primary w-full">Back to dashboard</a>
-      <a href="{% url 'worker_portal:safety' %}" class="mk-btn-secondary w-full">Safety guidance</a>
-    </div>
-  </article>
+  {% url 'worker_portal:dashboard' as dash_url %}
+  {% url 'worker_portal:safety' as safety_url %}
+  {% include "worker_portal/partials/empty_state.html" with icon="MK" eyebrow="Coming soon" title=title|default:"Feature coming soon" description=description|default:"This experience will roll out in a future release." primary_url=dash_url primary_label="Dashboard" secondary_url=safety_url secondary_label="Safety" %}
 </section>
 {% endblock %}

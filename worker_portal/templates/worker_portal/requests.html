@@ -1,18 +1,13 @@
 {% extends 'base/base_worker_portal.html' %}
 
 {% block title %}Requests | MongiKazi{% endblock %}
+{% block page_title %}Requests{% endblock %}
+{% block page_lead %}Respond to employer booking requests.{% endblock %}
 
 {% block content %}
 <section class="mk-page-grid">
-  <article class="mk-card mk-empty-state lg:col-span-12">
-    <span class="mk-empty-icon">RQ</span>
-    <p class="mk-eyebrow">Booking requests</p>
-    <h1 class="mt-2 text-3xl font-bold text-slate-950 dark:text-white">No booking requests yet</h1>
-    <p class="mt-3 max-w-2xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">New employer requests are managed in the bookings workflow with clear accept, decline, and cancellation actions.</p>
-    <div class="mt-5 grid w-full gap-2 sm:max-w-xl sm:grid-cols-2">
-      <a href="{% url 'bookings:worker_requests' %}" class="mk-btn-primary w-full">Open request workflow</a>
-      <a href="{% url 'bookings:worker_available_jobs' %}" class="mk-btn-secondary w-full">Browse marketplace jobs</a>
-    </div>
-  </article>
+  {% url 'bookings:worker_requests' as requests_url %}
+  {% url 'bookings:worker_available_jobs' as jobs_url %}
+  {% include "worker_portal/partials/empty_state.html" with icon="RQ" eyebrow="Booking requests" title="No requests yet" description="Accept or decline employer requests in the bookings workflow." primary_url=requests_url primary_label="Open requests" secondary_url=jobs_url secondary_label="Browse jobs" %}
 </section>
 {% endblock %}

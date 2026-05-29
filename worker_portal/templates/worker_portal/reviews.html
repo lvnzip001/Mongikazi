@@ -1,19 +1,12 @@
 {% extends 'base/base_worker_portal.html' %}
 
 {% block title %}Reviews | MongiKazi{% endblock %}
+{% block page_title %}Reviews{% endblock %}
+{% block page_lead %}Build reputation after each job.{% endblock %}
 
 {% block content %}
 <section class="mk-page-grid">
-  <article class="mk-card mk-empty-state lg:col-span-12">
-    <span class="mk-empty-icon">&#9733;</span>
-    <p class="mk-eyebrow">Reviews</p>
-    <h1 class="mt-2 text-3xl font-bold text-slate-950 dark:text-white">Your work reputation will appear here</h1>
-    <p class="mt-3 max-w-2xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">Ratings, employer feedback, and completed-job history will help build your trusted work reputation after the review system is introduced.</p>
-    <div class="mt-5 grid w-full gap-2 sm:max-w-xl sm:grid-cols-2">
-      <a href="/helpers/profile/preview/" class="mk-btn-secondary w-full">Preview profile</a>
-      <a href="{% url 'worker_portal:jobs' %}" class="mk-btn-primary w-full">Jobs area</a>
-    </div>
-  </article>
+  {% url 'worker_portal:jobs' as jobs_url %}
+  {% include "worker_portal/partials/empty_state.html" with icon="★" eyebrow="Reviews" title="Reputation grows here" description="Ratings and feedback appear after completed jobs." primary_url=jobs_url primary_label="Jobs area" secondary_url="/helpers/profile/preview/" secondary_label="Preview profile" %}
 </section>
 {% endblock %}
-

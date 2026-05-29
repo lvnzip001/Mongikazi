@@ -1,0 +1,19 @@
+<article class="mk-card mk-empty-state lg:col-span-12">
+  <span class="mk-empty-icon">{{ icon|default:"MK" }}</span>
+  {% if eyebrow %}<p class="mk-eyebrow">{{ eyebrow }}</p>{% endif %}
+  <h1 class="mk-page-title mt-2">{{ title }}</h1>
+  {% if description %}<p class="mk-body-copy mt-3 max-w-xl">{{ description }}</p>{% endif %}
+  {% if chips %}
+    <div class="mt-4 flex flex-wrap justify-center gap-2">
+      {% for chip in chips %}<span class="mk-badge-neutral">{{ chip }}</span>{% endfor %}
+    </div>
+  {% endif %}
+  <div class="mt-5 grid w-full gap-2 {% if secondary_url %}sm:max-w-xl sm:grid-cols-2{% else %}sm:max-w-sm{% endif %}">
+    {% if primary_url %}
+      <a href="{{ primary_url }}" class="mk-btn-primary w-full">{{ primary_label|default:"Continue" }}</a>
+    {% endif %}
+    {% if secondary_url %}
+      <a href="{{ secondary_url }}" class="mk-btn-secondary w-full">{{ secondary_label|default:"Learn more" }}</a>
+    {% endif %}
+  </div>
+</article>

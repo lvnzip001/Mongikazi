@@ -1,93 +1,82 @@
 {% extends 'base/base_worker_portal.html' %}
 
 {% block title %}My Work Dashboard | MongiKazi{% endblock %}
+{% block page_title %}Good day, {{ greeting_name }}{% endblock %}
+{% block page_lead %}Your requests, jobs, and profile at a glance.{% endblock %}
 
 {% block content %}
 <section class="mk-page-grid">
   <article class="mk-card mk-hero lg:col-span-12">
-    <div class="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(340px,0.85fr)] lg:items-center">
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(300px,0.85fr)] lg:items-center">
       <div>
-        <p class="mk-eyebrow">Worker workspace</p>
-        <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-4xl">Good day, {{ greeting_name }}</h1>
-        <p class="mt-3 max-w-3xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300 sm:text-base">Your work profile is becoming your trusted digital CV. Keep your services, availability, and trust readiness up to date so employers can book with confidence.</p>
+        <p class="mk-eyebrow">Today</p>
+        <h1 class="mk-page-title mt-2 sm:text-4xl">Build your profile. Find jobs. Earn.</h1>
+        <p class="mk-body-copy mt-3 max-w-lg">Keep services, availability, and verification up to date.</p>
         <div class="mt-5 flex flex-col gap-2 sm:flex-row">
-          <a href="{{ work_profile_url|default:'/helpers/profile/' }}" class="mk-btn-primary">Open work profile</a>
-          <a href="/helpers/profile/preview/" class="mk-btn-secondary">Preview as employer</a>
+          <a href="{{ work_profile_url|default:'/helpers/profile/' }}" class="mk-btn-primary">Work profile</a>
+          <a href="/helpers/profile/preview/" class="mk-btn-secondary">Preview</a>
         </div>
       </div>
       <div class="mk-readiness-card">
         <div class="flex items-start justify-between gap-3">
           <div>
-            <p class="text-xs font-bold uppercase tracking-[0.16em] text-mk-primary dark:text-teal-300">Work profile readiness</p>
-            <p class="mt-1 text-3xl font-bold text-slate-950 dark:text-white">{{ profile_completion_percent }}%</p>
+            <p class="mk-eyebrow">Work profile readiness</p>
+            <p class="mt-1 text-3xl font-extrabold text-mk-text">{{ profile_completion_percent }}%</p>
           </div>
           <span class="mk-chip">{{ trust_status_display }}</span>
         </div>
         <div class="mt-4 mk-progress-track"><span class="mk-progress-bar" style="width: {{ profile_completion_percent }}%"></span></div>
-        <p class="mt-3 text-xs font-semibold leading-5 text-mk-muted dark:text-slate-400">Readiness combines profile details, services, availability, and trust signals.</p>
       </div>
     </div>
   </article>
 
   <article class="mk-card lg:col-span-7">
-    <div class="flex items-start justify-between gap-3">
-      <div>
-        <p class="mk-eyebrow">Work profile</p>
-        <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Your supply-side foundation</h2>
-        <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">This information will support employer search, booking requests, and your public work profile later.</p>
-      </div>
-      <span class="mk-chip-muted">Profile</span>
-    </div>
+    <p class="mk-eyebrow">Profile</p>
+    <h2 class="mt-1 text-xl font-extrabold text-mk-text">At a glance</h2>
     <div class="mt-4 grid gap-3 sm:grid-cols-2">
       <div class="mk-stat"><span>Services</span><strong>{% if services %}{{ services|join:', ' }}{% else %}Pending{% endif %}</strong></div>
       <div class="mk-stat"><span>Availability</span><strong>{{ availability_summary }}</strong></div>
       <div class="mk-stat"><span>Trust signals</span><strong>{{ ready_signal_count }}/{{ trust_signal_count }}</strong></div>
       <div class="mk-stat"><span>Status</span><strong>{{ trust_status_display }}</strong></div>
     </div>
-    <div class="mt-4 grid gap-2 sm:grid-cols-3">
-      <a href="/helpers/profile/edit/" class="mk-btn-secondary w-full">Edit profile</a>
-      <a href="/helpers/profile/skills/" class="mk-btn-secondary w-full">Manage skills</a>
-      <a href="/helpers/profile/availability/" class="mk-btn-secondary w-full">Availability</a>
+    <div class="mt-4 flex flex-wrap gap-2">
+      <a href="/helpers/profile/edit/" class="mk-mini-link">Edit</a>
+      <a href="/helpers/profile/skills/" class="mk-mini-link">Skills</a>
+      <a href="/helpers/profile/availability/" class="mk-mini-link">Availability</a>
     </div>
   </article>
 
   <article class="mk-card lg:col-span-5">
-    <p class="mk-eyebrow">Next best actions</p>
-    <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">Become more bookable</h2>
-    <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Small profile improvements can make your future booking profile more trusted and easier to match.</p>
+    <p class="mk-eyebrow">Next actions</p>
+    <h2 class="mt-1 text-xl font-extrabold text-mk-text">Improve readiness</h2>
     <ul class="mt-4 grid gap-2">
       {% for item in next_actions %}
         <li class="mk-list-item"><span>{{ item.title }}</span><a href="{{ item.url }}" class="mk-mini-link">Open</a></li>
       {% empty %}
-        <li class="mk-empty-line">No outstanding setup actions.</li>
+        <li class="mk-empty-line">Profile looks good.</li>
       {% endfor %}
     </ul>
   </article>
 
   <article class="mk-card lg:col-span-12">
-    <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <p class="mk-eyebrow">Work activity</p>
-        <h2 class="mt-1 text-xl font-bold text-slate-950 dark:text-white">What will appear here next</h2>
-      </div>
-      <span class="mk-chip-muted">Marketplace workflow coming</span>
-    </div>
+    <p class="mk-eyebrow">Activity</p>
+    <h2 class="mt-1 text-xl font-extrabold text-mk-text">Your work hub</h2>
     <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-      <a href="{% url 'worker_portal:requests' %}" class="mk-stat-link"><span>Booking requests</span><strong>{{ placeholder_counts.requests }}</strong><small>New employer requests will appear here</small></a>
-      <a href="{% url 'worker_portal:jobs' %}" class="mk-stat-link"><span>Today's jobs</span><strong>{{ placeholder_counts.jobs }}</strong><small>No jobs scheduled yet</small></a>
-      <a href="{% url 'worker_portal:earnings' %}" class="mk-stat-link"><span>Weekly earnings</span><strong>{{ earnings_summary.weekly_total }}</strong><small>{{ earnings_summary.status }}</small></a>
-      <a href="{% url 'worker_portal:messages' %}" class="mk-stat-link"><span>Messages</span><strong>{{ placeholder_counts.messages }}</strong><small>Opens with active requests</small></a>
-      <a href="{% url 'worker_portal:reviews' %}" class="mk-stat-link"><span>Reviews</span><strong>{{ placeholder_counts.reviews }}</strong><small>Reputation builds after jobs</small></a>
+      <a href="{% url 'worker_portal:requests' %}" class="mk-stat-link"><span>Requests</span><strong>{{ placeholder_counts.requests }}</strong><small>Employer requests</small></a>
+      <a href="{% url 'worker_portal:jobs' %}" class="mk-stat-link"><span>Jobs</span><strong>{{ placeholder_counts.jobs }}</strong><small>Today's schedule</small></a>
+      <a href="{% url 'worker_portal:earnings' %}" class="mk-stat-link"><span>Earnings</span><strong>{{ earnings_summary.weekly_total }}</strong><small>{{ earnings_summary.status }}</small></a>
+      <a href="{% url 'worker_portal:messages' %}" class="mk-stat-link"><span>Messages</span><strong>{{ placeholder_counts.messages }}</strong><small>With active jobs</small></a>
+      <a href="{% url 'worker_portal:reviews' %}" class="mk-stat-link"><span>Reviews</span><strong>{{ placeholder_counts.reviews }}</strong><small>Reputation</small></a>
     </div>
   </article>
 
   <article class="mk-card mk-safety-strip lg:col-span-12">
     <div>
-      <p class="mk-eyebrow">Worker protection</p>
-      <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Work through structured platform flows</h2>
-      <p class="mt-2 max-w-3xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">As bookings go live, use MongiKazi requests, status tracking, and support paths to keep work clear, traceable, and safer.</p>
+      <p class="mk-eyebrow">Safety</p>
+      <h2 class="mt-1 text-lg font-extrabold text-mk-text">Use platform flows for every job.</h2>
+      <p class="mk-body-copy mt-2 max-w-xl">Clear requests, status tracking, and support when you need it.</p>
     </div>
-    <a href="{% url 'worker_portal:safety' %}" class="mk-btn-secondary">Safety guidance</a>
+    <a href="{% url 'worker_portal:safety' %}" class="mk-btn-secondary">Safety tips</a>
   </article>
 </section>
 {% endblock %}

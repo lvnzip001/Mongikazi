@@ -1,38 +1,37 @@
 {% extends 'base/base_worker_portal.html' %}
 
 {% block title %}Earnings | MongiKazi{% endblock %}
+{% block page_title %}Earnings{% endblock %}
+{% block page_lead %}Track income from completed jobs.{% endblock %}
 
 {% block content %}
 <section class="mk-page-grid">
   <article class="mk-card mk-hero lg:col-span-12">
     <p class="mk-eyebrow">Earnings</p>
-    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-950 dark:text-white">Earnings dashboard is coming soon</h1>
-    <p class="mt-3 max-w-3xl text-sm font-medium leading-7 text-mk-muted dark:text-slate-300">Completed jobs will later produce earnings history, payout visibility, and clear commission information.</p>
+    <h1 class="mk-page-title mt-2">Your earnings summary</h1>
+    <p class="mk-body-copy mt-3">Totals update when jobs are completed and verified.</p>
   </article>
 
-  <article class="mk-card lg:col-span-4">
+  <article class="mk-stat-card lg:col-span-4">
     <p class="mk-eyebrow">This week</p>
-    <h2 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">R0</h2>
-    <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Earnings activate once completed jobs are available.</p>
+    <h2 class="mt-2 text-2xl font-extrabold text-mk-text">R0</h2>
+    <p class="mk-muted mt-2">From completed jobs.</p>
   </article>
-  <article class="mk-card lg:col-span-4">
-    <p class="mk-eyebrow">Pending payout</p>
-    <h2 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">R0</h2>
-    <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Payout tracking will be introduced with the payments app.</p>
+  <article class="mk-stat-card lg:col-span-4">
+    <p class="mk-eyebrow">Pending</p>
+    <h2 class="mt-2 text-2xl font-extrabold text-mk-text">R0</h2>
+    <p class="mk-muted mt-2">Awaiting payout.</p>
   </article>
-  <article class="mk-card lg:col-span-4">
-    <p class="mk-eyebrow">Completed jobs</p>
-    <h2 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">0</h2>
-    <p class="mt-2 text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Work history will build your platform reputation.</p>
+  <article class="mk-stat-card lg:col-span-4">
+    <p class="mk-eyebrow">Completed</p>
+    <h2 class="mt-2 text-2xl font-extrabold text-mk-text">0</h2>
+    <p class="mk-muted mt-2">Jobs finished.</p>
   </article>
 
   <article class="mk-card lg:col-span-12">
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h2 class="text-lg font-bold text-slate-950 dark:text-white">How earnings will work</h2>
-        <p class="mt-2 max-w-3xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Once bookings and payments are active, this section will show job income, payout status, and platform commission transparency.</p>
-      </div>
-      <a href="{% url 'worker_portal:jobs' %}" class="mk-btn-secondary">View jobs area</a>
+      <p class="mk-body-copy max-w-xl">Full payout history lives in payments when your first job completes.</p>
+      <a href="{% url 'worker_portal:jobs' %}" class="mk-btn-secondary">View jobs</a>
     </div>
   </article>
 </section>
