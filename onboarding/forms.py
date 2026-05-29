@@ -5,7 +5,6 @@ from locations.form_fields import (
     bind_locality_fields,
     clean_locality_pair,
     locality_autocomplete_widget,
-    resolve_locality_from_form,
 )
 
 from .models import EmployerOnboardingProfile, HelperOnboardingProfile
@@ -62,9 +61,13 @@ class EmployerLocationForm(forms.ModelForm):
 
     def clean(self):
         cleaned = super().clean()
-        locality = resolve_locality_from_form(
-            cleaned.get("preferred_location_locality_id"),
+        locality = clean_locality_pair(
+            cleaned,
+            query_field="preferred_location_query",
+            id_field="preferred_location_locality_id",
             field_label="location",
+            fallback_locality=self.instance.preferred_location_locality,
+            fallback_text=self.instance.preferred_location,
         )
         cleaned["preferred_location"] = locality.display_label
         cleaned["preferred_location_locality"] = locality
