@@ -47,6 +47,31 @@ class AccountsAuthFlowTests(TestCase):
         self.assertIsNotNone(user.accepted_terms_at)
         self.assertRedirects(response, reverse("onboarding:start"), fetch_redirect_response=False)
 
+    def test_registration_without_email_uses_phone_as_username(self):
+        response = self.client.post(
+            reverse("accounts:register", kwargs={"role": "helper"}),
+            {
+                "first_name": "No",
+                "last_name": "Email",
+                "email": "",
+                "phone_number": "071 000 0099",
+                "password1": self.password,
+                "password2": self.password,
+                "accepted_terms": True,
+            },
+        )
+        user = User.objects.get(phone_number="0710000099")
+        self.assertIsNone(user.email)
+        self.assertEqual(user.username, "0710000099")
+        self.assertEqual(user.role, User.Role.HELPER)
+        self.assertRedirects(response, reverse("onboarding:start"), fetch_redirect_response=False)
+
+        login_response = self.client.post(
+            reverse("accounts:login"),
+            {"identifier": "0710000099", "password": self.password},
+        )
+        self.assertRedirects(login_response, reverse("onboarding:start"), fetch_redirect_response=False)
+
     def test_helper_registration_creates_user(self):
         response = self.client.post(
             reverse("accounts:register", kwargs={"role": "helper"}),

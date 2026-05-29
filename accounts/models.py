@@ -12,7 +12,7 @@ class User(AbstractUser):
         OPERATIONS = "OPERATIONS", _("Operations")
         ADMIN = "ADMIN", _("Admin")
 
-    email = models.EmailField(_("email address"), unique=True)
+    email = models.EmailField(_("email address"), unique=True, blank=True, null=True)
     role = models.CharField(max_length=20, choices=Role.choices, blank=True)
     phone_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     is_phone_verified = models.BooleanField(default=False)

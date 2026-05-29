@@ -28,8 +28,9 @@
     </div>
   </div>
   <div>
-    <label class="mb-2 block text-sm font-bold text-mk-text" for="{{ form.email.id_for_label }}">Email address</label>
+    <label class="mb-2 block text-sm font-bold text-mk-text" for="{{ form.email.id_for_label }}">Email address <span class="font-semibold text-mk-muted">(optional)</span></label>
     {{ form.email }}
+    <p class="mt-1 text-xs text-mk-muted">No email? Use your phone number below to sign in.</p>
     {% if form.email.errors %}<p class="mt-1 text-xs text-mk-danger">{{ form.email.errors|striptags }}</p>{% endif %}
   </div>
   <div>

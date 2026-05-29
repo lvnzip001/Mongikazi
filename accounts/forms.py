@@ -74,8 +74,11 @@ class RegisterForm(UserCreationForm):
         widget=forms.TextInput(attrs={"class": "mk-input", "placeholder": "Surname", "autocomplete": "family-name"}),
     )
     email = forms.EmailField(
-        label="Email address",
-        widget=forms.EmailInput(attrs={"class": "mk-input", "placeholder": "Email address", "autocomplete": "email"}),
+        label="Email address (optional)",
+        required=False,
+        widget=forms.EmailInput(
+            attrs={"class": "mk-input", "placeholder": "Email address (optional)", "autocomplete": "email"}
+        ),
     )
     phone_number = forms.CharField(
         label="Phone number",
@@ -97,7 +100,9 @@ class RegisterForm(UserCreationForm):
         self.fields["password2"].widget.attrs.update({"class": "mk-input", "placeholder": "Confirm password", "autocomplete": "new-password"})
 
     def clean_email(self):
-        email = self.cleaned_data["email"].lower().strip()
+        email = (self.cleaned_data.get("email") or "").strip().lower()
+        if not email:
+            return None
         if User.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError("An account with this email already exists.")
         return email
@@ -116,9 +121,11 @@ class RegisterForm(UserCreationForm):
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.email = self.cleaned_data["email"].lower().strip()
-        user.username = user.email
-        user.phone_number = self.cleaned_data["phone_number"]
+        email = self.cleaned_data.get("email")
+        phone_number = self.cleaned_data["phone_number"]
+        user.email = email
+        user.username = email or phone_number
+        user.phone_number = phone_number
         user.role = self.role
         user.accepted_terms = self.cleaned_data["accepted_terms"]
         if commit:
