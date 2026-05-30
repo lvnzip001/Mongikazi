@@ -1,49 +1,55 @@
 {% extends 'base/base_bookings.html' %}
+{% load booking_display %}
 
-{% block title %}Worker Jobs | MongiKazi{% endblock %}
+{% block title %}My Jobs | MongiKazi{% endblock %}
 
 {% block content %}
 <div class="p-5 sm:p-6 lg:p-8">
-  <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-    <div>
-      <p class="mk-eyebrow">Worker jobs</p>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">Accepted and completed jobs</h1>
-      <p class="mt-3 max-w-2xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Track work that has moved beyond the request stage. Earnings, reviews, and payouts will connect in future modules.</p>
-    </div>
-    <a href="{% url 'bookings:worker_requests' %}" class="mk-btn-secondary">View requests</a>
+  <p class="mk-eyebrow">Worker jobs</p>
+  <h1 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">Upcoming jobs</h1>
+  <p class="mt-2 text-sm text-mk-muted">Confirmed work you have accepted.</p>
+
+  <div class="mt-6 grid gap-3">
+    {% for row in upcoming_jobs %}
+      {% with booking=row.booking %}
+      <article class="mk-row-card">
+        <div>
+          <p class="text-sm font-bold text-slate-950 dark:text-white">{{ booking.booking_reference }} — {{ booking.service_category.name }}</p>
+          <p class="mt-1 text-xs text-mk-muted">{{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }} · {{ row.service_area }}</p>
+          <div class="mt-2">{% booking_status_badge booking %}</div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <a href="{% url 'bookings:worker_request_detail' booking_reference=booking.booking_reference %}" class="mk-btn-secondary">View</a>
+          {% if booking.status == 'ACCEPTED' %}
+            <form method="post" action="{% url 'bookings:worker_cancel_booking' booking_reference=booking.booking_reference %}" data-confirm="Cancel this booking?">
+              {% csrf_token %}
+              <button type="submit" class="mk-btn-danger">Cancel</button>
+            </form>
+          {% endif %}
+        </div>
+      </article>
+      {% endwith %}
+    {% empty %}
+      <div class="mk-empty-state"><p class="text-sm font-bold">No upcoming jobs.</p><a href="{% url 'worker_portal:offers' %}" class="mk-btn-primary mt-3 inline-flex">Check offers</a></div>
+    {% endfor %}
   </div>
 
-  {% if jobs %}
-    <div class="mt-6 grid gap-3">
-      {% for booking in jobs %}
-        <article class="mk-row-card">
-          <div class="min-w-0">
-            <div class="flex flex-wrap items-center gap-2">
-              <p class="text-xs font-bold uppercase tracking-[0.12em] text-mk-primary dark:text-teal-300">{{ booking.booking_reference }}</p>
-              <span class="mk-status {% if booking.status == 'ACCEPTED' %}mk-status-accepted{% elif booking.status == 'COMPLETED' %}mk-status-completed{% elif 'CANCELLED' in booking.status %}mk-status-cancelled{% endif %}">{{ booking.get_status_display }}</span>
-            </div>
-            <h2 class="mt-2 text-base font-bold text-slate-950 dark:text-white">{{ booking.service_category.name }} - {{ booking.scheduled_date }}</h2>
-            <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">Employer: {{ booking.employer.display_name|default:booking.employer.user.get_full_name|default:booking.employer.user.email }}</p>
-          </div>
-          <div class="flex flex-wrap items-center gap-2 sm:justify-end">
-            <a href="{% url 'bookings:worker_request_detail' booking_reference=booking.booking_reference %}" class="mk-btn-secondary">Details</a>
-            {% if booking.status == 'ACCEPTED' %}
-              <form method="post" action="{% url 'bookings:worker_cancel_booking' booking_reference=booking.booking_reference %}" data-confirm="Cancel this accepted booking?">
-                {% csrf_token %}
-                <button type="submit" class="mk-btn-danger">Cancel</button>
-              </form>
-            {% endif %}
-          </div>
-        </article>
-      {% endfor %}
-    </div>
-  {% else %}
-    <div class="mk-empty-state mt-6">
-      <p class="mk-eyebrow">No active jobs</p>
-      <h2 class="mt-2 text-xl font-bold text-slate-950 dark:text-white">Accepted jobs will appear here</h2>
-      <p class="mx-auto mt-2 max-w-lg text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Once you accept a booking request, it will move into your jobs list for tracking.</p>
-      <a href="{% url 'bookings:worker_requests' %}" class="mk-btn-primary mt-5 inline-flex">View requests</a>
-    </div>
-  {% endif %}
+  <h2 class="mk-section-title mt-10">History</h2>
+  <div class="mt-4 grid gap-3">
+    {% for row in history_jobs %}
+      {% with booking=row.booking %}
+      <article class="mk-row-card">
+        <div>
+          <p class="text-sm font-bold text-slate-950 dark:text-white">{{ booking.booking_reference }} — {{ booking.service_category.name }}</p>
+          <p class="mt-1 text-xs text-mk-muted">{{ booking.scheduled_date }}</p>
+          <div class="mt-2">{% booking_status_badge booking %}</div>
+        </div>
+        <a href="{% url 'bookings:worker_request_detail' booking_reference=booking.booking_reference %}" class="mk-btn-secondary">View</a>
+      </article>
+      {% endwith %}
+    {% empty %}
+      <p class="text-sm text-mk-muted">No past jobs yet.</p>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

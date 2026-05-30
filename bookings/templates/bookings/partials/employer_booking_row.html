@@ -1,0 +1,21 @@
+{% load booking_display %}
+{% with booking=row.booking %}
+<article class="mk-row-card">
+  <div class="min-w-0">
+    <div class="flex flex-wrap items-center gap-2">
+      <p class="text-xs font-bold uppercase tracking-[0.12em] text-mk-primary dark:text-teal-300">{{ booking.booking_reference }}</p>
+      {% booking_status_badge booking %}
+      {% if row.unread_count %}<span class="mk-badge-warning">{{ row.unread_count }} unread</span>{% endif %}
+    </div>
+    <h2 class="mt-2 text-base font-bold text-slate-950 dark:text-white">{{ booking.service_category.name }}{% if booking.worker %} with {{ booking.worker.display_name|default:"Worker" }}{% else %} (marketplace){% endif %}</h2>
+    <p class="mt-1 text-sm text-mk-muted">{{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }} · {{ row.service_area }}</p>
+    <p class="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-200">Estimate: R{{ booking.total_estimate }}</p>
+  </div>
+  <div class="flex flex-wrap items-center gap-2 sm:justify-end">
+    <a href="{{ row.detail_url }}" class="mk-btn-secondary">View details</a>
+    {% if booking.request_type == 'OPEN_MARKETPLACE' and booking.status == 'APPLICATIONS_RECEIVED' %}
+      <a href="{{ row.applications_url }}" class="mk-btn-primary">Review applications</a>
+    {% endif %}
+  </div>
+</article>
+{% endwith %}

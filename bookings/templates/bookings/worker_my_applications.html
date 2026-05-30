@@ -1,4 +1,5 @@
 ﻿{% extends 'base/base_bookings.html' %}
+{% load booking_display %}
 
 {% block title %}My Applications | MongiKazi{% endblock %}
 
@@ -11,20 +12,27 @@
     {% for app in applications %}
       <article class="mk-row-card">
         <div>
-          <p class="text-sm font-bold text-slate-950 dark:text-white">{{ app.booking.booking_reference }} - {{ app.booking.service_category.name }}</p>
-          <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">Status: {{ app.status }}{% if app.proposed_fee %} • Proposed fee: R{{ app.proposed_fee }}{% endif %}</p>
+          <p class="text-sm font-bold text-slate-950 dark:text-white">{{ app.booking.booking_reference }} — {{ app.booking.service_category.name }}</p>
+          <div class="mt-1 flex flex-wrap items-center gap-2">
+            {% application_status_badge app %}
+            {% if app.proposed_fee %}<span class="text-xs font-semibold text-mk-muted">Proposed fee: R{{ app.proposed_fee }}</span>{% endif %}
+          </div>
         </div>
-        {% if app.status == 'PENDING' or app.status == 'SHORTLISTED' %}
-          <form method="post" action="{% url 'bookings:worker_withdraw_application' application_id=app.id %}">
-            {% csrf_token %}
-            <button type="submit" class="mk-btn-danger">Withdraw</button>
-          </form>
-        {% endif %}
+        <div class="flex flex-wrap gap-2">
+          {% if app.status == 'SELECTED' and app.booking.status == 'PENDING_WORKER_RESPONSE' %}
+            <a href="{% url 'bookings:worker_request_detail' booking_reference=app.booking.booking_reference %}" class="mk-btn-primary">Review offer</a>
+          {% endif %}
+          {% if app.status == 'PENDING' or app.status == 'SHORTLISTED' %}
+            <form method="post" action="{% url 'bookings:worker_withdraw_application' application_id=app.id %}">
+              {% csrf_token %}
+              <button type="submit" class="mk-btn-danger">Withdraw</button>
+            </form>
+          {% endif %}
+        </div>
       </article>
     {% empty %}
-      <div class="mk-empty-state"><p class="text-sm font-bold text-slate-900 dark:text-white">No applications submitted yet.</p></div>
+      <div class="mk-empty-state"><p class="text-sm font-bold text-slate-900 dark:text-white">No applications submitted yet.</p><a href="{% url 'bookings:worker_available_jobs' %}" class="mk-btn-primary mt-3 inline-flex">Browse jobs</a></div>
     {% endfor %}
   </div>
 </div>
 {% endblock %}
-

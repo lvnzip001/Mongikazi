@@ -1,0 +1,44 @@
+{% load profile_display booking_display %}
+{% with booking=offer.booking %}
+<article class="mk-offer-card{% if compact %} mk-offer-card--compact{% endif %}">
+  <div class="mk-offer-card__head">
+    <div class="mk-offer-card__identity">
+      {% if compact %}
+        {% profile_avatar booking.employer size="xs" %}
+      {% else %}
+        {% profile_avatar booking.employer size="sm" %}
+      {% endif %}
+      <div class="mk-offer-card__body">
+        <p class="mk-offer-card__name">{{ offer.employer_display_name }}</p>
+        <p class="mk-offer-card__meta">
+          {{ booking.service_category.name }} · {{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }} · {{ booking.duration_hours }}h
+        </p>
+        {% if offer.service_area %}
+          <p class="mk-offer-card__meta">{{ offer.service_area }}</p>
+        {% endif %}
+        <div class="mk-offer-card__badges">
+          {% booking_status_badge booking %}
+          {% if offer.unread_count %}
+            <span class="mk-badge-warning">{{ offer.unread_count }} unread</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <p class="mk-offer-card__pay">R{{ booking.worker_fee_estimate }}</p>
+  </div>
+
+  {% if offer.instructions_snippet %}
+    <p class="mk-offer-card__instructions">{{ offer.instructions_snippet }}</p>
+  {% endif %}
+
+  <div class="mk-offer-card__actions">
+    <a href="{{ offer.detail_url }}" class="mk-btn-primary">Accept offer</a>
+    <a href="{{ offer.detail_url }}" class="mk-btn-secondary">View details</a>
+    {% if not compact %}
+      <a href="{{ offer.message_url }}" class="mk-btn-secondary">
+        Message{% if offer.unread_count %} ({{ offer.unread_count }}){% endif %}
+      </a>
+    {% endif %}
+  </div>
+</article>
+{% endwith %}

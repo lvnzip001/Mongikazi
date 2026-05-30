@@ -95,12 +95,16 @@ def employer_bookings(request):
     if guard:
         return guard
 
-    bookings = get_employer_bookings(request.user)
+    from bookings.selectors.employer_opportunities_selectors import get_employer_opportunities_context
+
+    opportunities = get_employer_opportunities_context(request.user, preview_limit=100)
     return render(
         request,
         "bookings/employer_bookings.html",
         {
-            "bookings": bookings,
+            "pending_response": opportunities["pending_response_all"],
+            "confirmed_upcoming": opportunities["confirmed_upcoming_all"],
+            "past_bookings": opportunities["past_bookings"],
             "nav_active": "employer_bookings",
             "portal_kind": "employer",
         },
@@ -170,6 +174,12 @@ def employer_booking_detail(request, booking_reference):
     if booking.worker_id:
         worker_card = build_employer_safe_worker_card(booking.worker)
 
+    from messaging.selectors.messaging_selectors import get_booking_thread_unread_count
+
+    service_area = ""
+    if booking.employer_location_id:
+        service_area = booking.employer_location.service_area_display()
+
     return render(
         request,
         "bookings/employer_booking_detail.html",
@@ -177,6 +187,8 @@ def employer_booking_detail(request, booking_reference):
             "booking": booking,
             "worker_card": worker_card,
             "events": events,
+            "service_area": service_area,
+            "thread_unread": get_booking_thread_unread_count(booking, request.user),
             "cancel_form": EmployerCancelBookingForm(),
             "can_cancel": can_cancel,
             "can_complete": can_complete,
@@ -307,16 +319,7 @@ def worker_requests(request):
         messages.warning(request, "Complete your worker profile before handling requests.")
         return redirect("helpers:profile_incomplete")
 
-    requests_qs = get_worker_booking_requests(request.user)
-    return render(
-        request,
-        "bookings/worker_requests.html",
-        {
-            "requests": requests_qs,
-            "portal_kind": "worker",
-            "nav_active": "worker_requests",
-        },
-    )
+    return redirect("worker_portal:offers")
 
 
 @login_required
@@ -326,12 +329,15 @@ def worker_jobs(request):
     if guard:
         return guard
 
-    jobs = get_worker_jobs(request.user)
+    from bookings.selectors.worker_opportunities_selectors import get_worker_opportunities_context
+
+    opportunities = get_worker_opportunities_context(request.user, preview_limit=100)
     return render(
         request,
         "bookings/worker_jobs.html",
         {
-            "jobs": jobs,
+            "upcoming_jobs": opportunities["upcoming_jobs_all"],
+            "history_jobs": opportunities["history_jobs"],
             "portal_kind": "worker",
             "nav_active": "worker_jobs",
         },
@@ -411,7 +417,7 @@ def worker_my_applications(request):
     return render(
         request,
         "bookings/worker_my_applications.html",
-        {"applications": applications, "portal_kind": "worker", "nav_active": "worker_applications"},
+        {"applications": applications, "portal_kind": "worker", "nav_active": "worker_my_applications"},
     )
 
 
@@ -442,19 +448,26 @@ def worker_request_detail(request, booking_reference):
     booking = _get_worker_booking_or_404(request.user, booking_reference)
     events = get_booking_events(booking)
 
+    from messaging.selectors.messaging_selectors import get_booking_thread_unread_count
+
+    employer_card = build_worker_safe_employer_card(booking.employer, booking=booking)
+    thread_unread = get_booking_thread_unread_count(booking, request.user)
+
     return render(
         request,
         "bookings/worker_request_detail.html",
         {
             "booking": booking,
             "events": events,
+            "employer_card": employer_card,
+            "thread_unread": thread_unread,
             "decline_form": WorkerDeclineBookingForm(),
             "cancel_form": WorkerCancelBookingForm(),
             "can_accept": booking.status == Booking.Status.PENDING_WORKER_RESPONSE,
             "can_decline": booking.status == Booking.Status.PENDING_WORKER_RESPONSE,
             "can_cancel": booking.status == Booking.Status.ACCEPTED,
             "portal_kind": "worker",
-            "nav_active": "worker_requests",
+            "nav_active": "offers",
         },
     )
 

@@ -1,4 +1,5 @@
 {% extends 'base/base_bookings.html' %}
+{% load booking_display %}
 
 {% block title %}My Bookings | MongiKazi{% endblock %}
 
@@ -7,42 +8,45 @@
   <div class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start">
     <div>
       <p class="mk-eyebrow">Employer bookings</p>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">Track requests from send to completion</h1>
-      <p class="mt-3 max-w-2xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Manage worker responses, review booking timelines, cancel when needed, and close completed jobs from one controlled workflow.</p>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">Your bookings</h1>
+      <p class="mt-3 max-w-2xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Track worker responses, confirmed jobs, and completed work.</p>
     </div>
     <div class="mk-soft-panel">
-      <p class="text-sm font-bold text-slate-950 dark:text-white">Ready to book help?</p>
-      <p class="mt-1 text-xs font-medium leading-5 text-mk-muted dark:text-slate-400">Create a request with the worker, service, date, location, and estimate clearly captured.</p>
-      <a href="{% url 'bookings:employer_booking_create' %}" class="mk-btn-primary mt-4 inline-flex w-full justify-center">Create booking request</a>
+      <a href="{% url 'bookings:employer_booking_create' %}" class="mk-btn-primary inline-flex w-full justify-center">Create booking request</a>
     </div>
   </div>
 
-  {% if bookings %}
-    <div class="mt-6 grid gap-3">
-      {% for booking in bookings %}
-        <article class="mk-row-card">
-          <div class="min-w-0">
-            <div class="flex flex-wrap items-center gap-2">
-              <p class="text-xs font-bold uppercase tracking-[0.12em] text-mk-primary dark:text-teal-300">{{ booking.booking_reference }}</p>
-              <span class="mk-status {% if booking.status == 'PENDING_WORKER_RESPONSE' %}mk-status-pending{% elif booking.status == 'ACCEPTED' %}mk-status-accepted{% elif booking.status == 'COMPLETED' %}mk-status-completed{% elif booking.status == 'DECLINED' %}mk-status-declined{% elif 'CANCELLED' in booking.status %}mk-status-cancelled{% endif %}">{{ booking.get_status_display }}</span>
-            </div>
-            <h2 class="mt-2 text-base font-bold text-slate-950 dark:text-white">{{ booking.service_category.name }} with {% if booking.worker %}{{ booking.worker.display_name|default:booking.worker.user.first_name|default:'Worker' }}{% else %}Open marketplace{% endif %}</h2>
-            <p class="mt-1 text-sm font-medium text-mk-muted dark:text-slate-300">{{ booking.scheduled_date }} at {{ booking.start_time }} - {{ booking.duration_hours }}h</p>
-            <p class="mt-1 text-sm font-semibold text-slate-700 dark:text-slate-200">Estimate: R{{ booking.total_estimate }}</p>
-          </div>
-          <div class="flex flex-wrap items-center gap-2 sm:justify-end">
-            <a href="{% url 'bookings:employer_booking_detail' booking_reference=booking.booking_reference %}" class="mk-btn-secondary">View details</a>
-          </div>
-        </article>
+  <section class="mt-8">
+    <h2 class="mk-section-title">Awaiting worker response</h2>
+    <div class="mt-4 grid gap-3">
+      {% for row in pending_response %}
+        {% include "bookings/partials/employer_booking_row.html" with row=row %}
+      {% empty %}
+        <p class="text-sm text-mk-muted">No bookings waiting for worker confirmation.</p>
       {% endfor %}
     </div>
-  {% else %}
-    <div class="mk-empty-state mt-6">
-      <p class="mk-eyebrow">No requests yet</p>
-      <h2 class="mt-2 text-xl font-bold text-slate-950 dark:text-white">Your first booking request will appear here</h2>
-      <p class="mx-auto mt-2 max-w-lg text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Once a worker accepts, declines, or a status changes, the event timeline will keep the record clear for both sides.</p>
-      <a href="{% url 'bookings:employer_booking_create' %}" class="mk-btn-primary mt-5 inline-flex">Send your first request</a>
+  </section>
+
+  <section class="mt-8">
+    <h2 class="mk-section-title">Confirmed upcoming jobs</h2>
+    <div class="mt-4 grid gap-3">
+      {% for row in confirmed_upcoming %}
+        {% include "bookings/partials/employer_booking_row.html" with row=row %}
+      {% empty %}
+        <p class="text-sm text-mk-muted">No confirmed upcoming jobs yet.</p>
+      {% endfor %}
     </div>
-  {% endif %}
+  </section>
+
+  <section class="mt-8">
+    <h2 class="mk-section-title">Past bookings</h2>
+    <div class="mt-4 grid gap-3">
+      {% for row in past_bookings %}
+        {% include "bookings/partials/employer_booking_row.html" with row=row %}
+      {% empty %}
+        <p class="text-sm text-mk-muted">No past bookings yet.</p>
+      {% endfor %}
+    </div>
+  </section>
 </div>
 {% endblock %}

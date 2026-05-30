@@ -17,7 +17,7 @@
     <div class="mk-shell-glow" aria-hidden="true"></div>
 
     <header class="mk-topbar">
-      <a href="{% if portal_kind == 'worker' %}{% url 'bookings:worker_requests' %}{% else %}{% url 'bookings:employer_bookings' %}{% endif %}" class="flex min-w-0 items-center gap-3">
+      <a href="{% if portal_kind == 'worker' %}{% url 'worker_portal:offers' %}{% else %}{% url 'bookings:employer_bookings' %}{% endif %}" class="flex min-w-0 items-center gap-3">
         <img src="{% static 'website/img/logo.png' %}" alt="MongiKazi logo" class="h-10 w-10 rounded-2xl object-cover">
         <span class="min-w-0">
           <strong class="block truncate text-sm font-extrabold text-mk-text">MongiKazi Bookings</strong>
@@ -52,8 +52,8 @@
         <p class="mk-sidebar-label">Workflow</p>
         <nav class="mt-3 grid gap-2" aria-label="Bookings navigation">
           {% if portal_kind == "worker" %}
-            <a class="mk-side-link {% if nav_active == 'worker_requests' %}is-active{% endif %}" href="{% url 'bookings:worker_requests' %}">Requests</a>
-            <a class="mk-side-link {% if nav_active == 'worker_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_jobs' %}">Jobs</a>
+            <a class="mk-side-link {% if nav_active == 'offers' or nav_active == 'worker_requests' %}is-active{% endif %}" href="{% url 'worker_portal:offers' %}">Offers</a>
+            <a class="mk-side-link {% if nav_active == 'worker_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_jobs' %}">Upcoming jobs</a>
             <a class="mk-side-link {% if nav_active == 'worker_available_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_available_jobs' %}">Available jobs</a>
             <a class="mk-side-link {% if nav_active == 'worker_applications' %}is-active{% endif %}" href="{% url 'bookings:worker_my_applications' %}">My applications</a>
             <a class="mk-side-link" href="{% url 'worker_portal:dashboard' %}">My Work dashboard</a>
@@ -76,8 +76,8 @@
       <div class="min-w-0">
         <nav class="mk-subnav lg:hidden" aria-label="Bookings navigation">
           {% if portal_kind == "worker" %}
-            <a class="mk-subnav-link {% if nav_active == 'worker_requests' %}is-active{% endif %}" href="{% url 'bookings:worker_requests' %}">Requests</a>
-            <a class="mk-subnav-link {% if nav_active == 'worker_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_jobs' %}">Jobs</a>
+            <a class="mk-subnav-link {% if nav_active == 'offers' or nav_active == 'worker_requests' %}is-active{% endif %}" href="{% url 'worker_portal:offers' %}">Offers</a>
+            <a class="mk-subnav-link {% if nav_active == 'worker_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_jobs' %}">Upcoming</a>
             <a class="mk-subnav-link {% if nav_active == 'worker_available_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_available_jobs' %}">Marketplace</a>
             <a class="mk-subnav-link {% if nav_active == 'worker_applications' %}is-active{% endif %}" href="{% url 'bookings:worker_my_applications' %}">Applications</a>
             <a class="mk-subnav-link" href="{% url 'worker_portal:dashboard' %}">My Work</a>

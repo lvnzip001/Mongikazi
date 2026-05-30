@@ -1,5 +1,5 @@
 ﻿{% extends 'base/base_bookings.html' %}
-{% load profile_display %}
+{% load profile_display booking_display %}
 
 {% block title %}Booking Applications | MongiKazi{% endblock %}
 
@@ -9,6 +9,10 @@
     <div>
       <p class="mk-eyebrow">Applications</p>
       <h1 class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">{{ booking.booking_reference }}</h1>
+      <div class="mt-2">{% booking_status_badge booking %}</div>
+      {% if booking.status == 'PENDING_WORKER_RESPONSE' and booking.worker %}
+        <p class="mt-2 text-sm text-mk-muted">Applicant selected. Waiting for {{ booking.worker.display_name|default:"worker" }} to accept.</p>
+      {% endif %}
     </div>
     <a href="{% url 'bookings:employer_marketplace_jobs' %}" class="mk-btn-secondary">Back to marketplace jobs</a>
   </div>

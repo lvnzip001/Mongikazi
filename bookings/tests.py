@@ -164,9 +164,24 @@ class BookingWorkflowTests(TestCase):
     def test_worker_sees_assigned_pending_request(self):
         booking = self._create_booking()
         self.client.force_login(self.worker_user)
-        response = self.client.get(reverse("bookings:worker_requests"))
+        response = self.client.get(reverse("worker_portal:offers"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, booking.booking_reference)
+
+    def test_employer_sees_booking_confirmed_after_worker_accept(self):
+        booking = self._create_booking()
+        self.client.force_login(self.worker_user)
+        self.client.post(reverse("bookings:worker_accept_booking", kwargs={"booking_reference": booking.booking_reference}))
+        booking.refresh_from_db()
+        self.assertEqual(booking.status, Booking.Status.ACCEPTED)
+
+        self.client.force_login(self.employer_user)
+        list_response = self.client.get(reverse("bookings:employer_bookings"))
+        self.assertContains(list_response, "Booking confirmed")
+        detail_response = self.client.get(
+            reverse("bookings:employer_booking_detail", kwargs={"booking_reference": booking.booking_reference})
+        )
+        self.assertContains(detail_response, "Booking confirmed")
 
     def test_worker_request_detail_shows_employer_location(self):
         booking = self._create_booking()
@@ -327,13 +342,13 @@ class BookingWorkflowTests(TestCase):
         self.assertContains(employer_find_help, reverse("bookings:employer_marketplace_jobs"))
 
         employer_bookings = self.client.get(reverse("employer_portal:bookings"))
-        self.assertContains(employer_bookings, reverse("bookings:employer_bookings"))
-        self.assertContains(employer_bookings, reverse("bookings:employer_marketplace_jobs"))
+        self.assertRedirects(employer_bookings, reverse("bookings:employer_bookings"), fetch_redirect_response=False)
 
         self.client.force_login(self.worker_user)
         worker_requests = self.client.get(reverse("worker_portal:requests"))
-        self.assertContains(worker_requests, reverse("bookings:worker_requests"))
-        self.assertContains(worker_requests, reverse("bookings:worker_available_jobs"))
+        self.assertRedirects(worker_requests, reverse("worker_portal:offers"), fetch_redirect_response=False)
+        offers_page = self.client.get(reverse("worker_portal:offers"))
+        self.assertContains(offers_page, reverse("bookings:worker_available_jobs"))
 
         worker_jobs = self.client.get(reverse("worker_portal:jobs"))
         self.assertContains(worker_jobs, reverse("bookings:worker_jobs"))
@@ -519,6 +534,32 @@ class BookingWorkflowTests(TestCase):
         self.client.post(reverse("bookings:worker_accept_booking", kwargs={"booking_reference": booking.booking_reference}))
         booking.refresh_from_db()
         self.assertEqual(booking.status, Booking.Status.ACCEPTED)
+
+    def test_selected_application_shows_review_offer_link(self):
+        booking = create_booking_request(
+            employer_profile=self.employer_profile,
+            service_category=self.service_category,
+            employer_location=self.employer_location,
+            scheduled_date=timezone.localdate() + timedelta(days=1),
+            start_time=time(9, 0),
+            duration_hours=4,
+            special_instructions="Pick me at gate",
+            created_by=self.employer_user,
+            request_type=Booking.RequestType.OPEN_MARKETPLACE,
+        )
+        self.client.force_login(self.worker_user)
+        self.client.post(
+            reverse("bookings:worker_apply_to_job", kwargs={"booking_reference": booking.booking_reference}),
+            data={"message": "Pick me"},
+        )
+        application = BookingApplication.objects.get(booking=booking, worker=self.worker_profile)
+        self.client.force_login(self.employer_user)
+        self.client.post(reverse("bookings:employer_select_application", kwargs={"application_id": application.id}))
+
+        self.client.force_login(self.worker_user)
+        response = self.client.get(reverse("bookings:worker_my_applications"))
+        self.assertContains(response, "Review offer")
+        self.assertContains(response, reverse("bookings:worker_request_detail", kwargs={"booking_reference": booking.booking_reference}))
 
     def test_worker_cannot_access_other_application(self):
         booking = create_booking_request(

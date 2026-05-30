@@ -1,5 +1,5 @@
 {% extends 'base/base_bookings.html' %}
-{% load profile_display %}
+{% load profile_display booking_display %}
 
 {% block title %}{{ booking.booking_reference }} | Worker Request{% endblock %}
 
@@ -8,13 +8,24 @@
   <header class="mk-page-header">
     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div>
-        <p class="mk-eyebrow">Booking request</p>
+        <p class="mk-eyebrow">Booking offer</p>
         <h1 class="mk-page-header__title">{{ booking.booking_reference }}</h1>
-        <p class="mk-page-header__lead">Review the full request before accepting or declining. The timeline records every action for transparency.</p>
+        <p class="mk-page-header__lead">Review the full request before accepting or declining.</p>
       </div>
-      <span class="mk-status shrink-0 {% if booking.status == 'PENDING_WORKER_RESPONSE' %}mk-status-pending{% elif booking.status == 'ACCEPTED' %}mk-status-accepted{% elif booking.status == 'COMPLETED' %}mk-status-completed{% elif booking.status == 'DECLINED' %}mk-status-declined{% elif 'CANCELLED' in booking.status %}mk-status-cancelled{% endif %}">{{ booking.get_status_display }}</span>
+      {% booking_status_badge booking %}
     </div>
   </header>
+
+  {% if can_accept %}
+    <section class="mt-6 rounded-2xl border-2 border-teal-500/40 bg-teal-50/90 p-5 dark:border-teal-700/50 dark:bg-teal-950/30">
+      <h2 class="text-lg font-bold text-slate-950 dark:text-white">Accept this offer</h2>
+      <p class="mt-1 text-sm text-mk-muted">Confirm you can work on {{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }}.</p>
+      <form method="post" action="{% url 'bookings:worker_accept_booking' booking_reference=booking.booking_reference %}" class="mt-4" data-confirm="Accept this booking offer?">
+        {% csrf_token %}
+        <button type="submit" class="mk-btn-primary w-full sm:w-auto min-w-[12rem]">Accept offer</button>
+      </form>
+    </section>
+  {% endif %}
 
   <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]">
     <article class="mk-detail-card">
@@ -22,12 +33,12 @@
         {% profile_avatar booking.employer size="md" %}
         <div class="min-w-0">
           <p class="text-xs font-bold uppercase tracking-[0.14em] text-mk-muted">Employer</p>
-          <p class="mt-1 truncate text-sm font-bold text-slate-950 dark:text-white">{{ booking.employer.display_name|default:booking.employer.user.get_full_name|default:booking.employer.user.username }}</p>
+          <p class="mt-1 truncate text-sm font-bold text-slate-950 dark:text-white">{{ employer_card.display_name }}</p>
           <p class="mt-0.5 text-xs text-mk-muted">
             {% if booking.employer_location %}
               {{ booking.employer_location.service_area_display }}
             {% else %}
-              {{ booking.employer.primary_area|default:"Area on file" }}
+              {{ employer_card.service_area|default:"Area on file" }}
             {% endif %}
           </p>
         </div>
@@ -36,7 +47,7 @@
       <dl class="mk-kv-grid mt-4 sm:grid sm:grid-cols-2">
         <div><dt>Service</dt><dd>{{ booking.service_category.name }}</dd></div>
         <div><dt>Date</dt><dd>{{ booking.scheduled_date }}</dd></div>
-        <div><dt>Time</dt><dd>{{ booking.start_time }}</dd></div>
+        <div><dt>Time</dt><dd>{{ booking.start_time|time:'H:i' }}</dd></div>
         <div><dt>Duration</dt><dd>{{ booking.duration_hours }} hour{{ booking.duration_hours|pluralize }}</dd></div>
         <div><dt>Location</dt><dd>{% if booking.employer_location %}{{ booking.employer_location.service_area_display }}{% else %}Location to be confirmed{% endif %}</dd></div>
       </dl>
@@ -63,42 +74,34 @@
 
   <section class="mk-actions-panel">
     <div>
-      <h2 class="mk-section-title">Your actions</h2>
-      <p class="mk-muted mt-1">Only respond if the date, location, service, and time work for you.</p>
+      <h2 class="mk-section-title">More actions</h2>
+      <p class="mk-muted mt-1">Message the employer or decline if the job does not work for you.</p>
     </div>
 
-    {% if can_accept or can_decline or can_cancel %}
-      <div class="grid gap-3 lg:grid-cols-2">
-        {% if can_accept %}
-          <form method="post" action="{% url 'bookings:worker_accept_booking' booking_reference=booking.booking_reference %}" data-confirm="Accept this booking request?">
-            {% csrf_token %}
-            <button type="submit" class="mk-btn-primary w-full">Accept booking</button>
-          </form>
-        {% endif %}
+    <div class="grid gap-3 lg:grid-cols-2">
+      <a href="{% url 'messaging:open_booking_thread' booking_reference=booking.booking_reference %}" class="mk-btn-secondary w-full">
+        Message employer{% if thread_unread %} ({{ thread_unread }} unread){% endif %}
+      </a>
+      <a href="{% url 'worker_portal:offers' %}" class="mk-btn-secondary w-full">Back to offers</a>
+    </div>
 
-        {% if can_decline %}
-          <form method="post" action="{% url 'bookings:worker_decline_booking' booking_reference=booking.booking_reference %}" class="grid gap-2">
-            {% csrf_token %}
-            <label class="mk-label" for="{{ decline_form.reason.id_for_label }}">Decline reason</label>
-            {{ decline_form.reason }}
-            <button type="submit" class="mk-btn-secondary w-full">Decline booking</button>
-          </form>
-        {% endif %}
-
-        {% if can_cancel %}
-          <form method="post" action="{% url 'bookings:worker_cancel_booking' booking_reference=booking.booking_reference %}" class="grid gap-2" data-confirm="Cancel this accepted booking?">
-            {% csrf_token %}
-            <label class="mk-label" for="{{ cancel_form.reason.id_for_label }}">Cancellation reason</label>
-            {{ cancel_form.reason }}
-            <button type="submit" class="mk-btn-danger w-full">Cancel accepted booking</button>
-          </form>
-        {% endif %}
-      </div>
-    {% else %}
-      <p class="mk-body-copy">No actions are available for this status.</p>
+    {% if can_decline %}
+      <form method="post" action="{% url 'bookings:worker_decline_booking' booking_reference=booking.booking_reference %}" class="mt-4 grid gap-2">
+        {% csrf_token %}
+        <label class="mk-label" for="{{ decline_form.reason.id_for_label }}">Decline reason</label>
+        {{ decline_form.reason }}
+        <button type="submit" class="mk-btn-danger w-full sm:w-auto">Decline offer</button>
+      </form>
     {% endif %}
 
-    <a href="{% url 'messaging:open_booking_thread' booking_reference=booking.booking_reference %}" class="mk-btn-secondary w-full lg:w-auto">Open chat</a>
+    {% if can_cancel %}
+      <form method="post" action="{% url 'bookings:worker_cancel_booking' booking_reference=booking.booking_reference %}" class="mt-4 grid gap-2" data-confirm="Cancel this accepted booking?">
+        {% csrf_token %}
+        <label class="mk-label" for="{{ cancel_form.reason.id_for_label }}">Cancellation reason</label>
+        {{ cancel_form.reason }}
+        <button type="submit" class="mk-btn-danger w-full sm:w-auto">Cancel accepted booking</button>
+      </form>
+    {% endif %}
   </section>
 </div>
 {% endblock %}

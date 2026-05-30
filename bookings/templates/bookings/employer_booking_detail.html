@@ -1,5 +1,5 @@
 {% extends 'base/base_bookings.html' %}
-{% load profile_display %}
+{% load profile_display booking_display %}
 
 {% block title %}{{ booking.booking_reference }} | Booking Detail{% endblock %}
 
@@ -11,8 +11,20 @@
       <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-3xl">{{ booking.booking_reference }}</h1>
       <p class="mt-3 max-w-2xl text-sm font-medium leading-6 text-mk-muted dark:text-slate-300">Follow the latest status, estimate, and audit timeline for this booking request.</p>
     </div>
-    <span class="mk-status {% if booking.status == 'PENDING_WORKER_RESPONSE' %}mk-status-pending{% elif booking.status == 'ACCEPTED' %}mk-status-accepted{% elif booking.status == 'COMPLETED' %}mk-status-completed{% elif booking.status == 'DECLINED' %}mk-status-declined{% elif 'CANCELLED' in booking.status %}mk-status-cancelled{% endif %}">{{ booking.get_status_display }}</span>
+    {% booking_status_badge booking %}
   </div>
+
+  {% if booking.status == 'ACCEPTED' and booking.worker %}
+    <div class="mt-6 rounded-2xl border border-teal-300 bg-teal-50/90 p-4 dark:border-teal-800 dark:bg-teal-950/40">
+      <p class="text-sm font-bold text-slate-950 dark:text-white">Booking confirmed</p>
+      <p class="mt-1 text-sm text-mk-muted">{{ worker_card.display_name|default:booking.worker.display_name }} accepted · {{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }}{% if service_area %} · {{ service_area }}{% endif %}</p>
+    </div>
+  {% elif booking.status == 'PENDING_WORKER_RESPONSE' and booking.worker %}
+    <div class="mt-6 rounded-2xl border border-amber-200 bg-amber-50/90 p-4 dark:border-amber-900/50 dark:bg-amber-950/30">
+      <p class="text-sm font-bold text-slate-950 dark:text-white">Awaiting worker response</p>
+      <p class="mt-1 text-sm text-mk-muted">Waiting for {{ worker_card.display_name|default:booking.worker.display_name }} to accept this offer.</p>
+    </div>
+  {% endif %}
 
   <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(300px,0.85fr)]">
     <article class="mk-detail-card">
@@ -103,7 +115,7 @@
       <a href="{% url 'bookings:employer_booking_applications' booking_reference=booking.booking_reference %}" class="mk-btn-secondary w-full lg:w-auto">View applications</a>
     {% endif %}
     {% if booking.worker %}
-      <a href="{% url 'messaging:open_booking_thread' booking_reference=booking.booking_reference %}" class="mk-btn-secondary w-full lg:w-auto">Open chat</a>
+      <a href="{% url 'messaging:open_booking_thread' booking_reference=booking.booking_reference %}" class="mk-btn-secondary w-full lg:w-auto">Open chat{% if thread_unread %} ({{ thread_unread }} unread){% endif %}</a>
     {% endif %}
   </section>
 </div>
