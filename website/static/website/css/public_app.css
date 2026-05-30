@@ -254,6 +254,74 @@ html[data-theme="dark"] .mk-hero-grid {
 .mk-link { color: var(--mk-primary); font-weight: 800; }
 .mk-link:hover { color: var(--mk-primary-dark); }
 
+/* Home hero — helper preview card over photo (light mode readability) */
+html[data-theme="light"] .mk-hero-helper-card {
+  background: rgba(255, 253, 252, 0.98);
+  border-color: rgba(95, 31, 52, 0.14);
+  box-shadow: 0 22px 56px rgba(95, 31, 52, 0.14);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html[data-theme="light"] .mk-hero-helper-card .mk-hero-kicker {
+  color: var(--mk-maroon-primary);
+}
+
+html[data-theme="light"] .mk-hero-helper-card .mk-hero-helper-name {
+  color: var(--mk-maroon-deep);
+}
+
+html[data-theme="light"] .mk-hero-helper-card .mk-hero-helper-meta {
+  color: var(--mk-subtext);
+}
+
+html[data-theme="light"] .mk-hero-helper-card .mk-hero-helper-rating {
+  background: #fff7ed;
+  color: #9a3412;
+  border-color: rgba(180, 83, 9, 0.32);
+}
+
+html[data-theme="light"] .mk-hero-helper-card .mk-hero-stat {
+  background: #ffffff;
+  border: 1px solid rgba(95, 31, 52, 0.1);
+}
+
+html[data-theme="light"] .mk-hero-helper-card .mk-hero-stat-value {
+  color: var(--mk-maroon-deep);
+}
+
+html[data-theme="light"] .mk-hero-helper-card .mk-hero-stat-label {
+  color: var(--mk-muted);
+}
+
+html[data-theme="dark"] .mk-hero-helper-card {
+  background: rgba(15, 23, 42, 0.94);
+  border-color: var(--mk-dark-border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+html[data-theme="dark"] .mk-hero-helper-card .mk-hero-helper-name {
+  color: var(--mk-dark-text);
+}
+
+html[data-theme="dark"] .mk-hero-helper-card .mk-hero-helper-meta {
+  color: var(--mk-dark-muted);
+}
+
+html[data-theme="dark"] .mk-hero-helper-card .mk-hero-stat {
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid var(--mk-dark-border);
+}
+
+html[data-theme="dark"] .mk-hero-helper-card .mk-hero-stat-value {
+  color: var(--mk-dark-text);
+}
+
+html[data-theme="dark"] .mk-hero-helper-card .mk-hero-stat-label {
+  color: var(--mk-dark-muted);
+}
+
 /* Alias for legacy camelCase class in templates */
 .text-mk-primaryDark { color: var(--mk-primary-dark) !important; }
 
