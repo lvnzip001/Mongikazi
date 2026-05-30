@@ -1,0 +1,49 @@
+{% extends "base/base_public.html" %}
+{% block title %}Privacy Rules | MongiKazi{% endblock %}
+{% block content %}
+<section class="mk-hero mk-hero-grid">
+  <div class="mk-container py-8 sm:py-10 lg:py-16">
+    {% include "components/section_badge.html" with label="Legal" %}
+    <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-mk-text sm:text-4xl lg:text-5xl">Privacy Rules</h1>
+    <p class="mt-2 text-sm leading-7 text-mk-muted sm:text-base">Version {{ privacy_version }}. This explains how personal information is handled in line with South African privacy requirements.</p>
+    <div class="mk-card mt-5 max-w-4xl p-4 space-y-3 sm:mt-6 sm:p-6 sm:space-y-4">
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">0. Scope</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">This policy applies to personal information processed through MongiKazi digital services and related operational support channels.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">1. Information we collect</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">We collect account details, profile information, booking activity, communication metadata, payment-related records, and device/session logs needed to operate the marketplace.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">1.1 Special categories and minors</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Users must not upload unnecessary special personal information. Accounts are intended for users with legal capacity; guardianship or legal authority may be required in edge cases.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">2. How we use information</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Data is used for authentication, fraud prevention, safety checks, booking operations, service communications, support, compliance, and platform improvement.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">2.1 Automated risk checks</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">We may use operational rules and fraud indicators to detect abuse patterns and trigger additional verification or account safeguards.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">3. Legal basis and consent records</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Where required, processing is based on consent, contractual necessity, legal obligations, and legitimate operational interests. Policy acceptance events are recorded for audit and compliance.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">3.1 Withdrawal and objections</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Where consent is the legal basis, withdrawal can be requested, but withdrawal does not invalidate prior lawful processing and may limit service functionality.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">4. Sharing and operators</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Data is shared only where needed to provide the service, comply with law, resolve disputes, or work with vetted service providers under confidentiality and security controls.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">4.1 Law enforcement and legal process</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">We may disclose information where required by court order, statute, or lawful regulatory request.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">5. Retention and security</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Records are retained for operational, legal, anti-fraud, and dispute-resolution needs. We apply reasonable technical and organizational safeguards against unauthorized access and misuse.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">5.1 Security incidents</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Where required by law, relevant stakeholders may be notified of material security incidents involving personal information.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">6. Your rights</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">You may request access, correction, or deletion where applicable, and may object to certain processing subject to legal limits and ongoing contractual or compliance requirements.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">6.1 PAIA/POPIA process</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Formal requests may require identity verification and may be processed in accordance with PAIA/POPIA procedures and timelines.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">7. Cookies and session data</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Session and preference cookies are used for secure login, CSRF protection, and user experience features such as theme preferences.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">7.1 Browser controls</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">You may manage cookies at browser level, but disabling critical cookies can affect login, security, and booking workflows.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">8. International processing</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">If data is processed outside South Africa through infrastructure or operators, safeguards will be applied consistent with legal requirements.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">9. Policy updates</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">This policy may be revised as services and legal obligations evolve. Version updates and effective dates will be published on this page.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">8. Contact and complaints</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Privacy requests can be submitted through the Contact page. Users may escalate unresolved complaints to the South African Information Regulator.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

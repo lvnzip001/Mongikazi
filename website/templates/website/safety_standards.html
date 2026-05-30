@@ -1,0 +1,45 @@
+{% extends "base/base_public.html" %}
+{% block title %}Marketplace Safety Standards | MongiKazi{% endblock %}
+{% block content %}
+<section class="mk-hero mk-hero-grid">
+  <div class="mk-container py-8 sm:py-10 lg:py-16">
+    {% include "components/section_badge.html" with label="Legal" %}
+    <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-mk-text sm:text-4xl lg:text-5xl">Marketplace Safety Standards</h1>
+    <p class="mt-2 text-sm leading-7 text-mk-muted sm:text-base">Version {{ safety_version }}. Core conduct and safety expectations for all users.</p>
+    <div class="mk-card mt-5 max-w-4xl p-4 space-y-3 sm:mt-6 sm:p-6 sm:space-y-4">
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">0. Scope and objective</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">These standards apply to all account holders, bookings, communications, and related marketplace interactions, with the goal of reducing harm and preventing abuse.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">1. Conduct baseline</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Users must behave lawfully, respectfully, and without discrimination, harassment, threats, or coercion.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">1.1 Zero-tolerance categories</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Violence threats, sexual exploitation, trafficking behavior, identity fraud, extortion, and targeted hate conduct may trigger immediate account locks.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">2. Identity and profile integrity</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Misrepresentation, fake profiles, forged documents, or attempts to bypass verification controls are prohibited.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">2.1 Verification cooperation</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Users may be asked for supporting documentation where account risk or report patterns indicate heightened verification needs.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">3. Booking and workplace safety</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Employers and helpers must communicate accurate job details, locations, and scope; unsafe or unlawful requests are prohibited.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">3.1 Safety expectations at work sites</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Users must avoid unsafe working conditions, intimidation, and retaliatory behavior. Material safety incidents should be reported through support channels as soon as possible.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">4. Payments and fraud</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Any scam pattern, extortion attempt, fabricated proof of payment, or coordinated abuse can trigger immediate restrictions and formal investigation.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">4.1 Off-platform evasion</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Attempts to bypass platform controls to evade safety checks, audits, or fee policies may be treated as abuse risk events.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">5. Reviews and messaging</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Reviews must reflect genuine booking experiences. Threats, hate speech, doxxing, or manipulative messaging is prohibited.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">5.1 Content moderation actions</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Content may be removed or limited where it violates these standards, legal obligations, or active safety investigations.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">6. Incident handling</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">MongiKazi may request evidence, restrict accounts, and preserve logs while incidents are investigated.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">6.1 Interim restrictions</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Temporary restrictions can include messaging limits, booking limits, profile visibility reduction, payment holds, or full suspension pending review.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">7. Escalation</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Serious incidents may be escalated to relevant authorities where legally required or where user safety is at risk.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">8. Appeals and review</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Users may request reconsideration of enforcement actions through support channels. Decisions may be maintained, modified, or reversed based on available evidence.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">9. Version updates</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Safety standards may be updated as risks evolve. The published version/date governs current enforcement expectations.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

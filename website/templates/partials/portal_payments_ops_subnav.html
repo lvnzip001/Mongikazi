@@ -1,0 +1,5 @@
+<nav class="mk-subnav lg:hidden" aria-label="Payments operations">
+  <a class="mk-subnav-link {% if nav_active == 'operations_review' %}is-active{% endif %}" href="{% url 'payments:operations_payments_review' %}" {% if nav_active == 'operations_review' %}aria-current="page"{% endif %}>Review</a>
+  <a class="mk-subnav-link {% if nav_active == 'operations_payout_history' %}is-active{% endif %}" href="{% url 'payments:operations_payout_history' %}" {% if nav_active == 'operations_payout_history' %}aria-current="page"{% endif %}>Payouts</a>
+  <a class="mk-subnav-link" href="{% url 'admin:index' %}">Admin</a>
+</nav>

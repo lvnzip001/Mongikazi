@@ -634,6 +634,12 @@ html[data-theme="dark"] .mk-body {
 }
 
 @media (min-width: 1024px) {
+  .mk-bottom-nav,
+  .mk-mobile-nav,
+  .mk-subnav {
+    display: none !important;
+  }
+
   .mk-worker-more-menu,
   .mk-portal-more-menu {
     display: none !important;

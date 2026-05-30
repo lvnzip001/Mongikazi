@@ -22,5 +22,14 @@ def portal_navigation(request):
         ctx["nav_active"] = "profile"
         ctx["profile_nav_active"] = match.url_name
         ctx["portal_section"] = "employer"
+    elif match.app_name == "payments" and match.url_name:
+        if match.url_name.startswith("worker"):
+            ctx["nav_active"] = "earnings"
+        elif match.url_name.startswith("employer"):
+            ctx["nav_active"] = "payments"
+        elif match.url_name == "operations_payments_review":
+            ctx["nav_active"] = "operations_review"
+        elif match.url_name == "operations_payout_history":
+            ctx["nav_active"] = "operations_payout_history"
 
     return ctx

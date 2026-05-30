@@ -1,0 +1,13 @@
+<aside class="mk-sidebar hidden lg:block" aria-label="Payments operations">
+  <p class="mk-payments-sidebar-label">Operations</p>
+  <nav class="mt-3 grid gap-2">
+    <a class="mk-side-link {% if nav_active == 'operations_review' %}is-active{% endif %}" href="{% url 'payments:operations_payments_review' %}" {% if nav_active == 'operations_review' %}aria-current="page"{% endif %}>Payment review</a>
+    <a class="mk-side-link {% if nav_active == 'operations_payout_history' %}is-active{% endif %}" href="{% url 'payments:operations_payout_history' %}" {% if nav_active == 'operations_payout_history' %}aria-current="page"{% endif %}>Payout history</a>
+    <a class="mk-side-link" href="{% url 'admin:index' %}">Admin</a>
+  </nav>
+  {% include "partials/portal_account_footer.html" %}
+  <div class="mk-sidebar-note">
+    <p class="font-extrabold text-mk-text">Verify then pay out</p>
+    <p class="mk-muted mt-1">Confirm employer proof before marking helper payouts.</p>
+  </div>
+</aside>

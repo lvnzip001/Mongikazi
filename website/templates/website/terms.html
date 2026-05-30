@@ -1,0 +1,51 @@
+{% extends "base/base_public.html" %}
+{% block title %}Platform Terms | MongiKazi{% endblock %}
+{% block content %}
+<section class="mk-hero mk-hero-grid">
+  <div class="mk-container py-8 sm:py-10 lg:py-16">
+    {% include "components/section_badge.html" with label="Legal" %}
+    <h1 class="mt-3 text-3xl font-extrabold tracking-tight text-mk-text sm:text-4xl lg:text-5xl">Platform Terms</h1>
+    <p class="mt-2 text-sm leading-7 text-mk-muted sm:text-base">Version {{ terms_version }}. Effective on publication. These terms govern use of the MongiKazi platform.</p>
+    <div class="mk-card mt-5 max-w-4xl p-4 space-y-3 sm:mt-6 sm:p-6 sm:space-y-4">
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">0. Definitions</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">"Platform" means MongiKazi websites, applications, and related services. "Employer" means a user requesting services. "Helper" means a user offering services. "Booking" means a platform-recorded work request and its status flow.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">1. Acceptance and eligibility</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">By creating or using an account, you accept these terms and confirm that information you provide is accurate and current.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">1.1 Age and authority</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">You confirm you have legal capacity to enter binding agreements, and if acting for an organization, you are authorized to do so.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">2. Marketplace role</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">MongiKazi provides a digital platform for requests, bookings, communication, and trust signals between employers and helpers. Users remain responsible for their own conduct, legal compliance, and contractual performance.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">2.1 No employment agency guarantee</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Unless expressly stated in a separate written agreement, MongiKazi does not guarantee placement, earnings levels, or uninterrupted availability of users.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">3. Account responsibilities</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">You must keep login credentials secure, not impersonate others, and not submit false, misleading, or abusive content. You are responsible for activity on your account.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">3.1 Verification and profile content</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Verification badges, profile data, and trust indicators may be updated, suspended, or removed where information changes or risk signals are detected.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">4. Booking and payment conduct</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Users must follow booking status flows, attend confirmed work responsibly, and avoid off-platform fraud, payment manipulation, or review abuse.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">4.1 Cancellations, no-shows, and disputes</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Late cancellations, no-shows, and material scope disputes may affect trust status and account visibility. The platform may consider communication logs and booking history when resolving disputes.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">4.2 Fees and future commercial terms</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Where platform fees apply, they will be disclosed in product flows or pricing pages. Updated fee structures may apply prospectively.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">5. Suspension and enforcement</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">MongiKazi may restrict or terminate access for fraud, harassment, unsafe conduct, policy evasion, or legal non-compliance, and may preserve records for investigation.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">5.1 Investigation cooperation</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Users agree to provide reasonably requested information for trust and safety investigations. Refusal may result in reduced functionality or suspension.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">6. Limitation and availability</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Services are provided on an as-available basis. To the extent permitted by law, MongiKazi excludes liability for indirect or consequential losses arising from platform use.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">6.1 Third-party dependencies</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Service availability may depend on third-party infrastructure (hosting, telecommunications, payment rails). MongiKazi is not liable for outages beyond reasonable control.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">6.2 Indemnity</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">You indemnify MongiKazi against claims arising from your unlawful conduct, policy breaches, or misuse of the platform.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">7. Governing law</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">These terms are governed by the laws of the Republic of South Africa.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">7.1 Dispute process</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">Parties should first attempt good-faith resolution through platform support before formal legal action, unless urgent relief is required.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">8. Changes to terms</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">We may update these terms. Material updates will be versioned, and continued use after effective date constitutes acceptance.</p>
+      <h2 class="text-base font-extrabold text-mk-text sm:text-lg">8. Contact</h2>
+      <p class="text-sm leading-7 text-mk-muted sm:text-base">For legal queries, contact support through the Contact page. A full legal identity and notices section should be completed before final production launch.</p>
+    </div>
+  </div>
+</section>
+{% endblock %}

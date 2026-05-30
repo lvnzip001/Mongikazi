@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.conf import settings
 
 
 def home(request):
@@ -59,3 +60,27 @@ def contact(request):
 def faq(request):
     """Frequently asked questions."""
     return render(request, "website/faq.html")
+
+
+def terms(request):
+    return render(
+        request,
+        "website/terms.html",
+        {"terms_version": settings.MONGIKAZI_TERMS_VERSION},
+    )
+
+
+def privacy(request):
+    return render(
+        request,
+        "website/privacy.html",
+        {"privacy_version": settings.MONGIKAZI_PRIVACY_VERSION},
+    )
+
+
+def safety_standards(request):
+    return render(
+        request,
+        "website/safety_standards.html",
+        {"safety_version": settings.MONGIKAZI_SAFETY_VERSION},
+    )
