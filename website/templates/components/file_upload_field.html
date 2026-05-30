@@ -1,0 +1,14 @@
+<div class="mk-file-upload" data-file-upload>
+  <input
+    type="file"
+    name="{{ name }}"
+    id="{{ input_id }}"
+    class="mk-file-upload__input"
+    accept="{{ accept|default:'.pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*' }}"
+    {% if required %}required{% endif %}
+  />
+  <div class="mk-file-upload__controls">
+    <label for="{{ input_id }}" class="mk-file-upload__trigger">{{ trigger_label|default:"Choose file" }}</label>
+    <span class="mk-file-upload__name" data-file-name data-default-label="{{ placeholder|default:'No file chosen' }}">{{ placeholder|default:"No file chosen" }}</span>
+  </div>
+</div>

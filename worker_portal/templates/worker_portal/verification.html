@@ -2,21 +2,38 @@
 
 {% block title %}Verification | MongiKazi{% endblock %}
 {% block page_title %}Verification{% endblock %}
-{% block page_lead %}Trust signals on your profile.{% endblock %}
+{% block page_lead %}Upload ID and criminal record check for platform review.{% endblock %}
 
 {% block content %}
 <section class="mk-page-grid">
-  <article class="mk-card mk-hero lg:col-span-12">
-    <p class="mk-eyebrow">Trust</p>
+  <article class="mk-card lg:col-span-12">
+    <p class="mk-eyebrow">Document centre</p>
     <h1 class="mk-page-title mt-2">Verification status</h1>
-    <p class="mk-body-copy mt-3">Signals from onboarding and your work profile.</p>
+    <p class="mk-body-copy mt-3">Upload the documents below. Experience stays on your work profile.</p>
+    <div class="mt-4">
+      {% if summary.key == 'verified' %}
+        <span class="mk-badge-success">{{ summary.label }}</span>
+      {% elif summary.key == 'pending' %}
+        <span class="mk-badge-warning">{{ summary.label }}</span>
+      {% elif summary.key == 'partial' %}
+        <span class="mk-badge-warning">{{ summary.label }}</span>
+      {% else %}
+        <span class="mk-badge-neutral">{{ summary.label }}</span>
+      {% endif %}
+    </div>
   </article>
 
-  <article class="mk-card lg:col-span-8">
-    <p class="mk-eyebrow">Signals</p>
-    <h2 class="mt-1 text-xl font-extrabold text-mk-text">Current checks</h2>
+  {% for card in document_cards %}
+    <div class="lg:col-span-6">
+      {% include "worker_portal/partials/verification_document_card.html" with card=card %}
+    </div>
+  {% endfor %}
+
+  <article class="mk-card lg:col-span-12">
+    <p class="mk-eyebrow">Profile signals</p>
+    <h2 class="mt-1 text-xl font-extrabold text-mk-text">Other trust checks</h2>
     <div class="mt-4 grid gap-2 sm:grid-cols-2">
-      {% for signal in trust_signals %}
+      {% for signal in non_document_signals %}
         <div class="mk-list-item">
           <span>{{ signal.get_signal_type_display }}</span>
           {% if signal.status == 'READY' or signal.status == 'APPROVED' %}
@@ -30,16 +47,10 @@
           {% endif %}
         </div>
       {% empty %}
-        <div class="mk-empty-line sm:col-span-2">Complete onboarding to add trust signals.</div>
+        <div class="mk-empty-line sm:col-span-2">Complete your work profile to add more trust signals.</div>
       {% endfor %}
     </div>
-  </article>
-
-  <article class="mk-card lg:col-span-4">
-    <p class="mk-eyebrow">Profile</p>
-    <h2 class="mt-1 text-lg font-extrabold text-mk-text">Keep documents current</h2>
-    <p class="mk-muted mt-2">Upload and update verification from your work profile.</p>
-    <a href="/helpers/profile/" class="mk-mini-link mt-4">Open profile</a>
+    <a href="{{ work_profile_url }}" class="mk-mini-link mt-4 inline-block">Open work profile</a>
   </article>
 </section>
 {% endblock %}

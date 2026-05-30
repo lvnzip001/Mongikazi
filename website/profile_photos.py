@@ -80,6 +80,10 @@ def profile_photo_url(subject):
         return ""
 
 
+def has_profile_photo(subject):
+    return _photo_file(subject) is not None
+
+
 def profile_display_name(subject):
     if subject is None:
         return "Member"

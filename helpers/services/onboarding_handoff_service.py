@@ -3,8 +3,10 @@ from django.utils.text import slugify
 
 from onboarding.models import HelperOnboardingProfile
 
-from helpers.models import HelperProfile, HelperSkill, HelperTrustSignal, ServiceCategory
-from helpers.services.profile_completion_service import calculate_helper_profile_completion
+from helpers.models import HelperProfile, HelperSkill, HelperTrustSignal, ServiceCategory, WorkerVerificationDocument
+from helpers.selectors.verification_selectors import get_current_verification_documents
+from helpers.services.profile_completion_service import calculate_helper_profile_completion, sync_profile_photo_trust_signal
+from website.profile_photos import has_profile_photo
 
 
 DEFAULT_SERVICE_CATEGORIES = [
@@ -100,21 +102,45 @@ def sync_helper_trust_signals_from_onboarding(user):
 
     helper_profile, _ = HelperProfile.objects.get_or_create(user=user)
     map_status = lambda flag: HelperTrustSignal.SignalStatus.READY if flag else HelperTrustSignal.SignalStatus.NOT_PROVIDED
+    current_documents = get_current_verification_documents(helper_profile)
+
+    id_status = HelperTrustSignal.SignalStatus.NOT_PROVIDED
+    if current_documents.get(WorkerVerificationDocument.DocumentType.ID_DOCUMENT):
+        from helpers.services.verification_service import sync_trust_signal_for_document_type
+
+        sync_trust_signal_for_document_type(helper_profile, WorkerVerificationDocument.DocumentType.ID_DOCUMENT)
+        id_status = None
+    else:
+        id_status = map_status(onboarding_profile.has_id_document_ready)
+
+    criminal_status = HelperTrustSignal.SignalStatus.NOT_PROVIDED
+    if current_documents.get(WorkerVerificationDocument.DocumentType.CRIMINAL_RECORD_CHECK):
+        from helpers.services.verification_service import sync_trust_signal_for_document_type
+
+        sync_trust_signal_for_document_type(helper_profile, WorkerVerificationDocument.DocumentType.CRIMINAL_RECORD_CHECK)
+        criminal_status = None
+    else:
+        criminal_status = map_status(onboarding_profile.has_criminal_check_ready)
 
     signal_values = {
-        HelperTrustSignal.SignalType.ID_DOCUMENT: map_status(onboarding_profile.has_id_document_ready),
-        HelperTrustSignal.SignalType.CRIMINAL_RECORD_CHECK: map_status(onboarding_profile.has_criminal_check_ready),
+        HelperTrustSignal.SignalType.ID_DOCUMENT: id_status,
+        HelperTrustSignal.SignalType.CRIMINAL_RECORD_CHECK: criminal_status,
         HelperTrustSignal.SignalType.REFERENCES: map_status(onboarding_profile.has_references),
         HelperTrustSignal.SignalType.EXPERIENCE_CAPTURED: (
             HelperTrustSignal.SignalStatus.READY if helper_profile.years_experience > 0 else HelperTrustSignal.SignalStatus.NOT_PROVIDED
         ),
         HelperTrustSignal.SignalType.PROFILE_PHOTO: (
-            HelperTrustSignal.SignalStatus.READY if helper_profile.profile_photo else HelperTrustSignal.SignalStatus.NOT_PROVIDED
+            HelperTrustSignal.SignalStatus.READY if has_profile_photo(helper_profile) else HelperTrustSignal.SignalStatus.NOT_PROVIDED
         ),
     }
 
     records = []
     for signal_type, status in signal_values.items():
+        if status is None:
+            trust_signal = HelperTrustSignal.objects.filter(helper=helper_profile, signal_type=signal_type).first()
+            if trust_signal:
+                records.append(trust_signal)
+            continue
         trust_signal, _ = HelperTrustSignal.objects.update_or_create(
             helper=helper_profile,
             signal_type=signal_type,

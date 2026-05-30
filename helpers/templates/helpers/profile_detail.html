@@ -64,11 +64,22 @@
         <p class="mk-eyebrow">Trust readiness</p>
         <h2 class="mt-1 text-lg font-bold text-slate-950 dark:text-white">Verification foundation</h2>
       </div>
-      <span class="mk-soft-badge">Phase 1</span>
+      <a href="{% url 'worker_portal:verification' %}" class="mk-small-link">Verification</a>
     </div>
     <ul class="mt-4 grid gap-2 text-sm">
       {% for signal in trust_signals %}
-      <li class="mk-list-item"><span>{{ signal.get_signal_type_display }}</span><span class="mk-chip-muted">{{ signal.get_status_display }}</span></li>
+      <li class="mk-list-item">
+        <span>{{ signal.get_signal_type_display }}</span>
+        {% if signal.status == 'APPROVED' or signal.status == 'READY' %}
+          <span class="mk-badge-success">{{ signal.get_status_display }}</span>
+        {% elif signal.status == 'PENDING_REVIEW' %}
+          <span class="mk-badge-warning">{{ signal.get_status_display }}</span>
+        {% elif signal.status == 'REJECTED' %}
+          <span class="mk-badge-danger">{{ signal.get_status_display }}</span>
+        {% else %}
+          <span class="mk-chip-muted">{{ signal.get_status_display }}</span>
+        {% endif %}
+      </li>
       {% empty %}
       <li class="mk-empty-line">No trust signals captured yet.</li>
       {% endfor %}

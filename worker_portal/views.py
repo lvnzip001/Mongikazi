@@ -1,7 +1,14 @@
+from django.contrib import messages as django_messages
 from django.contrib.auth.decorators import login_required
+from django.forms import ValidationError
+from django.http import FileResponse, Http404
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
+from helpers.forms import WorkerVerificationUploadForm
+from helpers.models import WorkerVerificationDocument
+from helpers.selectors.verification_selectors import get_current_verification_documents, get_worker_verification_page_context
+from helpers.services.verification_service import upload_worker_verification_document
 from worker_portal.services.dashboard_service import build_worker_dashboard_context
 
 
@@ -74,8 +81,61 @@ def verification(request):
     guard = _portal_access_guard(request)
     if guard:
         return guard
-    context = {**_base_context("verification"), **build_worker_dashboard_context(request.user)}
+    context = {
+        **_base_context("verification"),
+        **get_worker_verification_page_context(request.user),
+    }
     return render(request, "worker_portal/verification.html", context)
+
+
+@login_required
+@require_http_methods(["POST"])
+def verification_upload(request):
+    guard = _portal_access_guard(request)
+    if guard:
+        return guard
+
+    form = WorkerVerificationUploadForm(request.POST, request.FILES)
+    if not form.is_valid():
+        for error in form.errors.get("file", []) + form.errors.get("document_type", []) + form.non_field_errors():
+            django_messages.error(request, error)
+        return redirect("worker_portal:verification")
+
+    try:
+        upload_worker_verification_document(
+            user=request.user,
+            document_type=form.cleaned_data["document_type"],
+            uploaded_file=form.cleaned_data["file"],
+        )
+        django_messages.success(request, "Document uploaded. It will be reviewed by our team.")
+    except ValidationError as exc:
+        django_messages.error(request, exc.message if hasattr(exc, "message") else str(exc))
+
+    return redirect("worker_portal:verification")
+
+
+@login_required
+@require_http_methods(["GET"])
+def verification_document_download(request, document_type):
+    guard = _portal_access_guard(request)
+    if guard:
+        return guard
+
+    if document_type not in WorkerVerificationDocument.DocumentType.values:
+        raise Http404("Document not found")
+
+    from helpers.selectors.helper_selectors import get_helper_profile_for_user
+
+    helper_profile = get_helper_profile_for_user(request.user)
+    if not helper_profile:
+        raise Http404("Document not found")
+
+    documents = get_current_verification_documents(helper_profile)
+    document = documents.get(document_type)
+    if not document or not document.file:
+        raise Http404("Document not found")
+
+    return FileResponse(document.file.open("rb"), as_attachment=True, filename=document.file.name.split("/")[-1])
 
 
 @login_required
