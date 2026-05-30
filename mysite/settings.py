@@ -106,6 +106,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'website.context_processors.portal_navigation',
+                'website.context_processors.portal_nav_counts',
+                'messaging.context_processors.messaging_unread',
             ],
         },
     },

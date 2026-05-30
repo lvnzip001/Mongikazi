@@ -11,14 +11,16 @@
       </a>
       <nav class="mt-6 grid gap-2">
         <a class="mk-nav-link {% if nav_active == 'dashboard' %}is-active{% endif %}" href="{% url 'worker_portal:dashboard' %}" {% if nav_active == 'dashboard' %}aria-current="page"{% endif %}><span>Dashboard</span></a>
-        <a class="mk-nav-link {% if nav_active == 'requests' %}is-active{% endif %}" href="{% url 'worker_portal:requests' %}" {% if nav_active == 'requests' %}aria-current="page"{% endif %}><span>Requests</span></a>
-        <a class="mk-nav-link {% if nav_active == 'jobs' %}is-active{% endif %}" href="{% url 'worker_portal:jobs' %}" {% if nav_active == 'jobs' %}aria-current="page"{% endif %}><span>Jobs</span></a>
-        <a class="mk-nav-link {% if nav_active == 'earnings' %}is-active{% endif %}" href="{% url 'worker_portal:earnings' %}" {% if nav_active == 'earnings' %}aria-current="page"{% endif %}><span>Earnings</span></a>
-        <a class="mk-nav-link {% if nav_active == 'messages' %}is-active{% endif %}" href="{% url 'worker_portal:messages' %}" {% if nav_active == 'messages' %}aria-current="page"{% endif %}><span>Messages</span></a>
-        <a class="mk-nav-link {% if nav_active == 'verification' %}is-active{% endif %}" href="{% url 'worker_portal:verification' %}" {% if nav_active == 'verification' %}aria-current="page"{% endif %}><span>Verification</span></a>
-        <a class="mk-nav-link {% if nav_active == 'reviews' %}is-active{% endif %}" href="{% url 'worker_portal:reviews' %}" {% if nav_active == 'reviews' %}aria-current="page"{% endif %}><span>Reviews</span></a>
-        <a class="mk-nav-link {% if nav_active == 'safety' %}is-active{% endif %}" href="{% url 'worker_portal:safety' %}" {% if nav_active == 'safety' %}aria-current="page"{% endif %}><span>Safety</span></a>
-        <a class="mk-nav-link {% if nav_active == 'profile' %}is-active{% endif %}" href="{{ work_profile_url }}" {% if nav_active == 'profile' %}aria-current="page"{% endif %}><span>Work profile</span></a>
+        <a class="mk-nav-link {% if nav_active == 'offers' or nav_active == 'requests' %}is-active{% endif %}" href="{% url 'worker_portal:offers' %}" {% if nav_active == 'offers' %}aria-current="page"{% endif %}><span>Offers</span>{% include "partials/nav_unread_badge.html" with count=portal_nav_counts.offers %}</a>
+        <a class="mk-nav-link {% if nav_active == 'worker_available_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_available_jobs' %}"><span>Available jobs</span></a>
+        <a class="mk-nav-link {% if nav_active == 'worker_my_applications' %}is-active{% endif %}" href="{% url 'bookings:worker_my_applications' %}"><span>My applications</span></a>
+        <a class="mk-nav-link {% if nav_active == 'jobs' or nav_active == 'worker_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_jobs' %}" {% if nav_active == 'jobs' %}aria-current="page"{% endif %}><span>Upcoming jobs</span></a>
+        <a class="mk-nav-link {% if nav_active == 'earnings' %}is-active{% endif %}" href="{% url 'worker_portal:earnings' %}"><span>Earnings</span></a>
+        <a class="mk-nav-link {% if nav_active == 'messages' %}is-active{% endif %}" href="{% url 'worker_portal:messages' %}"><span>Messages</span>{% include "partials/nav_unread_badge.html" with count=messaging_unread.total_unread %}</a>
+        <a class="mk-nav-link {% if nav_active == 'verification' %}is-active{% endif %}" href="{% url 'worker_portal:verification' %}"><span>Verification</span></a>
+        <a class="mk-nav-link {% if nav_active == 'reviews' %}is-active{% endif %}" href="{% url 'worker_portal:reviews' %}"><span>Reviews</span></a>
+        <a class="mk-nav-link {% if nav_active == 'safety' %}is-active{% endif %}" href="{% url 'worker_portal:safety' %}"><span>Safety</span></a>
+        <a class="mk-nav-link {% if nav_active == 'profile' %}is-active{% endif %}" href="{{ work_profile_url }}"><span>Work profile</span></a>
         {% if portal_section == 'worker' and profile_nav_active %}
           <div class="mk-nav-subgroup" aria-label="Work profile sections">
             <a class="mk-nav-link mk-nav-link--sub {% if profile_nav_active == 'profile_detail' %}is-active{% endif %}" href="{% url 'helpers:profile_detail' %}"><span>Overview</span></a>
@@ -32,8 +34,8 @@
     </div>
     {% include "partials/portal_account_footer.html" %}
     <div class="mk-sidebar-note">
-      <p class="text-xs font-bold text-mk-text">Build trusted work history</p>
-      <p class="mt-1 text-xs font-medium leading-5 text-mk-muted">Keep your profile complete so employers can book with confidence.</p>
+      <p class="text-xs font-bold text-mk-text">Respond quickly to offers</p>
+      <p class="mt-1 text-xs font-medium leading-5 text-mk-muted">New booking offers need your acceptance before the job is confirmed.</p>
     </div>
   </div>
 </aside>

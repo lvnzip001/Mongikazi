@@ -78,6 +78,8 @@ class EmployerPortalAccessTests(TestCase):
             elif route == reverse("employer_portal:payments"):
                 self.assertEqual(response.status_code, 302)
                 self.assertEqual(response.url, reverse("payments:employer_invoices"))
+            elif route == reverse("employer_portal:bookings"):
+                self.assertRedirects(response, reverse("bookings:employer_bookings"), fetch_redirect_response=False)
             else:
                 self.assertEqual(response.status_code, 200)
 

@@ -907,6 +907,22 @@ html[data-theme="dark"] .divide-mk-border > :not([hidden]) ~ :not([hidden]) { bo
 html[data-theme="dark"] .shadow-mk-soft,
 html[data-theme="dark"] .shadow-mk-lift { box-shadow: var(--mk-shadow-lift) !important; }
 
+.mk-nav-badge {
+  display: inline-flex;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--mk-primary, #0d9488);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: 0.001ms !important;

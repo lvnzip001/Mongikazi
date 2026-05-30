@@ -73,3 +73,47 @@ def get_unread_counts_for_user(user):
 
     return {"threads_with_unread": 0, "total_unread": 0}
 
+
+def get_booking_thread_unread_count(booking, user):
+    return get_booking_unread_counts_map([booking], user).get(booking.id, 0)
+
+
+def get_booking_unread_counts_map(bookings, user):
+    """Return booking.id -> unread count for the given user (batched)."""
+    booking_list = list(bookings)
+    if not booking_list:
+        return {}
+
+    booking_ids = [booking.id for booking in booking_list]
+    counts = dict.fromkeys(booking_ids, 0)
+
+    if getattr(user, "is_employer", False):
+        threads = MessageThread.objects.filter(booking_id__in=booking_ids, employer_user=user).annotate(
+            unread_count=Count(
+                "messages",
+                filter=Q(messages__read_by_employer_at__isnull=True) & ~Q(messages__sender=user),
+            )
+        )
+    elif getattr(user, "is_helper", False):
+        threads = MessageThread.objects.filter(booking_id__in=booking_ids, helper_user=user).annotate(
+            unread_count=Count(
+                "messages",
+                filter=Q(messages__read_by_helper_at__isnull=True) & ~Q(messages__sender=user),
+            )
+        )
+    else:
+        return counts
+
+    for thread in threads:
+        if thread.booking_id:
+            counts[thread.booking_id] = thread.unread_count
+    return counts
+
+
+def get_recent_unread_threads_for_user(user, limit=2):
+    if getattr(user, "is_employer", False):
+        return list(get_threads_for_employer(user).filter(unread_count__gt=0).order_by("-last_message_at")[:limit])
+    if getattr(user, "is_helper", False):
+        return list(get_threads_for_helper(user).filter(unread_count__gt=0).order_by("-last_message_at")[:limit])
+    return []
+

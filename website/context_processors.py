@@ -33,3 +33,24 @@ def portal_navigation(request):
             ctx["nav_active"] = "operations_payout_history"
 
     return ctx
+
+
+def portal_nav_counts(request):
+    user = getattr(request, "user", None)
+    if not user or not user.is_authenticated:
+        return {"portal_nav_counts": {}}
+
+    from bookings.models import Booking
+    from bookings.selectors.booking_selectors import get_employer_bookings, get_worker_booking_requests
+
+    counts = {}
+    if getattr(user, "is_helper", False):
+        counts["offers"] = get_worker_booking_requests(user).count()
+    if getattr(user, "is_employer", False):
+        counts["pending_response"] = (
+            get_employer_bookings(user).filter(status=Booking.Status.PENDING_WORKER_RESPONSE).count()
+        )
+        counts["applications_received"] = (
+            get_employer_bookings(user).filter(status=Booking.Status.APPLICATIONS_RECEIVED).count()
+        )
+    return {"portal_nav_counts": counts}

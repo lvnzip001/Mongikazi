@@ -1,8 +1,8 @@
 <nav class="mk-bottom-nav mk-mobile-nav lg:hidden" aria-label="Mobile navigation">
-  <a class="mk-mobile-link {% if nav_active == 'dashboard' %}is-active{% endif %}" href="{% url 'worker_portal:dashboard' %}" {% if nav_active == 'dashboard' %}aria-current="page"{% endif %}>Home</a>
-  <a class="mk-mobile-link {% if nav_active == 'requests' %}is-active{% endif %}" href="{% url 'worker_portal:requests' %}" {% if nav_active == 'requests' %}aria-current="page"{% endif %}>Requests</a>
-  <a class="mk-mobile-link {% if nav_active == 'jobs' %}is-active{% endif %}" href="{% url 'worker_portal:jobs' %}" {% if nav_active == 'jobs' %}aria-current="page"{% endif %}>Jobs</a>
-  <a class="mk-mobile-link {% if nav_active == 'profile' %}is-active{% endif %}" href="{{ work_profile_url }}" {% if nav_active == 'profile' %}aria-current="page"{% endif %}>Profile</a>
+  <a class="mk-mobile-link {% if nav_active == 'dashboard' %}is-active{% endif %}" href="{% url 'worker_portal:dashboard' %}">Home</a>
+  <a class="mk-mobile-link {% if nav_active == 'offers' or nav_active == 'requests' %}is-active{% endif %}" href="{% url 'worker_portal:offers' %}">Offers</a>
+  <a class="mk-mobile-link {% if nav_active == 'worker_available_jobs' %}is-active{% endif %}" href="{% url 'bookings:worker_available_jobs' %}">Jobs</a>
+  <a class="mk-mobile-link {% if nav_active == 'messages' %}is-active{% endif %}" href="{% url 'worker_portal:messages' %}">Chat</a>
   <button type="button" class="mk-mobile-link mk-mobile-link--more {% if nav_active == 'more' %}is-active{% endif %}" data-worker-more-open aria-expanded="false" aria-label="More navigation">More</button>
 </nav>
 
@@ -13,22 +13,12 @@
       <button type="button" data-worker-more-close class="mk-icon-button" aria-label="Close menu">&#10005;</button>
     </div>
     <div class="grid gap-1">
-      <a href="{% url 'worker_portal:messages' %}" class="mk-nav-link">Messages</a>
+      <a href="{% url 'bookings:worker_my_applications' %}" class="mk-nav-link">My applications</a>
+      <a href="{% url 'bookings:worker_jobs' %}" class="mk-nav-link">Upcoming jobs</a>
       <a href="{% url 'worker_portal:earnings' %}" class="mk-nav-link">Earnings</a>
       <a href="{% url 'worker_portal:verification' %}" class="mk-nav-link">Verification</a>
-      <a href="{% url 'worker_portal:reviews' %}" class="mk-nav-link">Reviews</a>
       <a href="{% url 'worker_portal:safety' %}" class="mk-nav-link">Safety</a>
-      <a href="{% url 'bookings:worker_requests' %}" class="mk-nav-link">Bookings</a>
-      {% if portal_section == 'worker' and profile_nav_active %}
-        <p class="mk-nav-subgroup-label">Work profile</p>
-        <a href="{% url 'helpers:profile_detail' %}" class="mk-nav-link">Overview</a>
-        <a href="{% url 'helpers:profile_edit' %}" class="mk-nav-link">Edit profile</a>
-        <a href="{% url 'helpers:skills' %}" class="mk-nav-link">Skills</a>
-        <a href="{% url 'helpers:availability' %}" class="mk-nav-link">Availability</a>
-        <a href="{% url 'helpers:profile_preview' %}" class="mk-nav-link">Preview</a>
-      {% else %}
-        <a href="{{ work_profile_url }}" class="mk-nav-link">Work profile</a>
-      {% endif %}
+      <a href="{{ work_profile_url }}" class="mk-nav-link">Work profile</a>
       <div class="mk-portal-account mk-portal-account--menu">
         {% include "partials/portal_sign_out_link.html" %}
       </div>

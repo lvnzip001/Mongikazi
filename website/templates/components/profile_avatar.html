@@ -1,4 +1,4 @@
-<div class="mk-avatar mk-avatar--{{ size }}{% if size == 'lg' %} mk-avatar-lg{% elif size == 'xl' %} mk-avatar-xl{% elif size == 'sm' %} mk-avatar--sm{% endif %}{% if photo_url %} mk-avatar--photo{% endif %}" title="{{ name }}">
+<div class="mk-avatar mk-avatar--{{ size }}{% if size == 'lg' %} mk-avatar-lg{% elif size == 'xl' %} mk-avatar-xl{% elif size == 'sm' %} mk-avatar--sm{% elif size == 'xs' %} mk-avatar--xs{% endif %}{% if photo_url %} mk-avatar--photo{% endif %}" title="{{ name }}">
   {% if photo_url %}
     <img src="{{ photo_url }}" alt="{{ name }}" class="mk-avatar__img" loading="lazy" decoding="async" />
   {% else %}

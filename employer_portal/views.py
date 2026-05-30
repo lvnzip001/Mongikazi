@@ -56,7 +56,7 @@ def bookings(request):
     guard = _portal_access_guard(request)
     if guard:
         return guard
-    return render(request, "employer_portal/bookings.html", _base_context(request, "bookings"))
+    return redirect("bookings:employer_bookings")
 
 
 @login_required

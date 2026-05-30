@@ -188,3 +188,15 @@ class MessagingFlowTests(TestCase):
         self.assertIn("messaging\\static\\messaging", css)
         self.assertIn("messaging\\static\\messaging", js)
 
+    def test_dashboard_shows_unread_message_count(self):
+        thread = MessageThread.objects.create(
+            booking=self.booking,
+            employer_user=self.employer_user,
+            helper_user=self.helper_user,
+        )
+        Message.objects.create(thread=thread, sender=self.employer_user, body="Please confirm timing")
+        self.client.force_login(self.helper_user)
+        response = self.client.get(reverse("worker_portal:dashboard"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "1")
+

@@ -1,8 +1,11 @@
 from django.forms import ValidationError
+from django.urls import reverse
 
 from employers.models import EmployerTrustSignal
 from employers.services.onboarding_handoff_service import create_or_update_employer_profile_from_onboarding
 
+from bookings.selectors.employer_opportunities_selectors import get_employer_opportunities_context
+from messaging.selectors.messaging_selectors import get_recent_unread_threads_for_user
 from employer_portal.selectors.portal_selectors import (
     get_available_service_categories,
     get_employer_portal_primary_location,
@@ -57,12 +60,8 @@ def build_employer_dashboard_context(user):
         for profile in teaser_profiles
     ]
 
-    placeholder_counts = {
-        "bookings": 0,
-        "favourites": 0,
-        "messages": 0,
-        "payments": 0,
-    }
+    opportunities = get_employer_opportunities_context(user, preview_limit=3)
+    placeholder_counts = opportunities["counts"]
 
     next_actions = []
     if not employer_profile:
@@ -86,6 +85,29 @@ def build_employer_dashboard_context(user):
             "preferred_time": service_preference.preferred_time,
         }
 
+    dashboard_alerts = []
+    if opportunities["counts"]["pending_response"]:
+        dashboard_alerts.append(
+            {
+                "message": f"{opportunities['counts']['pending_response']} booking(s) awaiting worker response.",
+                "url": reverse("bookings:employer_bookings"),
+            }
+        )
+    if opportunities["counts"]["applications_received"]:
+        dashboard_alerts.append(
+            {
+                "message": f"{opportunities['counts']['applications_received']} job(s) have new applications to review.",
+                "url": reverse("bookings:employer_marketplace_jobs"),
+            }
+        )
+    if opportunities["counts"]["messages"]:
+        dashboard_alerts.append(
+            {
+                "message": f"You have {opportunities['counts']['messages']} unread message(s).",
+                "url": reverse("messaging:inbox"),
+            }
+        )
+
     return {
         "profile": employer_profile,
         "profile_completion_percent": profile_completion_percent,
@@ -100,4 +122,10 @@ def build_employer_dashboard_context(user):
         "trust_signal_count": len(trust_signals),
         "ready_signal_count": len([s for s in trust_signals if s.status == EmployerTrustSignal.SignalStatus.READY]),
         "greeting_name": user.first_name or user.username,
+        "pending_response_preview": opportunities["pending_response"],
+        "confirmed_upcoming_preview": opportunities["confirmed_upcoming"],
+        "applications_received_preview": opportunities["applications_received"],
+        "unread": opportunities["unread"],
+        "recent_unread_threads": get_recent_unread_threads_for_user(user, limit=2),
+        "dashboard_alerts": dashboard_alerts,
     }

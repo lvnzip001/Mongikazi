@@ -1,4 +1,5 @@
 {% extends 'base/base_employer_portal.html' %}
+{% load booking_display %}
 
 {% block title %}Employer Dashboard | MongiKazi{% endblock %}
 
@@ -9,10 +10,10 @@
       <div>
         <p class="mk-eyebrow">Employer workspace</p>
         <h1 class="mk-page-title">Good day, {{ greeting_name }}</h1>
-        <p class="mk-body-copy mt-3 max-w-lg">Find trusted help and manage bookings in one place.</p>
+        <p class="mk-body-copy mt-3 max-w-lg">Manage bookings, applications, and messages in one place.</p>
         <div class="mt-5 flex flex-col gap-2 sm:flex-row">
-          <a href="{% url 'employer_portal:find_help' %}" class="mk-btn-primary">Find trusted help</a>
-          <a href="{{ profile_url|default:'/employers/profile/' }}" class="mk-btn-secondary">Review profile setup</a>
+          <a href="{% url 'bookings:employer_booking_create' %}" class="mk-btn-primary">Create booking</a>
+          <a href="{% url 'bookings:employer_bookings' %}" class="mk-btn-secondary">All bookings</a>
         </div>
       </div>
       <div class="mk-readiness-card">
@@ -24,54 +25,108 @@
           <span class="mk-chip">{{ trust_status_display }}</span>
         </div>
         <div class="mt-4 mk-progress-track"><span class="mk-progress-bar" style="width: {{ profile_completion_percent }}%"></span></div>
+        {% if primary_location %}
+          <p class="mt-3 text-xs font-semibold text-mk-muted">{{ primary_location.suburb|default:primary_location.city }} area on file</p>
+        {% endif %}
+        {% if service_need_summary %}
+          <p class="mt-1 text-xs font-semibold text-mk-muted">{{ service_need_summary.service_type }} · {{ service_need_summary.service_frequency }}</p>
+        {% endif %}
       </div>
     </div>
   </article>
 
-  <article class="mk-card lg:col-span-7">
-    <div class="flex items-start justify-between gap-3">
-      <header class="mk-card-heading">
-        <p class="mk-eyebrow">Readiness summary</p>
-        <h2 class="mk-card-heading__title">Your booking foundation</h2>
-      </header>
-      <span class="mk-chip-muted">Setup</span>
-    </div>
-    <div class="mt-4 grid gap-3 sm:grid-cols-2">
-      <div class="mk-stat"><span>Primary location</span><strong>{% if primary_location %}{{ primary_location.suburb|default:primary_location.city|default:'Captured' }}{% else %}Pending{% endif %}</strong></div>
-      <div class="mk-stat"><span>Service need</span><strong>{% if service_need_summary %}{{ service_need_summary.service_type }}{% else %}Pending{% endif %}</strong></div>
-      <div class="mk-stat"><span>Trust signals</span><strong>{{ ready_signal_count }}/{{ trust_signal_count }}</strong></div>
-      <div class="mk-stat"><span>Account status</span><strong>{{ trust_status_display }}</strong></div>
-    </div>
-    <div class="mt-4 grid gap-2 sm:grid-cols-3">
-      <a href="/employers/profile/" class="mk-btn-secondary w-full">Profile</a>
-      <a href="/employers/profile/locations/" class="mk-btn-secondary w-full">Location</a>
-      <a href="/employers/profile/preferences/" class="mk-btn-secondary w-full">Preferences</a>
-    </div>
-  </article>
+  {% if dashboard_alerts %}
+    <article class="mk-card lg:col-span-12">
+      <ul class="grid gap-2">
+        {% for alert in dashboard_alerts %}
+          <li class="rounded-2xl border border-teal-200 bg-teal-50/80 px-4 py-3 text-sm font-semibold text-slate-800 dark:border-teal-900/60 dark:bg-teal-950/30 dark:text-slate-100">
+            {{ alert.message }} <a href="{{ alert.url }}" class="mk-mini-link ml-2">View</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </article>
+  {% endif %}
 
-  <article class="mk-card lg:col-span-5">
-    <header class="mk-card-heading">
-      <p class="mk-eyebrow">Next best actions</p>
-      <h2 class="mk-card-heading__title">Keep the account ready</h2>
+  <article class="mk-card lg:col-span-6">
+    <header class="mk-card-heading flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="mk-eyebrow">Action required</p>
+        <h2 class="mk-card-heading__title">Awaiting worker response</h2>
+      </div>
+      <a href="{% url 'bookings:employer_bookings' %}" class="mk-mini-link">View all</a>
     </header>
     <ul class="mt-4 grid gap-2">
-      {% for item in next_actions %}
-        <li class="mk-list-item"><span>{{ item.title }}</span><a href="{{ item.url }}" class="mk-mini-link">Open</a></li>
+      {% for row in pending_response_preview %}
+        <li class="mk-list-item">
+          <span>{{ row.booking.booking_reference }} — {{ row.booking.service_category.name }}</span>
+          <a href="{{ row.detail_url }}" class="mk-mini-link">Open</a>
+        </li>
       {% empty %}
-        <li class="mk-empty-line">No outstanding setup actions.</li>
+        <li class="mk-empty-line">No pending worker responses.</li>
       {% endfor %}
     </ul>
   </article>
 
-  <article class="mk-card lg:col-span-12">
-    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <article class="mk-card lg:col-span-6">
+    <header class="mk-card-heading flex flex-wrap items-end justify-between gap-3">
       <div>
-        <p class="mk-eyebrow">Marketplace entry</p>
-        <h2 class="mk-card-heading__title">Start preparing your first helper request</h2>
-        <p class="mk-body-copy mt-2 max-w-3xl">Browse available categories and helper profile teasers while the full booking request workflow is being prepared.</p>
+        <p class="mk-eyebrow">Confirmed</p>
+        <h2 class="mk-card-heading__title">Upcoming jobs</h2>
       </div>
-      <a href="{% url 'employer_portal:find_help' %}" class="mk-btn-primary shrink-0">Explore helper options</a>
-    </div>
+      <a href="{% url 'bookings:employer_bookings' %}" class="mk-mini-link">View all</a>
+    </header>
+    <ul class="mt-4 grid gap-2">
+      {% for row in confirmed_upcoming_preview %}
+        <li class="mk-list-item">
+          <span>{{ row.booking.booking_reference }} — {{ row.booking.scheduled_date }}</span>
+          <a href="{{ row.detail_url }}" class="mk-mini-link">Open</a>
+        </li>
+      {% empty %}
+        <li class="mk-empty-line">No confirmed upcoming jobs yet.</li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="mk-card lg:col-span-6">
+    <header class="mk-card-heading flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="mk-eyebrow">Marketplace</p>
+        <h2 class="mk-card-heading__title">Applications received</h2>
+      </div>
+      <a href="{% url 'bookings:employer_marketplace_jobs' %}" class="mk-mini-link">View jobs</a>
+    </header>
+    <ul class="mt-4 grid gap-2">
+      {% for row in applications_received_preview %}
+        <li class="mk-list-item">
+          <span>{{ row.booking.booking_reference }}</span>
+          <a href="{{ row.applications_url }}" class="mk-mini-link">Review</a>
+        </li>
+      {% empty %}
+        <li class="mk-empty-line">No new applications to review.</li>
+      {% endfor %}
+    </ul>
+  </article>
+
+  <article class="mk-card lg:col-span-6">
+    <header class="mk-card-heading flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="mk-eyebrow">Messages</p>
+        <h2 class="mk-card-heading__title">Unread</h2>
+      </div>
+      <a href="{% url 'employer_portal:messages' %}" class="mk-mini-link">Inbox{% if unread.total_unread %} ({{ unread.total_unread }}){% endif %}</a>
+    </header>
+    {% if recent_unread_threads %}
+      <ul class="mt-4 grid gap-2">
+        {% for thread in recent_unread_threads %}
+          <li class="mk-list-item">
+            <span>{{ thread.booking.booking_reference|default:"Chat" }} — {{ thread.unread_count }} unread</span>
+            <a href="{% url 'messaging:thread_detail' thread_id=thread.id %}" class="mk-mini-link">Open</a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="mk-empty-line mt-4">No unread messages.</p>
+    {% endif %}
   </article>
 
   <article class="mk-card lg:col-span-12">
@@ -80,10 +135,10 @@
       <h2 class="mk-card-heading__title">Quick links</h2>
     </header>
     <div class="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      <a href="{% url 'employer_portal:bookings' %}" class="mk-stat-link"><span>Upcoming bookings</span><strong>{{ placeholder_counts.bookings }}</strong><small>Booking requests will appear here.</small></a>
-      <a href="{% url 'employer_portal:favourites' %}" class="mk-stat-link"><span>Favourite helpers</span><strong>{{ placeholder_counts.favourites }}</strong><small>Saved helpers will appear here.</small></a>
-      <a href="{% url 'employer_portal:payments' %}" class="mk-stat-link"><span>Payments</span><strong>{{ placeholder_counts.payments }}</strong><small>Invoices and POP uploads.</small></a>
-      <a href="{% url 'employer_portal:messages' %}" class="mk-stat-link"><span>Messages</span><strong>{{ placeholder_counts.messages }}</strong><small>Chats open after requests.</small></a>
+      <a href="{% url 'bookings:employer_bookings' %}" class="mk-stat-link"><span>Active bookings</span><strong>{{ placeholder_counts.bookings }}</strong><small>Pending + confirmed</small></a>
+      <a href="{% url 'bookings:employer_marketplace_jobs' %}" class="mk-stat-link"><span>Applications</span><strong>{{ placeholder_counts.applications_received }}</strong><small>Jobs with applicants</small></a>
+      <a href="{% url 'employer_portal:messages' %}" class="mk-stat-link"><span>Messages</span><strong>{{ placeholder_counts.messages }}</strong><small>Unread count</small></a>
+      <a href="{% url 'employer_portal:find_help' %}" class="mk-stat-link"><span>Find help</span><strong>{{ helper_teasers|length }}</strong><small>Helper previews</small></a>
     </div>
   </article>
 </section>
