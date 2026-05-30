@@ -113,6 +113,9 @@ class PaymentsFlowTests(TestCase):
         response = self.client.get(reverse("payments:employer_invoices"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, invoice.invoice_number)
+        self.assertContains(response, 'aria-label="Employer portal navigation"')
+        self.assertContains(response, "data-portal-more-open")
+        self.assertContains(response, reverse("employer_portal:payments"))
 
     def test_other_employer_cannot_view_invoice_detail(self):
         invoice = self._complete_booking()
@@ -147,6 +150,11 @@ class PaymentsFlowTests(TestCase):
         response = self.client.get(reverse("payments:worker_earnings"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, invoice.invoice_number)
+        self.assertContains(response, "My Work")
+        self.assertContains(response, reverse("worker_portal:earnings"))
+        self.assertContains(response, "data-worker-more-open")
+        self.assertContains(response, 'aria-label="Worker portal navigation"')
+        self.assertContains(response, 'aria-label="Mobile navigation"')
 
     def test_employer_redirects_from_worker_earnings(self):
         self.client.force_login(self.employer_user)
@@ -217,6 +225,15 @@ class PaymentsFlowTests(TestCase):
         response = self.client.get(reverse("payments:operations_payments_review"))
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.url, reverse("onboarding:start"))
+
+    def test_operations_review_includes_ops_navigation(self):
+        self.client.force_login(self.operations_user)
+        response = self.client.get(reverse("payments:operations_payments_review"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'aria-label="Payments operations"')
+        self.assertContains(response, "Payment review")
+        self.assertContains(response, reverse("payments:operations_payout_history"))
+        self.assertContains(response, "mk-subnav")
 
     def test_operations_can_mark_paid_out_after_invoice_paid(self):
         invoice = self._complete_booking()

@@ -255,6 +255,76 @@ html[data-theme="dark"] .mk-btn-secondary {
   font-weight: 700;
 }
 
+/* Operations payments — sidebar + mobile subnav (bookings-style) */
+.mk-payments-sidebar-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mk-muted);
+}
+
+.mk-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-bottom: 0.9rem;
+}
+
+.mk-subnav-link,
+.mk-side-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--mk-border);
+  background: var(--mk-surface);
+  color: var(--mk-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.mk-subnav-link {
+  padding: 0.55rem 0.82rem;
+  border-radius: 0.9rem;
+}
+
+.mk-side-link {
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0.72rem 0.82rem;
+  border-radius: 0.95rem;
+}
+
+.mk-subnav-link.is-active,
+.mk-side-link.is-active {
+  background: var(--mk-primary);
+  border-color: var(--mk-primary);
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(15, 118, 110, 0.18);
+}
+
+html[data-theme="dark"] .mk-subnav-link,
+html[data-theme="dark"] .mk-side-link {
+  border-color: #334155;
+  background: #0f172a;
+  color: #94a3b8;
+}
+
+.mk-subnav-link:hover,
+.mk-side-link:hover {
+  background: var(--mk-secondary);
+  transform: translateY(-1px);
+}
+
+.mk-subnav-link.is-active:hover,
+.mk-side-link.is-active:hover {
+  background: var(--mk-primary-dark);
+  border-color: var(--mk-primary-dark);
+  color: #fff;
+}
+
 
 
 

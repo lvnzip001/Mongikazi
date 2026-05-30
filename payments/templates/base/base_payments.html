@@ -7,34 +7,81 @@
   <title>{% block title %}MongiKazi Payments{% endblock %}</title>
   {% include "partials/mk_head.html" %}
   <link rel="stylesheet" href="{% static 'website/css/mk-portal.css' %}">
-  <link rel="stylesheet" href="{% static 'website/css/public_app.css' %}">
+  <link rel="stylesheet" href="{% static 'website/css/mk-polish.css' %}">
   <link rel="stylesheet" href="{% static 'payments/css/payments.css' %}">
+  {% block extra_css %}{% endblock %}
 </head>
 <body class="mk-body min-h-screen bg-mk-bg text-mk-text font-sans antialiased">
+
+{% if portal_kind == "worker" %}
+  <a href="#payments-content" class="mk-skip-link">Skip to content</a>
+  <div class="mk-shell">
+    {% include "partials/portal_worker_sidebar.html" %}
+    <div class="mk-main">
+      <header class="mk-topbar mk-mobile-header">
+        <div class="min-w-0">
+          <p class="truncate text-base font-bold text-mk-text">Earnings</p>
+          <p class="hidden text-xs font-semibold text-mk-muted sm:block">Invoices and payout status</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="{{ work_profile_url }}" class="mk-top-link hidden sm:inline-flex">Work profile</a>
+          <a href="{% url 'accounts:logout_confirm' %}" class="mk-top-link mk-top-link--signout hidden sm:inline-flex">Sign out</a>
+          <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
+        </div>
+      </header>
+      {% if messages %}
+        <div class="mb-4 grid gap-2" aria-live="polite">
+          {% for message in messages %}
+            <div class="mk-alert">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <main id="payments-content" class="pb-24 lg:pb-0">
+        <section class="mk-portal-panel">
+
+{% elif portal_kind == "employer" %}
+  <a href="#payments-content" class="mk-skip-link">Skip to content</a>
+  <div class="mk-shell">
+    {% include "partials/portal_employer_sidebar.html" %}
+    <div class="mk-main">
+      <header class="mk-topbar mk-mobile-header">
+        <div class="min-w-0">
+          <p class="truncate text-base font-bold text-mk-text">Payments</p>
+          <p class="hidden text-xs font-semibold text-mk-muted sm:block">Invoices and proof of payment</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="{{ employer_profile_url }}" class="mk-top-link hidden sm:inline-flex">Profile setup</a>
+          <a href="{% url 'accounts:logout_confirm' %}" class="mk-top-link mk-top-link--signout hidden sm:inline-flex">Sign out</a>
+          <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
+        </div>
+      </header>
+      {% if messages %}
+        <div class="mb-4 grid gap-2" aria-live="polite">
+          {% for message in messages %}
+            <div class="mk-alert">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <main id="payments-content" class="pb-24 lg:pb-0">
+        <section class="mk-portal-panel">
+
+{% else %}
+  <a href="#payments-content" class="mk-skip-link">Skip to content</a>
   <main class="mk-page-wrap">
     <header class="mk-topbar mk-mobile-header">
-      <a href="{% if portal_kind == 'worker' %}{% url 'payments:worker_earnings' %}{% elif portal_kind == 'operations' %}{% url 'payments:operations_payments_review' %}{% else %}{% url 'payments:employer_invoices' %}{% endif %}" class="flex min-w-0 items-center gap-3">
+      <a href="{% url 'payments:operations_payments_review' %}" class="flex min-w-0 items-center gap-3">
         <img src="{% static 'website/img/logo.png' %}" alt="MongiKazi logo" class="h-10 w-10 rounded-2xl object-cover">
         <span class="min-w-0">
-          <strong class="block truncate text-sm font-extrabold text-mk-text">Payments</strong>
-          <span class="block truncate text-xs font-semibold text-mk-muted">Invoices and payouts</span>
+          <strong class="block truncate text-sm font-extrabold text-mk-text">Payments ops</strong>
+          <span class="block truncate text-xs font-semibold text-mk-muted">Review and payouts</span>
         </span>
       </a>
       <div class="flex flex-wrap items-center justify-end gap-2">
-        {% if portal_kind == 'worker' %}
-          <a href="{% url 'worker_portal:dashboard' %}" class="mk-top-link">My Work</a>
-          <a href="{{ work_profile_url }}" class="mk-top-link hidden sm:inline-flex">Profile</a>
-        {% elif portal_kind == 'operations' %}
-          <a href="{% url 'admin:index' %}" class="mk-top-link hidden sm:inline-flex">Admin</a>
-        {% else %}
-          <a href="{% url 'employer_portal:dashboard' %}" class="mk-top-link">Workspace</a>
-          <a href="{{ employer_profile_url }}" class="mk-top-link hidden sm:inline-flex">Profile</a>
-        {% endif %}
+        <a href="{% url 'admin:index' %}" class="mk-top-link hidden sm:inline-flex">Admin</a>
         <a href="{% url 'accounts:logout_confirm' %}" class="mk-top-link mk-top-link--signout">Sign out</a>
         <button type="button" data-theme-toggle class="mk-icon-button" aria-label="Toggle dark mode" aria-pressed="false">&#9680;</button>
       </div>
     </header>
-
     {% if messages %}
       <div class="mb-4 grid gap-2" aria-live="polite">
         {% for message in messages %}
@@ -42,14 +89,47 @@
         {% endfor %}
       </div>
     {% endif %}
+    <div class="grid gap-5 lg:grid-cols-[240px_minmax(0,1fr)]">
+      {% include "partials/portal_payments_ops_sidebar.html" %}
+      <div class="min-w-0">
+        {% include "partials/portal_payments_ops_subnav.html" %}
+        <section id="payments-content" class="mk-card mk-surface-card">
+          <div class="mk-content-panel">
 
-    <section class="mk-card mk-surface-card">
-      <div class="mk-content-panel">
-      {% block content %}{% endblock %}
+{% endif %}
+
+{% block content %}{% endblock %}
+
+{% if portal_kind == "worker" %}
+        </section>
+      </main>
+    </div>
+  </div>
+  {% include "partials/portal_worker_mobile_nav.html" %}
+
+{% elif portal_kind == "employer" %}
+        </section>
+      </main>
+    </div>
+  </div>
+  {% include "partials/portal_employer_mobile_nav.html" %}
+
+{% else %}
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   </main>
-  <script src="{% static 'website/js/mk-theme.js' %}"></script>
-  <script src="{% static 'payments/js/payments.js' %}"></script>
+{% endif %}
+
+<script src="{% static 'website/js/mk-theme.js' %}"></script>
+{% if portal_kind == "worker" %}
+  <script src="{% static 'worker_portal/js/worker_portal.js' %}"></script>
+{% elif portal_kind == "employer" %}
+  <script src="{% static 'employer_portal/js/employer_portal.js' %}"></script>
+{% endif %}
+<script src="{% static 'payments/js/payments.js' %}"></script>
+{% block extra_js %}{% endblock %}
+
 </body>
 </html>
