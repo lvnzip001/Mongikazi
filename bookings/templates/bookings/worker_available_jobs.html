@@ -16,8 +16,15 @@
     {% for booking in jobs %}
       <article class="mk-row-card">
         <div>
-          <p class="text-sm font-bold text-slate-950 dark:text-white">{{ booking.booking_reference }} - {{ booking.service_category.name }}</p>
-          <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">{{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }} • {{ booking.employer_location }}</p>
+          <p class="text-sm font-bold text-slate-950 dark:text-white">{{ booking.booking_reference }} — {{ booking.service_category.name }}</p>
+          <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">
+            {% if booking.employer_location %}
+              {{ booking.employer_location.service_area_display }}
+            {% else %}
+              Location to be confirmed
+            {% endif %}
+          </p>
+          <p class="mt-0.5 text-xs text-mk-muted dark:text-slate-400">{{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }} · {{ booking.duration_hours }}h</p>
         </div>
         <a href="{% url 'bookings:worker_apply_to_job' booking_reference=booking.booking_reference %}" class="mk-btn-primary">Apply</a>
       </article>

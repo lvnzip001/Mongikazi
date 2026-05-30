@@ -23,7 +23,13 @@
         <div class="min-w-0">
           <p class="text-xs font-bold uppercase tracking-[0.14em] text-mk-muted">Employer</p>
           <p class="mt-1 truncate text-sm font-bold text-slate-950 dark:text-white">{{ booking.employer.display_name|default:booking.employer.user.get_full_name|default:booking.employer.user.username }}</p>
-          <p class="mt-0.5 text-xs text-mk-muted">{{ booking.employer.primary_area|default:"Area on file" }}</p>
+          <p class="mt-0.5 text-xs text-mk-muted">
+            {% if booking.employer_location %}
+              {{ booking.employer_location.service_area_display }}
+            {% else %}
+              {{ booking.employer.primary_area|default:"Area on file" }}
+            {% endif %}
+          </p>
         </div>
       </div>
       <h2 class="mk-section-title">Request details</h2>
@@ -32,7 +38,7 @@
         <div><dt>Date</dt><dd>{{ booking.scheduled_date }}</dd></div>
         <div><dt>Time</dt><dd>{{ booking.start_time }}</dd></div>
         <div><dt>Duration</dt><dd>{{ booking.duration_hours }} hour{{ booking.duration_hours|pluralize }}</dd></div>
-        <div><dt>Location</dt><dd>{{ booking.employer_location.label|default:'Saved location' }}</dd></div>
+        <div><dt>Location</dt><dd>{% if booking.employer_location %}{{ booking.employer_location.service_area_display }}{% else %}Location to be confirmed{% endif %}</dd></div>
       </dl>
       {% if booking.special_instructions %}
         <div class="mk-soft-panel mt-4">

@@ -14,21 +14,39 @@
   </div>
 
   <div class="mt-6 grid gap-3">
-    {% for app in applications %}
+    {% for row in application_rows %}
+      {% with app=row.application card=row.employer_card %}
       <article class="mk-form-block">
         <div class="flex flex-wrap items-start justify-between gap-3">
-          <div class="flex items-start gap-3 min-w-0">
+          <div class="flex min-w-0 flex-1 items-start gap-3">
             {% profile_avatar app.worker size="md" %}
-            <div class="min-w-0">
-            <p class="text-sm font-bold text-slate-950 dark:text-white">{{ app.worker.display_name }}</p>
-            <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">{{ app.worker.location|default:'Location pending' }}</p>
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-bold text-slate-950 dark:text-white">{{ card.display_name }}</p>
+              <p class="mt-1 text-xs font-semibold text-mk-muted dark:text-slate-400">{{ card.location|default:'Location pending' }}</p>
+              {% if card.years_experience %}
+                <p class="mt-1 text-xs text-mk-muted dark:text-slate-400">{{ card.years_experience }} year{{ card.years_experience|pluralize }} experience</p>
+              {% endif %}
+              {% if card.service_categories %}
+                <div class="mt-2 flex flex-wrap gap-1">
+                  {% for category in card.service_categories %}
+                    <span class="mk-badge-neutral">{{ category }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              {% include "bookings/partials/employer_worker_trust_badges.html" with badges=card.badges %}
             </div>
           </div>
-            <p class="mt-2 text-xs text-slate-600 dark:text-slate-300">{{ app.message|default:'No message provided.' }}</p>
-            {% if app.proposed_fee %}<p class="mt-1 text-xs font-bold text-mk-primary dark:text-teal-300">Proposed fee: R{{ app.proposed_fee }}</p>{% endif %}
-          </div>
-          <span class="mk-status">{{ app.status }}</span>
+          <span class="mk-status shrink-0">{{ app.get_status_display }}</span>
         </div>
+
+        {% if card.bio_snippet %}
+          <p class="mt-3 text-xs text-slate-600 dark:text-slate-300">{{ card.bio_snippet }}</p>
+        {% endif %}
+        <p class="mt-2 text-sm text-slate-700 dark:text-slate-200">{{ app.message|default:'No application message provided.' }}</p>
+        {% if app.proposed_fee %}
+          <p class="mt-1 text-xs font-bold text-mk-primary dark:text-teal-300">Proposed fee: R{{ app.proposed_fee }}</p>
+        {% endif %}
+
         {% if app.status == 'PENDING' or app.status == 'SHORTLISTED' %}
           <div class="mt-4 flex flex-wrap gap-2">
             <form method="post" action="{% url 'bookings:employer_select_application' application_id=app.id %}">{% csrf_token %}<button class="mk-btn-primary" type="submit">Select applicant</button></form>
@@ -36,10 +54,10 @@
           </div>
         {% endif %}
       </article>
+      {% endwith %}
     {% empty %}
       <div class="mk-empty-state"><p class="text-sm font-bold text-slate-900 dark:text-white">No applications yet.</p></div>
     {% endfor %}
   </div>
 </div>
 {% endblock %}
-

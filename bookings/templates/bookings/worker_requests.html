@@ -29,7 +29,14 @@
               <p class="text-xs font-bold uppercase tracking-[0.12em] text-mk-primary">{{ booking.booking_reference }}</p>
               <span class="mk-status mk-status-pending">{{ booking.get_status_display }}</span>
             </div>
-            <h2 class="mt-2 text-base font-bold text-mk-text">{{ booking.service_category.name }} - {{ booking.scheduled_date }}</h2>
+            <h2 class="mt-2 text-base font-bold text-mk-text">{{ booking.service_category.name }} — {{ booking.scheduled_date }}</h2>
+            <p class="mt-1 text-sm font-medium text-mk-muted">
+              {% if booking.employer_location %}
+                {{ booking.employer_location.service_area_display }}
+              {% else %}
+                Location to be confirmed
+              {% endif %}
+            </p>
             <p class="mt-1 text-sm font-medium text-mk-muted">Employer: {{ booking.employer.display_name|default:booking.employer.user.get_full_name|default:booking.employer.user.email }}</p>
             <p class="mt-1 mk-row-highlight">Estimated pay: R{{ booking.worker_fee_estimate }}</p>
           </div>

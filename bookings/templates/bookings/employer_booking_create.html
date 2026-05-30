@@ -35,11 +35,13 @@
     </section>
 
     <section class="grid gap-5 lg:grid-cols-2">
-      <div class="mk-form-block">
+      <div class="mk-form-block" data-booking-worker-step>
         <p class="mk-step">2. Choose worker (direct only)</p>
         <label class="mk-label" for="{{ form.worker.id_for_label }}">Worker</label>
         {{ form.worker }}
-        <p class="mt-2 text-xs font-medium leading-5 text-mk-muted dark:text-slate-400">Required for direct requests. Optional for open marketplace jobs.</p>
+        <p class="mt-2 text-xs font-medium leading-5 text-mk-muted dark:text-slate-400" data-worker-hint>
+          Required for direct requests. Disabled when posting an open marketplace job.
+        </p>
         {% if form.worker.errors %}<p class="mk-field-error">{{ form.worker.errors|join:', ' }}</p>{% endif %}
       </div>
 

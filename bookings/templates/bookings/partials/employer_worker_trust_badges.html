@@ -1,0 +1,13 @@
+{% if badges %}
+  <div class="mt-2 flex flex-wrap gap-2">
+    {% for badge in badges %}
+      {% if badge.variant == 'success' %}
+        <span class="mk-badge-success">{{ badge.label }}</span>
+      {% elif badge.variant == 'warning' %}
+        <span class="mk-badge-warning">{{ badge.label }}</span>
+      {% else %}
+        <span class="mk-badge-neutral">{{ badge.label }}</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
