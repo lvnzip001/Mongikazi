@@ -6,6 +6,7 @@ app_name = "worker_portal"
 
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
+    path("offers/", views.offers, name="offers"),
     path("requests/", views.requests, name="requests"),
     path("jobs/", views.jobs, name="jobs"),
     path("earnings/", views.earnings, name="earnings"),

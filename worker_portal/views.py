@@ -7,8 +7,10 @@ from django.views.decorators.http import require_http_methods
 
 from helpers.forms import WorkerVerificationUploadForm
 from helpers.models import WorkerVerificationDocument
+from helpers.selectors.helper_selectors import get_helper_profile_for_user
 from helpers.selectors.verification_selectors import get_current_verification_documents, get_worker_verification_page_context
 from helpers.services.verification_service import upload_worker_verification_document
+from bookings.selectors.worker_opportunities_selectors import get_worker_opportunities_context
 from worker_portal.services.dashboard_service import build_worker_dashboard_context
 
 
@@ -35,8 +37,26 @@ def dashboard(request):
     guard = _portal_access_guard(request)
     if guard:
         return guard
-    context = {**_base_context("dashboard"), **build_worker_dashboard_context(request.user)}
+    context = {
+        **_base_context("dashboard"),
+        "portal_kind": "worker",
+        **build_worker_dashboard_context(request.user),
+    }
     return render(request, "worker_portal/dashboard.html", context)
+
+
+@login_required
+@require_http_methods(["GET"])
+def offers(request):
+    guard = _portal_access_guard(request)
+    if guard:
+        return guard
+    context = {
+        **_base_context("offers"),
+        "portal_kind": "worker",
+        **get_worker_opportunities_context(request.user, preview_limit=50),
+    }
+    return render(request, "worker_portal/offers.html", context)
 
 
 @login_required
@@ -45,7 +65,7 @@ def requests(request):
     guard = _portal_access_guard(request)
     if guard:
         return guard
-    return render(request, "worker_portal/requests.html", _base_context("requests"))
+    return redirect("worker_portal:offers")
 
 
 @login_required
@@ -54,7 +74,12 @@ def jobs(request):
     guard = _portal_access_guard(request)
     if guard:
         return guard
-    return render(request, "worker_portal/jobs.html", _base_context("jobs"))
+    context = {
+        **_base_context("jobs"),
+        "portal_kind": "worker",
+        **get_worker_opportunities_context(request.user, preview_limit=5),
+    }
+    return render(request, "worker_portal/jobs.html", context)
 
 
 @login_required

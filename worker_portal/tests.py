@@ -39,6 +39,7 @@ class WorkerPortalAccessTests(TestCase):
 
         self.routes = [
             reverse("worker_portal:dashboard"),
+            reverse("worker_portal:offers"),
             reverse("worker_portal:requests"),
             reverse("worker_portal:jobs"),
             reverse("worker_portal:earnings"),
@@ -79,6 +80,8 @@ class WorkerPortalAccessTests(TestCase):
             elif route == reverse("worker_portal:earnings"):
                 self.assertEqual(response.status_code, 302)
                 self.assertEqual(response.url, reverse("payments:worker_earnings"))
+            elif route == reverse("worker_portal:requests"):
+                self.assertRedirects(response, reverse("worker_portal:offers"), fetch_redirect_response=False)
             else:
                 self.assertEqual(response.status_code, 200)
 
@@ -117,7 +120,8 @@ class WorkerPortalDomainIntegrationTests(TestCase):
         response = self.client.get(reverse("worker_portal:dashboard"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Nomsa")
-        self.assertContains(response, "Cleaning")
+        self.assertContains(response, "81%")
+        self.assertContains(response, "Work profile readiness")
 
     def test_dashboard_handles_missing_helper_profile_safely(self):
         self.client.force_login(self.user)
@@ -127,8 +131,11 @@ class WorkerPortalDomainIntegrationTests(TestCase):
 
     def test_placeholder_pages_load(self):
         self.client.force_login(self.user)
+        requests_response = self.client.get(reverse("worker_portal:requests"))
+        self.assertRedirects(requests_response, reverse("worker_portal:offers"), fetch_redirect_response=False)
+        offers_response = self.client.get(reverse("worker_portal:offers"))
+        self.assertEqual(offers_response.status_code, 200)
         for route_name in [
-            "worker_portal:requests",
             "worker_portal:jobs",
             "worker_portal:verification",
             "worker_portal:reviews",
@@ -157,6 +164,7 @@ class WorkerPortalDomainIntegrationTests(TestCase):
 class WorkerPortalRoutingAndRedirectTests(TestCase):
     def test_routes_resolve_correctly(self):
         self.assertEqual(resolve("/worker/").view_name, "worker_portal:dashboard")
+        self.assertEqual(resolve("/worker/offers/").view_name, "worker_portal:offers")
         self.assertEqual(resolve("/worker/requests/").view_name, "worker_portal:requests")
         self.assertEqual(resolve("/worker/jobs/").view_name, "worker_portal:jobs")
         self.assertEqual(resolve("/worker/earnings/").view_name, "worker_portal:earnings")

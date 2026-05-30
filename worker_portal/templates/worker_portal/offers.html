@@ -1,0 +1,31 @@
+{% extends 'base/base_worker_portal.html' %}
+{% load booking_display %}
+
+{% block title %}Offers | MongiKazi{% endblock %}
+{% block page_title %}New offers{% endblock %}
+{% block page_lead %}Respond to booking requests that need your confirmation.{% endblock %}
+
+{% block content %}
+<section class="mk-page-grid">
+  <article class="mk-card lg:col-span-12">
+    <p class="mk-eyebrow">Opportunities</p>
+    <h1 class="mk-page-title mt-2">Offers awaiting your response</h1>
+    <p class="mk-body-copy mt-2">Accept quickly so employers can confirm the job. You can message them or view full details before deciding.</p>
+
+    <div class="mk-offers-list mt-6">
+      {% for offer in new_offers_all %}
+        {% include "bookings/partials/worker_offer_card.html" with offer=offer %}
+      {% empty %}
+        <div class="mk-empty-state rounded-2xl border border-dashed border-mk-border py-10">
+          <p class="text-sm font-bold text-mk-text">No new offers yet.</p>
+          <p class="mk-muted mt-2 max-w-md">Keep your profile complete and check available jobs near you.</p>
+          <div class="mt-5 flex flex-wrap justify-center gap-2">
+            <a href="{% url 'bookings:worker_available_jobs' %}" class="mk-btn-primary">Browse available jobs</a>
+            <a href="{{ work_profile_url }}" class="mk-btn-secondary">Complete profile</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </article>
+</section>
+{% endblock %}

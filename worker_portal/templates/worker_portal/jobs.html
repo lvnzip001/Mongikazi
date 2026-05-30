@@ -1,13 +1,39 @@
 {% extends 'base/base_worker_portal.html' %}
+{% load booking_display %}
 
-{% block title %}Jobs | MongiKazi{% endblock %}
-{% block page_title %}Jobs{% endblock %}
-{% block page_lead %}Assigned work and your applications.{% endblock %}
+{% block title %}Upcoming Jobs | MongiKazi{% endblock %}
+{% block page_title %}Upcoming jobs{% endblock %}
+{% block page_lead %}Jobs you have accepted and are scheduled to complete.{% endblock %}
 
 {% block content %}
 <section class="mk-page-grid">
-  {% url 'bookings:worker_jobs' as jobs_url %}
-  {% url 'bookings:worker_my_applications' as apps_url %}
-  {% include "worker_portal/partials/empty_state.html" with icon="JB" eyebrow="Jobs" title="Your jobs live here" description="Upcoming, completed, and cancelled jobs are tracked in bookings." primary_url=jobs_url primary_label="Open jobs" secondary_url=apps_url secondary_label="My applications" %}
+  <article class="mk-card lg:col-span-12">
+    <p class="mk-eyebrow">Confirmed work</p>
+    <h1 class="mk-page-title mt-2">Upcoming jobs</h1>
+
+    <div class="mt-6 grid gap-3">
+      {% for row in upcoming_jobs_all %}
+        {% with booking=row.booking %}
+        <article class="mk-row-card">
+          <div>
+            <p class="text-sm font-bold text-slate-950 dark:text-white">{{ booking.booking_reference }} — {{ booking.service_category.name }}</p>
+            <p class="mt-1 text-xs text-mk-muted">{{ booking.scheduled_date }} at {{ booking.start_time|time:'H:i' }} · {{ row.service_area }}</p>
+            <div class="mt-2">{% booking_status_badge booking %}</div>
+          </div>
+          <a href="{% url 'bookings:worker_request_detail' booking_reference=booking.booking_reference %}" class="mk-btn-primary">View job</a>
+        </article>
+        {% endwith %}
+      {% empty %}
+        <div class="mk-empty-state">
+          <p class="text-sm font-bold">No upcoming jobs yet.</p>
+          <a href="{% url 'worker_portal:offers' %}" class="mk-btn-primary mt-3 inline-flex">Check offers</a>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="mt-8">
+      <a href="{% url 'bookings:worker_jobs' %}" class="mk-btn-secondary">Full jobs history</a>
+    </div>
+  </article>
 </section>
 {% endblock %}
