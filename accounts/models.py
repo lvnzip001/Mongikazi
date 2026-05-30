@@ -58,3 +58,25 @@ class User(AbstractUser):
     @property
     def is_operations_user(self):
         return self.role in {self.Role.OPERATIONS, self.Role.ADMIN} or self.is_staff or self.is_superuser
+
+
+class UserPolicyAcceptance(models.Model):
+    """Audit trail for policy consent captured during account flows."""
+
+    class Source(models.TextChoices):
+        REGISTRATION = "REGISTRATION", _("Registration")
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="policy_acceptances")
+    source = models.CharField(max_length=24, choices=Source.choices, default=Source.REGISTRATION)
+    terms_version = models.CharField(max_length=32)
+    privacy_version = models.CharField(max_length=32)
+    safety_version = models.CharField(max_length=32)
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    user_agent = models.CharField(max_length=512, blank=True)
+    accepted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["user", "accepted_at"]),
+            models.Index(fields=["accepted_at"]),
+        ]

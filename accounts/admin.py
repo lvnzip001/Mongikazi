@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
-from .models import User
+from .models import User, UserPolicyAcceptance
 
 
 @admin.register(User)
@@ -46,4 +46,29 @@ class MongiKaziUserAdmin(UserAdmin):
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
         ("MongiKazi Profile", {"fields": ("role", "email", "phone_number", "accepted_terms")}),
+    )
+
+
+@admin.register(UserPolicyAcceptance)
+class UserPolicyAcceptanceAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "source",
+        "terms_version",
+        "privacy_version",
+        "safety_version",
+        "ip_address",
+        "accepted_at",
+    )
+    list_filter = ("source", "terms_version", "privacy_version", "safety_version", "accepted_at")
+    search_fields = ("user__email", "user__phone_number", "user__username", "ip_address", "user_agent")
+    readonly_fields = (
+        "user",
+        "source",
+        "terms_version",
+        "privacy_version",
+        "safety_version",
+        "ip_address",
+        "user_agent",
+        "accepted_at",
     )

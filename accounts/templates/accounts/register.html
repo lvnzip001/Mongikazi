@@ -51,7 +51,13 @@
   </div>
   <label class="flex items-start gap-3 rounded-2xl bg-mk-bg p-4 mk-body-copy">
     {{ form.accepted_terms }}
-    <span>I accept the MongiKazi platform terms, privacy rules, and marketplace safety standards.</span>
+    <span>
+      I accept the MongiKazi
+      <a href="{% url 'website:terms' %}" class="mk-link" target="_blank" rel="noopener">platform terms</a>,
+      <a href="{% url 'website:privacy' %}" class="mk-link" target="_blank" rel="noopener">privacy rules</a>,
+      and
+      <a href="{% url 'website:safety_standards' %}" class="mk-link" target="_blank" rel="noopener">marketplace safety standards</a>.
+    </span>
   </label>
   {% if form.accepted_terms.errors %}<p class="text-xs text-mk-danger">{{ form.accepted_terms.errors|striptags }}</p>{% endif %}
   <button type="submit" class="mk-btn-primary w-full">Create account</button>

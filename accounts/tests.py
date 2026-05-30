@@ -4,7 +4,7 @@ from django.urls import reverse
 from website.tests.media_fixtures import tiny_png
 
 from .forms import RegisterForm
-from .models import User
+from .models import User, UserPolicyAcceptance
 from .services.redirect_service import get_onboarding_url, get_role_redirect_url
 
 
@@ -47,6 +47,10 @@ class AccountsAuthFlowTests(TestCase):
         user = User.objects.get(email="emp@example.com")
         self.assertEqual(user.role, User.Role.EMPLOYER)
         self.assertIsNotNone(user.accepted_terms_at)
+        acceptance = UserPolicyAcceptance.objects.get(user=user)
+        self.assertEqual(acceptance.terms_version, "2026-05-30")
+        self.assertEqual(acceptance.privacy_version, "2026-05-30")
+        self.assertEqual(acceptance.safety_version, "2026-05-30")
         self.assertRedirects(response, reverse("onboarding:start"), fetch_redirect_response=False)
 
     def test_registration_without_email_uses_phone_as_username(self):
@@ -329,7 +333,6 @@ class RedirectServiceTests(TestCase):
         user = User(username="employer@example.com", role=User.Role.EMPLOYER, is_onboarding_complete=False)
         self.assertEqual(get_role_redirect_url(user), reverse("onboarding:start"))
         self.assertEqual(get_onboarding_url(user), reverse("onboarding:start"))
-
 
 
 
