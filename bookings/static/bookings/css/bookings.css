@@ -451,3 +451,13 @@ html[data-theme="dark"] .mk-progress-track { background: #1e293b; }
     transition-duration: 0.01ms !important;
   }
 }
+
+.mk-form-block.is-disabled {
+  opacity: 0.58;
+  pointer-events: none;
+  filter: grayscale(0.15);
+}
+
+.mk-form-block.is-disabled .mk-step {
+  color: var(--mk-muted);
+}

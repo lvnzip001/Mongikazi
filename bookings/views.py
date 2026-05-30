@@ -27,6 +27,7 @@ from bookings.selectors.booking_selectors import (
     get_worker_booking_requests,
     get_worker_jobs,
 )
+from employers.selectors.employer_selectors import build_worker_safe_employer_card
 from bookings.services.booking_application_service import (
     apply_to_booking,
     decline_application,
@@ -159,16 +160,22 @@ def employer_booking_detail(request, booking_reference):
     if guard:
         return guard
 
+    from helpers.selectors.verification_selectors import build_employer_safe_worker_card
+
     booking = _get_employer_booking_or_404(request.user, booking_reference)
     events = get_booking_events(booking)
     can_cancel = booking.status in [Booking.Status.PENDING_WORKER_RESPONSE, Booking.Status.ACCEPTED]
     can_complete = booking.status == Booking.Status.ACCEPTED
+    worker_card = None
+    if booking.worker_id:
+        worker_card = build_employer_safe_worker_card(booking.worker)
 
     return render(
         request,
         "bookings/employer_booking_detail.html",
         {
             "booking": booking,
+            "worker_card": worker_card,
             "events": events,
             "cancel_form": EmployerCancelBookingForm(),
             "can_cancel": can_cancel,
@@ -199,13 +206,18 @@ def employer_booking_applications(request, booking_reference):
     guard = _employer_guard(request)
     if guard:
         return guard
-    booking, applications = get_booking_applications_for_employer(request.user, booking_reference)
+    booking, application_rows = get_booking_applications_for_employer(request.user, booking_reference)
     if not booking:
         raise Http404("Booking not found")
     return render(
         request,
         "bookings/employer_booking_applications.html",
-        {"booking": booking, "applications": applications, "portal_kind": "employer", "nav_active": "employer_marketplace"},
+        {
+            "booking": booking,
+            "application_rows": application_rows,
+            "portal_kind": "employer",
+            "nav_active": "employer_marketplace",
+        },
     )
 
 
@@ -349,7 +361,17 @@ def worker_apply_to_job(request, booking_reference):
     worker_profile = _worker_profile_for_user(request.user)
     if not worker_profile:
         return redirect("helpers:profile_incomplete")
-    booking = Booking.objects.filter(booking_reference=booking_reference).select_related("employer", "service_category").first()
+    booking = (
+        Booking.objects.filter(booking_reference=booking_reference)
+        .select_related(
+            "employer",
+            "employer__user",
+            "service_category",
+            "employer_location",
+            "employer_location__locality",
+        )
+        .first()
+    )
     if not booking:
         raise Http404("Booking not found")
     form = BookingApplicationForm(request.POST or None)
@@ -369,7 +391,13 @@ def worker_apply_to_job(request, booking_reference):
     return render(
         request,
         "bookings/worker_apply_to_job.html",
-        {"booking": booking, "form": form, "portal_kind": "worker", "nav_active": "worker_available_jobs"},
+        {
+            "booking": booking,
+            "employer_card": build_worker_safe_employer_card(booking.employer, booking=booking),
+            "form": form,
+            "portal_kind": "worker",
+            "nav_active": "worker_available_jobs",
+        },
     )
 
 

@@ -2,6 +2,7 @@ from datetime import time, timedelta
 from decimal import Decimal
 
 from django.contrib.staticfiles import finders
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -11,7 +12,8 @@ from bookings.forms import EmployerBookingRequestForm
 from bookings.models import Booking, BookingApplication, BookingEvent
 from bookings.services.booking_service import create_booking_request
 from employers.models import EmployerLocation, EmployerProfile
-from helpers.models import HelperProfile, HelperSkill, ServiceCategory
+from helpers.models import HelperProfile, HelperSkill, HelperTrustSignal, ServiceCategory, WorkerVerificationDocument
+from helpers.services.verification_service import review_worker_verification_document, upload_worker_verification_document
 
 
 class BookingWorkflowTests(TestCase):
@@ -165,6 +167,16 @@ class BookingWorkflowTests(TestCase):
         response = self.client.get(reverse("bookings:worker_requests"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, booking.booking_reference)
+
+    def test_worker_request_detail_shows_employer_location(self):
+        booking = self._create_booking()
+        self.client.force_login(self.worker_user)
+        response = self.client.get(
+            reverse("bookings:worker_request_detail", kwargs={"booking_reference": booking.booking_reference})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Benoni")
+        self.assertContains(response, "Home")
 
     def test_worker_cannot_see_another_workers_request(self):
         booking = self._create_booking()
@@ -338,6 +350,107 @@ class BookingWorkflowTests(TestCase):
         self.assertEqual(booking.request_type, Booking.RequestType.OPEN_MARKETPLACE)
         self.assertEqual(booking.status, Booking.Status.OPEN_FOR_APPLICATIONS)
         self.assertIsNone(booking.worker)
+
+    def test_employer_create_page_disables_worker_step_for_marketplace(self):
+        self.client.force_login(self.employer_user)
+        response = self.client.get(reverse("bookings:employer_booking_create"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "data-booking-worker-step")
+
+    def test_worker_marketplace_lists_job_location(self):
+        create_booking_request(
+            employer_profile=self.employer_profile,
+            service_category=self.service_category,
+            employer_location=self.employer_location,
+            scheduled_date=timezone.localdate() + timedelta(days=1),
+            start_time=time(9, 0),
+            duration_hours=4,
+            special_instructions="Gate code 1234",
+            created_by=self.employer_user,
+            request_type=Booking.RequestType.OPEN_MARKETPLACE,
+        )
+        self.client.force_login(self.worker_user)
+        response = self.client.get(reverse("bookings:worker_available_jobs"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Benoni")
+        self.assertContains(response, "Home")
+
+    def test_worker_apply_page_shows_employer_profile_not_private_contact(self):
+        self.employer_profile.contact_number = "0829998888"
+        self.employer_profile.save()
+        booking = create_booking_request(
+            employer_profile=self.employer_profile,
+            service_category=self.service_category,
+            employer_location=self.employer_location,
+            scheduled_date=timezone.localdate() + timedelta(days=1),
+            start_time=time(9, 0),
+            duration_hours=4,
+            special_instructions="Gate code 1234",
+            created_by=self.employer_user,
+            request_type=Booking.RequestType.OPEN_MARKETPLACE,
+        )
+        self.client.force_login(self.worker_user)
+        response = self.client.get(
+            reverse("bookings:worker_apply_to_job", kwargs={"booking_reference": booking.booking_reference})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Zipho Employer")
+        self.assertContains(response, "Benoni")
+        self.assertContains(response, "Profile complete")
+        self.assertContains(response, "Gate code 1234")
+        self.assertNotContains(response, "0829998888")
+        self.assertNotContains(response, "0710000001")
+
+    def test_employer_applications_page_shows_safe_trust_badges_not_private_data(self):
+        booking = create_booking_request(
+            employer_profile=self.employer_profile,
+            service_category=self.service_category,
+            employer_location=self.employer_location,
+            scheduled_date=timezone.localdate() + timedelta(days=1),
+            start_time=time(9, 0),
+            duration_hours=4,
+            special_instructions="Gate code 1234",
+            created_by=self.employer_user,
+            request_type=Booking.RequestType.OPEN_MARKETPLACE,
+        )
+        self.client.force_login(self.worker_user)
+        self.client.post(
+            reverse("bookings:worker_apply_to_job", kwargs={"booking_reference": booking.booking_reference}),
+            data={"message": "I am available for this job.", "proposed_fee": "300.00"},
+        )
+        id_document = upload_worker_verification_document(
+            user=self.worker_user,
+            document_type=WorkerVerificationDocument.DocumentType.ID_DOCUMENT,
+            uploaded_file=SimpleUploadedFile("id.pdf", b"%PDF-1.4 test\n%%EOF", content_type="application/pdf"),
+        )
+        staff = User.objects.create_user(
+            username="booking_staff@mk.com",
+            email="booking_staff@mk.com",
+            phone_number="0710000099",
+            password=self.password,
+            role=User.Role.HELPER,
+            is_onboarding_complete=True,
+            is_staff=True,
+        )
+        review_worker_verification_document(
+            document=id_document,
+            reviewer=staff,
+            status=WorkerVerificationDocument.Status.APPROVED,
+        )
+        HelperTrustSignal.objects.filter(
+            helper=self.worker_profile,
+            signal_type=HelperTrustSignal.SignalType.CRIMINAL_RECORD_CHECK,
+        ).update(status=HelperTrustSignal.SignalStatus.PENDING_REVIEW)
+
+        self.client.force_login(self.employer_user)
+        response = self.client.get(
+            reverse("bookings:employer_booking_applications", kwargs={"booking_reference": booking.booking_reference})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "ID verified")
+        self.assertContains(response, "Nomsa Worker")
+        self.assertNotContains(response, "0710000003")
+        self.assertNotContains(response, "/media/helpers/verification/")
 
     def test_helper_can_apply_to_open_job(self):
         booking = create_booking_request(

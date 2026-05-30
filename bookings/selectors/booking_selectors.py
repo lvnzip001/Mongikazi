@@ -23,7 +23,13 @@ def get_booking_for_employer(user, booking_id_or_reference):
 
 def get_booking_for_worker(user, booking_id_or_reference):
     return (
-        Booking.objects.select_related("employer", "worker", "service_category", "employer_location")
+        Booking.objects.select_related(
+            "employer",
+            "worker",
+            "service_category",
+            "employer_location",
+            "employer_location__locality",
+        )
         .filter(worker__user=user)
         .filter(_booking_lookup_q(booking_id_or_reference))
         .first()
@@ -36,7 +42,12 @@ def get_employer_bookings(user):
 
 def get_worker_booking_requests(user):
     return (
-        Booking.objects.select_related("employer", "service_category", "employer_location")
+        Booking.objects.select_related(
+            "employer",
+            "service_category",
+            "employer_location",
+            "employer_location__locality",
+        )
         .filter(worker__user=user, status=Booking.Status.PENDING_WORKER_RESPONSE)
     )
 
@@ -58,7 +69,12 @@ def get_worker_jobs(user):
 
 def get_worker_open_marketplace_jobs(user):
     return (
-        Booking.objects.select_related("employer", "service_category", "employer_location")
+        Booking.objects.select_related(
+            "employer",
+            "service_category",
+            "employer_location",
+            "employer_location__locality",
+        )
         .filter(request_type=Booking.RequestType.OPEN_MARKETPLACE, worker__isnull=True)
         .filter(status__in=[Booking.Status.OPEN_FOR_APPLICATIONS, Booking.Status.APPLICATIONS_RECEIVED])
         .exclude(employer__user=user)
@@ -79,11 +95,21 @@ def get_employer_marketplace_jobs(user):
 
 
 def get_booking_applications_for_employer(user, booking_reference):
+    from helpers.selectors.verification_selectors import build_employer_safe_worker_card
+
     booking = get_booking_for_employer(user, booking_reference)
     if not booking:
-        return None, BookingApplication.objects.none()
-    applications = booking.applications.select_related("worker", "worker__user").all()
-    return booking, applications
+        return None, []
+    applications = (
+        booking.applications.select_related("worker", "worker__user")
+        .prefetch_related("worker__trust_signals", "worker__skills__category")
+        .all()
+    )
+    application_rows = [
+        {"application": application, "employer_card": build_employer_safe_worker_card(application.worker)}
+        for application in applications
+    ]
+    return booking, application_rows
 
 
 def get_booking_application_for_worker(user, application_id):

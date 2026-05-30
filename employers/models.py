@@ -89,6 +89,22 @@ class EmployerLocation(models.Model):
             return f"{self.employer} - {self.label}"
         return f"{self.employer} location"
 
+    def service_area_display(self):
+        """Human-readable area for workers (suburb/city), without full street address."""
+        parts = []
+        if self.locality_id:
+            parts.append(self.locality.name)
+        if self.suburb and self.suburb not in parts:
+            parts.append(self.suburb)
+        if self.city and self.city not in parts:
+            parts.append(self.city)
+        if self.province and self.province not in parts:
+            parts.append(self.province)
+        area = ", ".join(parts)
+        if self.label and area:
+            return f"{self.label} · {area}"
+        return self.label or area or "Location on file"
+
 
 class EmployerServicePreference(models.Model):
     class ServiceType(models.TextChoices):

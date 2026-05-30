@@ -56,6 +56,7 @@ def profile_detail(request):
         except ValidationError:
             return redirect("helpers:profile_incomplete")
 
+    profile = refresh_helper_profile_state(profile)
     skills = get_helper_skills(profile)
     availability = get_helper_availability(profile)
     trust_signals = get_helper_trust_signals(profile)

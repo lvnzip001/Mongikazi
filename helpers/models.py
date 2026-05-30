@@ -146,3 +146,51 @@ class HelperTrustSignal(models.Model):
 
     def __str__(self):
         return f"{self.helper} - {self.signal_type}"
+
+
+class WorkerVerificationDocument(models.Model):
+    class DocumentType(models.TextChoices):
+        ID_DOCUMENT = "ID_DOCUMENT", "ID document"
+        CRIMINAL_RECORD_CHECK = "CRIMINAL_RECORD_CHECK", "Criminal record check"
+
+    class Status(models.TextChoices):
+        NOT_UPLOADED = "NOT_UPLOADED", "Not uploaded"
+        UPLOADED = "UPLOADED", "Uploaded"
+        PENDING_REVIEW = "PENDING_REVIEW", "Pending review"
+        APPROVED = "APPROVED", "Approved"
+        REJECTED = "REJECTED", "Rejected"
+
+    helper = models.ForeignKey(HelperProfile, on_delete=models.CASCADE, related_name="verification_documents")
+    document_type = models.CharField(max_length=40, choices=DocumentType.choices)
+    file = models.FileField(upload_to="helpers/verification/%Y/%m/")
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.UPLOADED)
+    is_current = models.BooleanField(default=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    reviewed_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="reviewed_verification_documents",
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
+    review_note = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-uploaded_at", "-id"]
+        indexes = [
+            models.Index(fields=["helper", "document_type", "is_current"]),
+            models.Index(fields=["status"]),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["helper", "document_type"],
+                condition=models.Q(is_current=True),
+                name="unique_current_worker_verification_document",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.helper} {self.document_type} ({self.status})"

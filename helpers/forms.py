@@ -152,3 +152,32 @@ class HelperAvailabilityForm(forms.ModelForm):
         if start and end and end <= start:
             raise forms.ValidationError("End time must be after start time.")
         return cleaned
+
+
+class WorkerVerificationUploadForm(forms.Form):
+    document_type = forms.ChoiceField(
+        choices=[],
+        widget=forms.HiddenInput(),
+    )
+    file = forms.FileField(
+        label="Document file",
+        widget=forms.ClearableFileInput(
+            attrs={
+                "class": "mk-input",
+                "accept": ".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*",
+            }
+        ),
+    )
+
+    def __init__(self, *args, **kwargs):
+        from helpers.models import WorkerVerificationDocument
+
+        super().__init__(*args, **kwargs)
+        self.fields["document_type"].choices = WorkerVerificationDocument.DocumentType.choices
+
+    def clean_file(self):
+        from helpers.verification_documents import validate_verification_document
+
+        uploaded = self.cleaned_data.get("file")
+        validate_verification_document(uploaded)
+        return uploaded

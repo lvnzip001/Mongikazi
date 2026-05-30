@@ -1,6 +1,14 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 
-from .models import HelperAvailability, HelperProfile, HelperSkill, HelperTrustSignal, ServiceCategory
+from helpers.models import (
+    HelperAvailability,
+    HelperProfile,
+    HelperSkill,
+    HelperTrustSignal,
+    ServiceCategory,
+    WorkerVerificationDocument,
+)
+from helpers.services.verification_service import review_worker_verification_document, sync_verification_trust_signals
 
 
 class HelperSkillInline(admin.TabularInline):
@@ -66,3 +74,62 @@ class HelperTrustSignalAdmin(admin.ModelAdmin):
     list_filter = ("signal_type", "status")
     search_fields = ("helper__display_name", "helper__user__email", "notes")
     readonly_fields = ("created_at", "updated_at")
+
+
+@admin.register(WorkerVerificationDocument)
+class WorkerVerificationDocumentAdmin(admin.ModelAdmin):
+    list_display = (
+        "helper",
+        "document_type",
+        "status",
+        "is_current",
+        "uploaded_at",
+        "reviewed_at",
+        "reviewed_by",
+    )
+    list_filter = ("document_type", "status", "is_current")
+    search_fields = ("helper__display_name", "helper__user__email", "review_note")
+    readonly_fields = ("uploaded_at", "created_at", "updated_at")
+    actions = ("approve_documents", "reject_documents", "mark_pending_review")
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if obj.is_current:
+            sync_verification_trust_signals(obj.helper)
+
+    @admin.action(description="Approve selected documents")
+    def approve_documents(self, request, queryset):
+        updated = 0
+        for document in queryset.filter(is_current=True):
+            review_worker_verification_document(
+                document=document,
+                reviewer=request.user,
+                status=WorkerVerificationDocument.Status.APPROVED,
+            )
+            updated += 1
+        self.message_user(request, f"Approved {updated} document(s).", messages.SUCCESS)
+
+    @admin.action(description="Reject selected documents")
+    def reject_documents(self, request, queryset):
+        updated = 0
+        for document in queryset.filter(is_current=True):
+            review_worker_verification_document(
+                document=document,
+                reviewer=request.user,
+                status=WorkerVerificationDocument.Status.REJECTED,
+                review_note="Please upload a clearer or updated document.",
+            )
+            updated += 1
+        self.message_user(request, f"Rejected {updated} document(s).", messages.WARNING)
+
+    @admin.action(description="Mark selected as pending review")
+    def mark_pending_review(self, request, queryset):
+        updated = 0
+        for document in queryset.filter(is_current=True):
+            review_worker_verification_document(
+                document=document,
+                reviewer=request.user,
+                status=WorkerVerificationDocument.Status.PENDING_REVIEW,
+            )
+            updated += 1
+        self.message_user(request, f"Marked {updated} document(s) as pending review.", messages.INFO)
